@@ -3,6 +3,8 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+import './assets/css/reset.css'
+
 import delay from './utils/delay'
 
 Vue.use(delay)

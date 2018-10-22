@@ -1,0 +1,25 @@
+html, body, input, textarea, select, button{font-family:'Microsoft Yahei';}
+html,body,ul,ol,dl,dd,h1,h2,h3,h4,h5,h6,pre,form,fieldset,legend,input,button,textarea,p,blockquote,table,th,td,menu{margin:0;padding:0}
+table{border-collapse:collapse;border-spacing:0;table-layout:fixed}
+ul,ol,menu{list-style:none}
+fieldset,img{border:none}
+img,object,select,input,textarea,button{vertical-align:middle}
+caption,th {text-align: left;}
+article,aside,footer,header,nav,section,figure,figcaption {display: block;}
+code, kbd, pre, samp, tt { font-family: Consolas,"Courier New", Courier, monospace;}
+address, cite, dfn, em, var,i {font-style: normal;}
+a,a:hover,a:visited,a:link{ text-decoration: none}
+a:visited, a:visited,a:link{color:#333}
+select,input,textarea,button{ outline:none; }
+label{ font-weight: normal}
+table,tr,td,th,thead,tbody,tfoot{ font-weight: normal;}
+div,input[type="text"],button,ul,li,span,textarea,table,tr,td,th,ol{ box-sizing: border-box;}
+body,ul,ol,dl,dd,h1,h2,h3,h4,h5,h6,pre,form,fieldset,legend,input,button,textarea,p,blockquote,table,th,td,menu{margin:0;padding:0}
+table{border-collapse:collapse;border-spacing:0;table-layout:fixed}
+ul,ol,menu{list-style:none}
+fieldset,img{border:none}
+img,object,select,input,textarea,button{vertical-align:middle}
+caption,th {text-align: left;}
+article,aside,footer,header,hgroup,nav,section,figure,figcaption {display: block;}
+.clearfix{overflow:hidden;_zoom:1;}
+a,input,textarea,button,span,li,textarea{outline:none;}
