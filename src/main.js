@@ -5,6 +5,7 @@ import store from './store'
 import MintUI from 'mint-ui'
 
 import './assets/css/reset.css'
+import './assets/css/icon.css'
 import 'mint-ui/lib/style.css'
 
 import delay from './utils/delay'
