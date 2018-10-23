@@ -16,3 +16,6 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+const clientWidth = document.documentElement.clientWidth
+document.documentElement.style.fontSize = `${(clientWidth / 375) * 20}px`

@@ -6,5 +6,6 @@
 <style lang="scss">
 html,body,#app {
   height: 100%;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
 }
 </style>
