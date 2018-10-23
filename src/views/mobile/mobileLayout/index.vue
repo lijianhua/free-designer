@@ -43,6 +43,7 @@ export default {
 
 <style scoped lang="scss">
     .mobileLayout{
+        height: 100%;
         .tabBar{
             height: 2.5rem;
             width: 100%;
