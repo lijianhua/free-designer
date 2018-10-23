@@ -20,8 +20,6 @@ export default {
   created () {
     if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
       this.isMobileBorwser = true
-      const clientWidth = document.documentElement.clientWidth
-      document.documentElement.style.fontSize = `${(clientWidth / 375) * 20}px`
     } else {
       this.isMobileBorwser = false
     }
