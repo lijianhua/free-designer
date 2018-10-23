@@ -1,11 +1,10 @@
 <template>
     <div class="login">
-        <h1 @click="loginIn">点击登录</h1>
-        <div class="mobileLogin" v-if="isMobileBorwser">
-            mobile登录
-        </div>
-        <div v-if="!isMobileBorwser">
-            pc登录
+        <img class="loginbg" src="../../assets/images/loginBg.png" alt="loginbg">
+        <div class="loginForm">
+          <input type="text" v-model="username" placeholder="请输入手机号码">
+          <input type="password" v-model="password" placeholder="请输入密码">
+          <button @click="loginIn">登录</button>
         </div>
     </div>
 </template>
@@ -14,34 +13,40 @@
 export default {
   data () {
     return {
-      isMobileBorwser: true
+      username: '',
+      password: ''
     }
   },
   created () {
-    if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-      this.isMobileBorwser = true
-      const clientWidth = document.documentElement.clientWidth
-      document.documentElement.style.fontSize = `${(clientWidth / 375) * 20}px`
-    } else {
-      this.isMobileBorwser = false
-    }
+
   },
   methods: {
     // 登录
     loginIn () {
-      console.info(this.isMobileBorwser)
-      if (this.isMobileBorwser) {
-        this.$router.push({ path: '/m/home' })
-      } else {
-        this.$router.push({ path: '/home' })
-      }
+      console.info(this.username, this.password)
+      // this.$router.push({ path: '/home' })
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-    .mobileLogin{
-
+    .login{
+      position: relative;
+      .loginbg{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: -1;
+      }
+      .loginForm{
+        position: absolute;
+        top: 30rem;
+        left: 0;
+        input{
+          width:
+        }
+      }
     }
 </style>
