@@ -8,6 +8,8 @@ import './assets/css/reset.css'
 import './assets/css/icon.css'
 import 'mint-ui/lib/style.css'
 
+import 'lib-flexible/flexible.js'
+
 import delay from './utils/delay'
 
 Vue.use(delay)
