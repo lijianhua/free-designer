@@ -45,12 +45,12 @@ export default {
     .mobileLayout{
         height: 100%;
         .tabBar{
-            height: 2.5rem;
             width: 100%;
+            height: 100px;
             position: fixed;
             bottom: 0;
             color: #666;
-            font-size: .5rem;
+            font-size: 20px;
             background: #fafafa;
             display: flex;
             justify-content: space-around;
@@ -61,9 +61,9 @@ export default {
                 justify-content: center;
                 align-items: center;
                 img{
-                    width: 1.2rem;
-                    height: 1.2rem;
-                    margin-bottom: 0.2rem;
+                    width: 48px;
+                    height: 48px;
+                    margin-bottom: 8px;
                 }
             }
         }

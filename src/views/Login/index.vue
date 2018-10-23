@@ -42,19 +42,19 @@ export default {
       .loginForm{
         width: 100%;
         position: absolute;
-        top: 16rem;
+        top: 640px;
         left: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
         input{
           width: 60%;
-          height: 2rem;
-          line-height: 2rem;
+          height: 100px;
+          line-height: 100px;
           border: none;
           border-bottom: 1px solid #dcdcdc;
           color: #dcdcdc;
-          margin-bottom: 1rem;
+          margin-bottom: 10px;
           background-repeat: no-repeat;
           background-position: 5% center;
           background-size: 6%;
@@ -62,15 +62,15 @@ export default {
         }
         .loginbtn{
           width: 75%;
-          height: 2rem;
-          line-height: 2rem;
+          height: 70px;
+          line-height: 70px;
           text-align: center;
           color: #ffffff;
           background-repeat: no-repeat;
           background-size: 100% 100%;
-          font-size: 0.8rem;
-          letter-spacing: 0.5rem;
-          margin-top: 2.25rem;
+          font-size: 32px;
+          letter-spacing: 20px;
+          margin-top: 120px;
         }
       }
     }
