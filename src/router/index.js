@@ -8,6 +8,7 @@ const Login = () => import('@/views/login/index')
 const mobileLayout = () => import('@/views/mobileLayout/index')
 const Home = () => import('@/views/home/index') // 首页
 const Apply = () => import('@/views/apply/index') // 需求池
+const Product = () => import('@/views/product/index') // 作品展
 const Order = () => import('@/views/order/index') // 我的
 
 const My = () => import('@/views/my/index') // 个人中心
@@ -40,6 +41,11 @@ export default new Router({
           name: 'apply',
           path: '/apply',
           component: Apply
+        },
+        {
+          name: 'product',
+          path: '/product',
+          component: Product
         },
         {
           name: 'order',

@@ -8,13 +8,18 @@
                 <div>首页</div>
             </router-link>
             <router-link to="/apply">
-                <img v-show="!isNowUrl('apply')" src="../../assets/images/icon_apply_normal.png" alt="apply">
-                <img v-show="isNowUrl('apply')" src="../../assets/images/icon_apply_click.png" alt="apply-hover">
+                <img v-show="!isNowUrl('apply')" src="../../assets/images/icon_demand_normal.png" alt="apply">
+                <img v-show="isNowUrl('apply')" src="../../assets/images/icon_demand_click.png" alt="apply-hover">
                 <div>需求池</div>
             </router-link>
+            <router-link to="/product">
+                <img v-show="!isNowUrl('product')" src="../../assets/images/icon_send_normal.png" alt="apply">
+                <img v-show="isNowUrl('product')" src="../../assets/images/icon_send_click.png" alt="apply-hover">
+                <div>作品展</div>
+            </router-link>
             <router-link to="/order">
-                <img v-show="!isNowUrl('order')" src="../../assets/images/icon_demand_normal.png" alt="order">
-                <img v-show="isNowUrl('order')" src="../../assets/images/icon_demand_click.png" alt="order-hover">
+                <img v-show="!isNowUrl('order')" src="../../assets/images/icon_apply_normal.png" alt="order">
+                <img v-show="isNowUrl('order')" src="../../assets/images/icon_apply_click.png" alt="order-hover">
                 <div>订单</div>
             </router-link>
             <router-link to="/my">
