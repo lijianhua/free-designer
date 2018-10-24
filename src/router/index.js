@@ -6,10 +6,12 @@ const Login = () => import('@/views/Login/index')
 
 // Mobile页面
 const mobileLayout = () => import('@/views/mobileLayout/index')
-const Home = () => import('@/views/home/index') // 首页
+const Home = () => import('@/views/Home/index') // 首页
 const Apply = () => import('@/views/apply/index') // 需求池
-const My = () => import('@/views/my/index') // 订单
 const Order = () => import('@/views/order/index') // 我的
+
+const My = () => import('@/views/my/index') // 个人中心
+const MyWork = () => import('@/views/my/my-work') // 个人中心
 
 Vue.use(Router)
 
@@ -37,14 +39,19 @@ export default new Router({
           component: Apply
         },
         {
+          name: 'order',
+          path: '/order',
+          component: Order
+        },
+        {
           name: 'my',
           path: '/my',
           component: My
         },
         {
-          name: 'order',
-          path: '/order',
-          component: Order
+          name: 'my-work',
+          path: '/my-work',
+          component: MyWork
         }
       ]
     }

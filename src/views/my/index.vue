@@ -21,30 +21,30 @@
             </div>
         </div>
         <div class="list">
-            <div class="item">
+            <router-link class="item" :to="{name:'my-work'}">
                 <p>我的作品</p>
                 <i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="item">
+            </router-link>
+            <router-link class="item" :to="{name:'my-work'}">
                 <p>实名认证</p>
                 <i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="item">
+            </router-link>
+            <router-link class="item" :to="{name:'my-work'}">
                 <p>平台说明</p>
                 <i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="item">
+            </router-link>
+            <router-link class="item" :to="{name:'my-work'}">
                 <p>积分充值</p>
                 <i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="item">
+            </router-link>
+            <router-link class="item" :to="{name:'my-work'}">
                 <p>积分管理</p>
                 <i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="item">
+            </router-link>
+            <router-link class="item" :to="{name:'my-work'}">
                 <p>退出登录</p>
                 <i class="fas fa-chevron-right"></i>
-            </div>
+            </router-link>
         </div>
     </div>
 </template>
@@ -63,40 +63,36 @@ export default {
     background: #eee;
 
     .header {
-        padding: 0.5rem;
+        padding: 20px;
         overflow: hidden;
         background: url('~@/assets/images/my_background.png');
         background-size: cover;
-        height: 12rem;
+        height: 440px;
 
         .avatar {
-            position: relative;
             overflow: hidden;
-            border-radius: 1.5rem;
+            border-radius: 50%;
             background: #eee;
             color: #fff;
             text-align: center;
-            line-height: 3rem;
-            height: 3rem;
-            width: 3rem;
+            line-height: 120px;
+            height: 120px;
+            width: 120px;
             margin: 0 auto;
 
             img {
-                height: 101%;
-                width: 102%;
-                position: absolute;
-                left: 0;
-                margin: -1px;
+                height: 100%;
+                width: 100%;
             }
         }
 
         .setting {
-            font-size: .6rem;
-            line-height: 1.2rem;
+            font-size: 24px;
+            line-height: 48px;
             text-align: right;
             i {
                 color: #2196f3;
-                margin-left: 0.2rem;
+                margin-left: 8px;
             }
         }
 
@@ -113,26 +109,26 @@ export default {
             .info {
                 align-items: flex-end;
                 .tel {
-                    font-size: 1rem;
+                    font-size: 40px;
                 }
                 .exp {
-                    margin-left: 1rem;
-                    font-size: 0.7rem;
-                    margin-bottom: 0.1rem;
+                    margin-left: 40px;
+                    font-size: 28px;
+                    margin-bottom: 4px;
                 }
             }
 
             .integral {
-                font-size: 0.8rem;
+                font-size: 32px;
                 > div {
                     margin: 0 10px;
                 }
             }
 
             .intro {
-                margin-top: 0.8rem;
-                font-size: 0.6rem;
-                line-height: 1.2rem;
+                margin-top: 32px;
+                font-size: 24px;
+                line-height: 48px;
             }
         }
 
@@ -141,8 +137,7 @@ export default {
     .list {
         flex: 1;
         background: #fff;
-        font-size: 0.6rem;
-        padding: 0.5rem;
+        padding: 20px;
         position: relative;
         -webkit-user-select: none;
         -moz-user-select: none;
@@ -152,16 +147,17 @@ export default {
         width: 100%;
         overflow: auto;
         overflow-scrolling: touch;
-        margin-top: 1rem;
+        margin-top: 40px;
         font-weight: 300;
         color: #aaa;
+        box-sizing: border-box;
 
         .item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            line-height: 2rem;
-            font-size: 0.8rem;
+            line-height: 80px;
+            font-size: 32px;
             color: #999;
             border-bottom: 1px solid #eee;
         }
