@@ -6,7 +6,7 @@ const Login = () => import('@/views/Login/index')
 
 // Mobile页面
 const mobileLayout = () => import('@/views/mobileLayout/index')
-const Home = () => import('@/views/Home/index') // 首页
+const Home = () => import('@/views/home/index') // 首页
 const Apply = () => import('@/views/apply/index') // 需求池
 const Order = () => import('@/views/order/index') // 我的
 
