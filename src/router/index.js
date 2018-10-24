@@ -11,7 +11,8 @@ const Apply = () => import('@/views/apply/index') // 需求池
 const Order = () => import('@/views/order/index') // 我的
 
 const My = () => import('@/views/my/index') // 个人中心
-const MyWork = () => import('@/views/my/my-work') // 个人中心
+const MyWork = () => import('@/views/my/my-work') // 我的作品
+const MyCertificationResult = () => import('@/views/my/my-certification-result') // 实名认证
 
 Vue.use(Router)
 
@@ -52,6 +53,11 @@ export default new Router({
           name: 'my-work',
           path: '/my-work',
           component: MyWork
+        },
+        {
+          name: 'my-certification-result',
+          path: '/my-certification-result',
+          component: MyCertificationResult
         }
       ]
     }

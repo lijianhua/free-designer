@@ -25,7 +25,7 @@
                 <p>我的作品</p>
                 <i class="fas fa-chevron-right"></i>
             </router-link>
-            <router-link class="item" :to="{name:'my-work'}">
+            <router-link class="item" :to="{name:'my-certification-result'}">
                 <p>实名认证</p>
                 <i class="fas fa-chevron-right"></i>
             </router-link>
