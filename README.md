@@ -18,3 +18,13 @@ $ open http://localhost:8080/
 [字体icon fontawesome](https://fontawesome.com)
 
 [vue-cli3.0引入px2rem与lib-flexible 移动端适配](https://blog.csdn.net/qq_31393401/article/details/82353267)
+原项目rem * 40 = 现在px       原项目px * 20 = 现在px
+
+
+#路由
+
+##个人中心
+个人中心页：/views/my/index.vue
+我的作品页：/views/my/my-work.vue
+实名认证结果页：/views/my/my-certification-result.vue
+平台说明页：/views/my/my-about.vue
