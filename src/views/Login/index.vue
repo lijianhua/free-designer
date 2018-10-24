@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { toLogin } from '../../api/login'
 export default {
   data () {
     return {
@@ -18,12 +19,21 @@ export default {
     }
   },
   created () {
+    console.info(toLogin)
   },
   methods: {
     // 登录
     loginIn () {
       console.info(this.username, this.password)
-      this.$router.push({ path: '/home' })
+      const data = {
+        mobile: this.username,
+        password: this.password
+      }
+      toLogin(data)
+        .then((res) => {
+          console.info(res)
+        })
+      // this.$router.push({ path: '/home' })
     }
   }
 }

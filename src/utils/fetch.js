@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const instance = axios.create({
-  baseURL: '/api/',
+  baseURL: 'https://www.free-designer.cn/api/',
   timeout: 20000
 })
 
@@ -15,7 +15,7 @@ instance.interceptors.response.use(
   error => Promise.reject(error)
 )
 
-export function fetchUtil (name, options = {}) {
+export default function fetchUtil (name, options = {}) {
   const {
     method = 'GET',
     data = {}
