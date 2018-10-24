@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 // const Home = () => import('@/views/Home/index')
-const Login = () => import('@/views/Login/index')
+const Login = () => import('@/views/login/index')
 
 // Mobile页面
 const mobileLayout = () => import('@/views/mobileLayout/index')
