@@ -54,5 +54,19 @@
         "propList":["*"]
      }
     }
+  },
+  "vue": {
+    "devServer": {
+      "proxy": {
+        "/api/**/": {
+          "target": "http://180.76.53.122:8083",
+          "changeOrigin": true,
+          "cookieDomainRewrite": "www.free-designer.cn",
+          "headers": {
+              "Referer": "http://www.free-designer.cn"
+          }
+        }
+      }
+    }
   }
 }
