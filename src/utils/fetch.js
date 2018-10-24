@@ -1,8 +1,10 @@
 import axios from 'axios'
+import { Toast } from 'mint-ui'
 
 const instance = axios.create({
-  baseURL: '/api/',
-  timeout: 20000
+  baseURL: '/api',
+  timeout: 20000,
+  withCredentials: true
 })
 
 instance.interceptors.request.use(
@@ -11,8 +13,29 @@ instance.interceptors.request.use(
 )
 
 instance.interceptors.response.use(
-  response => response,
-  error => Promise.reject(error)
+  response => {
+    if (response && response.data && response.data.success) {
+      return response.data
+    } else if (response && response.data && response.data.message) {
+      Toast({
+        message: response.data.message,
+        duration: 5000
+      })
+    } else {
+      Toast({
+        message: '接口报错',
+        duration: 5000
+      })
+    }
+    return Promise.reject(response)
+  },
+  error => {
+    Toast({
+      message: '接口报错',
+      duration: 5000
+    })
+    return Promise.reject(error)
+  }
 )
 
 export function fetchUtil (name, options = {}) {
