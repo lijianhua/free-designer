@@ -38,7 +38,7 @@ instance.interceptors.response.use(
   }
 )
 
-export function fetchUtil (name, options = {}) {
+export default function fetchUtil (name, options = {}) {
   const {
     method = 'GET',
     data = {}
