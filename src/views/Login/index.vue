@@ -2,33 +2,23 @@
     <div class="login">
         <img class="loginbg" src="../../assets/images/loginBg.png" alt="loginbg">
         <div class="loginForm">
-          <input class="icon-username" type="text" v-model="username" placeholder="请输入手机号码">
-          <input class="icon-password" type="password" v-model="password" placeholder="请输入密码">
-          <div class="loginbtn icon-loginbtn" @click="loginIn">登录</div>
+          <input class="icon-username" type="text" v-model="formData.mobile" placeholder="请输入手机号码">
+          <input class="icon-password" type="password" v-model="formData.password" placeholder="请输入密码">
+          <div class="loginbtn icon-loginbtn" @click="submit($router)">登录</div>
         </div>
     </div>
 </template>
-
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
-  data () {
-    return {
-      username: '',
-      password: ''
-    }
-  },
-  created () {
+  computed: {
+    ...mapGetters('login', ['formData'])
   },
   methods: {
-    // 登录
-    loginIn () {
-      console.info(this.username, this.password)
-      this.$router.push({ path: '/home' })
-    }
+    ...mapActions('login', ['submit'])
   }
 }
 </script>
-
 <style scoped lang="scss">
     .login{
       position: relative;

@@ -21,18 +21,19 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/',
+      path: '/login',
       name: 'login',
       component: Login
     },
     {
-      path: '/:mobilePages',
+      path: '/',
       name: 'mobileLayout',
       component: mobileLayout,
+      redirect: 'home',
       children: [
         {
           name: 'home',
-          path: '/home',
+          path: '/',
           component: Home
         },
         {

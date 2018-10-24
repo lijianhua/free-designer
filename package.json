@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "js-cookie": "^2.2.0",
     "lib-flexible": "^0.3.2",
     "mint-ui": "^2.2.13",
     "normalize.css": "^8.0.0",
@@ -51,8 +52,24 @@
       "autoprefixer": {},
       "postcss-pxtorem": {
         "rootValue": 75,
-        "propList":["*"]
-     }
+        "propList": [
+          "*"
+        ]
+      }
+    }
+  },
+  "vue": {
+    "devServer": {
+      "proxy": {
+        "/api/": {
+          "target": "http://180.76.53.122:8083",
+          "changeOrigin": true,
+          "cookieDomainRewrite": "www.free-designer.cn",
+          "headers": {
+            "Referer": "http://www.free-designer.cn"
+          }
+        }
+      }
     }
   },
   "vue": {
