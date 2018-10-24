@@ -13,6 +13,7 @@ const Order = () => import('@/views/order/index') // 我的
 const My = () => import('@/views/my/index') // 个人中心
 const MyWork = () => import('@/views/my/my-work') // 我的作品
 const MyCertificationResult = () => import('@/views/my/my-certification-result') // 实名认证
+const MyAbout = () => import('@/views/my/my-about') // 企业说明
 
 Vue.use(Router)
 
@@ -58,6 +59,11 @@ export default new Router({
           name: 'my-certification-result',
           path: '/my-certification-result',
           component: MyCertificationResult
+        },
+        {
+          name: 'my-about',
+          path: '/my-about',
+          component: MyAbout
         }
       ]
     }

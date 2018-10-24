@@ -29,7 +29,7 @@
                 <p>实名认证</p>
                 <i class="fas fa-chevron-right"></i>
             </router-link>
-            <router-link class="item" :to="{name:'my-work'}">
+            <router-link class="item" :to="{name:'my-about'}">
                 <p>平台说明</p>
                 <i class="fas fa-chevron-right"></i>
             </router-link>
