@@ -30,6 +30,7 @@ $ open http://localhost:8080/
 我的作品页：/views/my/my-work.vue
 实名认证结果页：/views/my/my-certification-result.vue
 平台说明页：/views/my/my-about.vue
+积分充值：/views/my/my-pay-new.vue
 ```
 ## 登录
 

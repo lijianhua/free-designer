@@ -33,7 +33,7 @@
                 <p>平台说明</p>
                 <i class="fas fa-chevron-right"></i>
             </router-link>
-            <router-link class="item" :to="{name:'my-work'}">
+            <router-link class="item" :to="{name:'my-pay-new'}">
                 <p>积分充值</p>
                 <i class="fas fa-chevron-right"></i>
             </router-link>

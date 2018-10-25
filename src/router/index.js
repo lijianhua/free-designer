@@ -11,10 +11,16 @@ const Apply = () => import('@/views/apply/index') // 需求池
 const Product = () => import('@/views/product/index') // 作品展
 const Order = () => import('@/views/order/index') // 我的
 
-const My = () => import('@/views/my/index') // 个人中心
-const MyWork = () => import('@/views/my/my-work') // 我的作品
-const MyCertificationResult = () => import('@/views/my/my-certification-result') // 实名认证
-const MyAbout = () => import('@/views/my/my-about') // 企业说明
+// 个人中心
+const My = () => import('@/views/my/index')
+// 我的作品
+const MyWork = () => import('@/views/my/my-work')
+// 实名认证
+const MyCertificationResult = () => import('@/views/my/my-certification-result')
+// 企业说明
+const MyAbout = () => import('@/views/my/my-about')
+// 积分充值
+const myPayNew = () => import('@/views/my/my-pay-new')
 
 Vue.use(Router)
 
@@ -71,6 +77,11 @@ export default new Router({
           name: 'my-about',
           path: '/my-about',
           component: MyAbout
+        },
+        {
+          name: 'my-pay-new',
+          path: '/my-pay-new',
+          component: myPayNew
         }
       ]
     }
