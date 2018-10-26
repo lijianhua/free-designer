@@ -5,6 +5,9 @@
           <input class="icon-username" type="text" v-model="formData.mobile" placeholder="请输入手机号码">
           <input class="icon-password" type="password" v-model="formData.password" placeholder="请输入密码">
           <div class="loginbtn icon-loginbtn" @click="submit($router)">登录</div>
+          <div class="accound">
+            <router-link to="/register">账号注册 ></router-link> | <router-link to="/findPassword">找回密码 ></router-link>
+          </div>
         </div>
     </div>
 </template>
@@ -61,6 +64,11 @@ export default {
           font-size: 32px;
           letter-spacing: 20px;
           margin-top: 120px;
+        }
+        .accound{
+          font-size: 26px;
+          color: #a2a2a2;
+          margin-top: 40px;
         }
       }
     }
