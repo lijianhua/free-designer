@@ -96,7 +96,7 @@
                 </mu-select>
             </div>
         </div>
-        <div class="desingerInfo">
+        <div @click="isShowDetail = true" class="desingerInfo">
             <div class="header">
                 <div class="header-img">
                     <img src="../../assets/images/avatar.png" alt="avatar">
@@ -143,10 +143,15 @@
             </div>
         </div>
         <div class="bottomBg"></div>
+        <!-- 工作者详情页 -->
+        <mu-slide-left-transition>
+            <designerDetail v-if="isShowDetail" :detailData='detailData' @callBack='callBack'></designerDetail>
+        </mu-slide-left-transition>
     </div>
 </template>
 
 <script>
+import designerDetail from './designerDetail'
 export default {
   data () {
     return {
@@ -154,13 +159,21 @@ export default {
       sortOptions: ['最多浏览', '最多点赞', '最多下载'],
       selectSort: '最多浏览',
       fliterOtions: ['弱电系统', '项目经理', '施工图', '暖通系统', '强电系统', '风水设计', '短期雇佣', '软装配饰', '造价预算', '效果图', '消防报审图', '平面规划', '主案设计', '施组编制'],
-      selectFilter: '弱电系统'
+      selectFilter: '弱电系统',
+      detailData: 1,
+      isShowDetail: false
     }
   },
   methods: {
     isShowMore () {
       this.isShowMoreFilter = !this.isShowMoreFilter
+    },
+    callBack () {
+      this.isShowDetail = false
     }
+  },
+  components: {
+    designerDetail
   }
 }
 </script>

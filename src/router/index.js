@@ -3,8 +3,6 @@ import Router from 'vue-router'
 
 // const Home = () => import('@/views/Home/index')
 const Login = () => import('@/views/login/index')
-const Register = () => import('@/views/login/register') // 注册
-const FindPassword = () => import('@/views/login/findPassword') // 找回密码
 // Mobile页面
 const mobileLayout = () => import('@/views/mobileLayout/index')
 const Home = () => import('@/views/home/index') // 首页
@@ -26,16 +24,6 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login
-    },
-    {
-      path: '/register',
-      name: 'register',
-      component: Register
-    },
-    {
-      path: '/findPassword',
-      name: 'findPassword',
-      component: FindPassword
     },
     {
       path: '/',

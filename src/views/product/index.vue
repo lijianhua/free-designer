@@ -38,7 +38,7 @@
         </div>
         <!-- 作品详情 -->
         <mu-slide-left-transition>
-            <productDetail v-show="isShowDetail" :detailData='detailData' @callBack='callBack'></productDetail>
+            <productDetail v-if="isShowDetail" :detailData='detailData' @callBack='callBack'></productDetail>
         </mu-slide-left-transition>
     </div>
 </template>
