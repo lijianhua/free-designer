@@ -1,82 +1,14 @@
 <template>
     <div class="home">
         <mt-swipe class="swiper" :auto="4000">
-            <mt-swipe-item><img src="../../assets/images/banner/banner5.png" alt="banner5"></mt-swipe-item>
-            <mt-swipe-item><img src="../../assets/images/banner/banner4.png" alt="banner4"></mt-swipe-item>
-            <mt-swipe-item><img src="../../assets/images/banner/banner3.png" alt="banner3"></mt-swipe-item>
-            <mt-swipe-item><img src="../../assets/images/banner/banner2.png" alt="banner2"></mt-swipe-item>
-            <mt-swipe-item><img src="../../assets/images/banner/banner1.png" alt="banner1"></mt-swipe-item>
+            <mt-swipe-item v-for="(item, index) in bannersList" :key="index">
+                <img :src="item.pic" alt="banner">
+            </mt-swipe-item>
         </mt-swipe>
         <div class="filter-container">
-            <div class="filterBox">
-                <img src="../../assets/images/filter1.png" alt="filter1">
-                <p>主案设计</p>
-            </div>
-            <div class="filterBox">
-                <img src="../../assets/images/filter2.png" alt="filter2">
-                <p>效果图</p>
-            </div>
-            <div class="filterBox">
-                <img src="../../assets/images/filter3.png" alt="filter3">
-                <p>施工图</p>
-            </div>
-            <div class="filterBox">
-                <img src="../../assets/images/filter4.png" alt="filter4">
-                <p>预算定额</p>
-            </div>
-        </div>
-        <div class="filter-container">
-            <div class="filterBox">
-                <img src="../../assets/images/filter5.png" alt="filter5">
-                <p>施组编制</p>
-            </div>
-            <div class="filterBox">
-                <img src="../../assets/images/filter6.png" alt="filter6">
-                <p>项目经理</p>
-            </div>
-            <div class="filterBox">
-                <img src="../../assets/images/filter7.png" alt="filter7">
-                <p>消防报警</p>
-            </div>
-            <div class="filterBox">
-                <img src="../../assets/images/filter8.png" alt="filter8">
-                <p>电气系统</p>
-            </div>
-        </div>
-        <div v-show="isShowMoreFilter" class="filter-container">
-            <div class="filterBox">
-                <img src="../../assets/images/filter9.png" alt="filter9">
-                <p>软装配饰</p>
-            </div>
-            <div class="filterBox">
-                <img src="../../assets/images/filter10.png" alt="filter10">
-                <p>平面规划</p>
-            </div>
-            <div class="filterBox">
-                <img src="../../assets/images/filter11.png" alt="filter11">
-                <p>灯光设计</p>
-            </div>
-            <div class="filterBox">
-                <img src="../../assets/images/filter12.png" alt="filter12">
-                <p>弱电智能</p>
-            </div>
-        </div>
-        <div v-show="isShowMoreFilter" class="filter-container">
-            <div class="filterBox">
-                <img src="../../assets/images/filter13.png" alt="filter13">
-                <p>声学设计</p>
-            </div>
-            <div class="filterBox">
-                <img src="../../assets/images/filter14.png" alt="filter14">
-                <p>水系统</p>
-            </div>
-            <div class="filterBox">
-                <img src="../../assets/images/filter15.png" alt="filter15">
-                <p>暖通系统</p>
-            </div>
-            <div class="filterBox">
-                <img src="../../assets/images/filter16.png" alt="filter16">
-                <p>风水设计</p>
+            <div v-for="(item, index) in filtersList" v-show="isCanShowAllFilters(index)" :key="index" class="filterBox">
+                <img :src="item.pic" alt="filter">
+                <p>{{ item.name }}</p>
             </div>
         </div>
         <div class="clickMore">
@@ -91,8 +23,8 @@
             </div>
             <div class="sortFilter">
                 <span>筛选</span>
-                <mu-select v-model="selectFilter">
-                    <mu-option v-for="option in fliterOtions" :key="option" :label="option" :value="option"></mu-option>
+                <mu-select v-if="showFilter" v-model="selectFilter">
+                    <mu-option v-for="(option, index) in filtersList" :key="index" :label="option.name" :value="option.name"></mu-option>
                 </mu-select>
             </div>
         </div>
@@ -151,6 +83,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import designerDetail from './designerDetail'
 export default {
   data () {
@@ -158,18 +91,39 @@ export default {
       isShowMoreFilter: false,
       sortOptions: ['最多浏览', '最多点赞', '最多下载'],
       selectSort: '最多浏览',
-      fliterOtions: ['弱电系统', '项目经理', '施工图', '暖通系统', '强电系统', '风水设计', '短期雇佣', '软装配饰', '造价预算', '效果图', '消防报审图', '平面规划', '主案设计', '施组编制'],
-      selectFilter: '弱电系统',
+      selectFilter: '',
       detailData: 1,
-      isShowDetail: false
+      isShowDetail: false,
+      showFilter: false
     }
   },
+  computed: {
+    ...mapGetters('home', ['bannersList', 'filtersList'])
+  },
+  async created () {
+    this.getBanners()
+    await this.getFilters()
+    this.selectFilter = this.filtersList[0].name
+    this.showFilter = true
+  },
   methods: {
+    ...mapActions('home', ['getBanners', 'getFilters']),
     isShowMore () {
       this.isShowMoreFilter = !this.isShowMoreFilter
     },
     callBack () {
       this.isShowDetail = false
+    },
+    isCanShowAllFilters (index) {
+      if (this.isShowMoreFilter) {
+        return true
+      } else {
+        if (index > 7) {
+          return false
+        } else {
+          return true
+        }
+      }
     }
   },
   components: {
@@ -188,9 +142,10 @@ export default {
     }
   }
   .filter-container {
-    padding: 29px 110px 0 110px;
+    padding: 29px 95px 0 95px;
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
+
     .filterBox {
       width: 100px;
       height: 162px;
@@ -198,6 +153,7 @@ export default {
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      margin-left: 53.3333px;
       img {
         width: 80px;
         height: 80px;
@@ -208,6 +164,9 @@ export default {
         font-size: 24px;
         line-height: 29px;
       }
+    }
+    .filterBox:nth-child(4n+1){
+        margin-left: 0;
     }
   }
   .clickMore {
