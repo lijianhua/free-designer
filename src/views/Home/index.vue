@@ -96,14 +96,14 @@
                 </mu-select>
             </div>
         </div>
-        <div @click="isShowDetail = true" class="desingerInfo">
+        <div class="desingerInfo">
             <div class="header">
-                <div class="header-img">
+                <div @click="isShowDetail = true" class="header-img">
                     <img src="../../assets/images/avatar.png" alt="avatar">
                 </div>
                 <div class="ownInfo">
                     <div>
-                        <span class="name">豆豆</span>
+                        <span @click="isShowDetail = true" class="name">豆豆</span>
                         <span class="workExperience">五年工作经验</span>
                     </div>
                     <div class="address">

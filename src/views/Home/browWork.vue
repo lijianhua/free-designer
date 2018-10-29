@@ -1,8 +1,8 @@
 <template>
-    <div class="designerDetail">
+    <div class="browWork">
         <div class="closeHeader">
             <img @click="closeDetail" src="../../assets/images/back.png" alt="back">
-            工作者详情
+            作品浏览页
         </div>
         <div class="desingerInfo">
             <div class="header">
@@ -51,59 +51,41 @@
             </div>
         </div>
         <div class="history">
-            <span>工作历史和反馈</span>
-            <span @click="isShowBrowWork = true">作品浏览<strong>》</strong></span>
+            <span @click="closeDetail"><strong>《</strong>工作历史和反馈</span>
+            <span>作品浏览</span>
         </div>
-        <div class="historyDesign">
-            <div class="title">办公室工程 平面规划 1600平米</div>
-            <div class="designInfo">
-                <div class="evaluate">
-                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                    <img src="../../assets/images/homestart.png" alt="homestart">
-                </div>
-                <span class="score">5.00</span>
-                <span class="date">2018年08月</span>
+        <div class="designBox">
+            <div class="title">1000平米办公室项目</div>
+            <div class="designImg" @click="isShowDetail = true">
+                <img src="../../assets/images/designImg.png" alt="designImg">
             </div>
-            <p class="talkAbout">(｡･∀･)ﾉﾞ嗨 豆豆！惊人的自由职业者！非常快速和高效。把事情做对，高度专业，我推荐他！</p>
+            <div class="designInfo">
+                <div class="price">本案授权 39积分/套</div>
+                <div class="clickGood">
+                    <img src="../../assets/images/good.png" alt="good">
+                    <span>587</span>
+                    <img src="../../assets/images/talk.png" alt="talk">
+                    <span>6</span>
+                </div>
+            </div>
         </div>
-        <!-- 工作者作品 -->
-        <mu-slide-left-transition>
-            <browWork v-if="isShowBrowWork" @callBack='callBack'></browWork>
-        </mu-slide-left-transition>
     </div>
 </template>
 
 <script>
-import browWork from './browWork'
 export default {
-  data () {
-    return {
-      isShowBrowWork: false
-    }
-  },
-  props: ['detailData'],
   created () {
-    console.info(this.detailData)
   },
   methods: {
     closeDetail () {
       this.$emit('callBack')
-    },
-    callBack () {
-      this.isShowBrowWork = false
     }
-  },
-  components: {
-    browWork
   }
 }
 </script>
 
 <style scoped lang="scss">
-.designerDetail {
+.browWork {
   width: 100%;
   height: calc(100% - 100px);
   position: fixed;
@@ -208,52 +190,54 @@ export default {
     }
   }
   .history{
-    padding: 20px 10px 20px 50px;
+    padding: 20px 50px 20px 5px;
     background-color: #f0f0f0;
     font-size: 26px;
     display: flex;
     justify-content: space-between;
-    strong{
-        font-weight: normal;
-        margin-left: 18px;
+    span{
+        strong{
+            font-weight: normal;
+            margin-right: 18px;
+        }
     }
   }
-  .historyDesign{
-    padding: 20px 50px;
+.designBox{
     border-bottom: 3px solid #ebebeb;
     .title{
-        line-height: 50px;
+        padding: 0 15px;
+        line-height: 58px;
+        color: #797979;
         font-size: 26px;
     }
-    .designInfo{
-        margin-top: 10px;
-        margin-bottom: 10px;
-        display: flex;
-        align-content: center;
-        .evaluate{
-            width: 125px;
-            height: 25px;
-            display: flex;
-            align-content: center;
-            img{
-                width: 25px;
-                height: 25px;
-            }
-        }
-        .score{
-            font-size: 22px;
-            margin-left: 25px;
-            margin-right: 25px;
-        }
-        .date{
-            font-size: 22px;
-            color: #909090;
+    .designImg{
+        img{
+            width: 100%;
         }
     }
-    .talkAbout{
-        color: #909090;
-        line-height: 35px;
-        font-size: 20px;
+    .designInfo{
+        padding: 0 15px;
+        display: flex;
+        justify-content: space-between;
+        .price{
+            line-height: 58px;
+            color: #797979;
+            font-size: 26px;
+        }
+        .clickGood{
+            display: flex;
+            align-items: center;
+            img{
+                width: 26px;
+                height: 26px;
+            }
+            span{
+                margin-left: 15px;
+                margin-right: 50px;
+                color: #797979;
+                font-size: 26px;
+            }
+        }
     }
   }
 }
