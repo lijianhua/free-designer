@@ -56,7 +56,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('home', ['bannersList', 'filtersList'])
+    ...mapGetters('product', ['bannersList', 'filtersList'])
   },
   async created () {
     this.getBanners()
@@ -65,7 +65,7 @@ export default {
     this.showFilter = true
   },
   methods: {
-    ...mapActions('home', ['getBanners', 'getFilters']),
+    ...mapActions('product', ['getBanners', 'getFilters']),
     callBack () {
       this.isShowDetail = false
     }
