@@ -23,12 +23,22 @@
             </div>
             <div class="sortFilter">
                 <span>筛选</span>
-                <mu-select v-if="showFilter" v-model="selectFilter">
-                    <mu-option v-for="(option, index) in filtersList" :key="index" :label="option.name" :value="option.name"></mu-option>
+                <mu-select v-if="showFilter" v-model="selectFilter" @change="getUsersList">
+                    <mu-option v-for="(option, index) in filtersList" :key="index" :label="option.name" :value="option.id"></mu-option>
                 </mu-select>
             </div>
         </div>
-        <div class="desingerInfo">
+        <!-- <mu-load-more @refresh="refresh" :refreshing="refreshing" :loading="loading" @load="load">
+            <mu-list>
+                <template v-for="i in num">
+                <mu-list-item>
+                    <mu-list-item-title>{{text}} Item {{i}}</mu-list-item-title>
+                </mu-list-item>
+                <mu-divider />
+                </template>
+            </mu-list>
+        </mu-load-more> -->
+        <!-- <div class="desingerInfo">
             <div class="header">
                 <div @click="isShowDetail = true" class="header-img">
                     <img src="../../assets/images/avatar.png" alt="avatar">
@@ -73,7 +83,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="bottomBg"></div>
         <!-- 工作者详情页 -->
         <mu-slide-left-transition>
@@ -98,16 +108,17 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('home', ['bannersList', 'filtersList'])
+    ...mapGetters('home', ['bannersList', 'filtersList', 'usersList'])
   },
   async created () {
     this.getBanners()
     await this.getFilters()
-    this.selectFilter = this.filtersList[0].name
+    this.selectFilter = this.filtersList[0].id
     this.showFilter = true
+    this.getUsersList()
   },
   methods: {
-    ...mapActions('home', ['getBanners', 'getFilters']),
+    ...mapActions('home', ['getBanners', 'getFilters', 'getUsers']),
     isShowMore () {
       this.isShowMoreFilter = !this.isShowMoreFilter
     },
@@ -124,6 +135,12 @@ export default {
           return true
         }
       }
+    },
+    getUsersList () {
+      const dataFrom = {
+        role: this.selectFilter
+      }
+      this.getUsers(dataFrom)
     }
   },
   components: {

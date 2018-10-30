@@ -11,3 +11,9 @@ export function getFilters () {
     method: 'GET'
   })
 }
+export function getUsers (data = {}) {
+  return fetchUtil('/users/', {
+    method: 'GET',
+    data
+  })
+}
