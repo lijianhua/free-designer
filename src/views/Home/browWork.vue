@@ -1,41 +1,17 @@
 <template>
-    <div class="home">
-        <mt-swipe class="swiper" :auto="4000">
-            <mt-swipe-item v-for="(item, index) in bannersList" :key="index">
-                <img :src="item.pic" alt="banner">
-            </mt-swipe-item>
-        </mt-swipe>
-        <div class="filter-container">
-            <div v-for="(item, index) in filtersList" v-show="isCanShowAllFilters(index)" :key="index" class="filterBox">
-                <img :src="item.pic" alt="filter">
-                <p>{{ item.name }}</p>
-            </div>
-        </div>
-        <div class="clickMore">
-            <span @click="isShowMore">更多 >></span>
-        </div>
-        <div class="selectFilter">
-            <div class="sortFilter">
-                <span>排序</span>
-                <mu-select v-model="selectSort">
-                    <mu-option v-for="option in sortOptions" :key="option" :label="option" :value="option"></mu-option>
-                </mu-select>
-            </div>
-            <div class="sortFilter">
-                <span>筛选</span>
-                <mu-select v-if="showFilter" v-model="selectFilter">
-                    <mu-option v-for="(option, index) in filtersList" :key="index" :label="option.name" :value="option.name"></mu-option>
-                </mu-select>
-            </div>
+    <div class="browWork">
+        <div class="closeHeader">
+            <img @click="closeDetail" src="../../assets/images/back.png" alt="back">
+            作品浏览页
         </div>
         <div class="desingerInfo">
             <div class="header">
-                <div @click="isShowDetail = true" class="header-img">
+                <div class="header-img">
                     <img src="../../assets/images/avatar.png" alt="avatar">
                 </div>
                 <div class="ownInfo">
                     <div>
-                        <span @click="isShowDetail = true" class="name">豆豆</span>
+                        <span class="name">豆豆</span>
                         <span class="workExperience">五年工作经验</span>
                     </div>
                     <div class="address">
@@ -74,126 +50,64 @@
                 </div>
             </div>
         </div>
-        <div class="bottomBg"></div>
-        <!-- 工作者详情页 -->
-        <mu-slide-left-transition>
-            <designerDetail v-if="isShowDetail" :detailData='detailData' @callBack='callBack'></designerDetail>
-        </mu-slide-left-transition>
+        <div class="history">
+            <span @click="closeDetail"><strong>《</strong>工作历史和反馈</span>
+            <span>作品浏览</span>
+        </div>
+        <div class="designBox">
+            <div class="title">1000平米办公室项目</div>
+            <div class="designImg" @click="isShowDetail = true">
+                <img src="../../assets/images/designImg.png" alt="designImg">
+            </div>
+            <div class="designInfo">
+                <div class="price">本案授权 39积分/套</div>
+                <div class="clickGood">
+                    <img src="../../assets/images/good.png" alt="good">
+                    <span>587</span>
+                    <img src="../../assets/images/talk.png" alt="talk">
+                    <span>6</span>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import designerDetail from './designerDetail'
 export default {
-  data () {
-    return {
-      isShowMoreFilter: false,
-      sortOptions: ['最多浏览', '最多点赞', '最多下载'],
-      selectSort: '最多浏览',
-      selectFilter: '',
-      detailData: 1,
-      isShowDetail: false,
-      showFilter: false
-    }
-  },
-  computed: {
-    ...mapGetters('home', ['bannersList', 'filtersList'])
-  },
-  async created () {
-    this.getBanners()
-    await this.getFilters()
-    this.selectFilter = this.filtersList[0].name
-    this.showFilter = true
+  created () {
   },
   methods: {
-    ...mapActions('home', ['getBanners', 'getFilters']),
-    isShowMore () {
-      this.isShowMoreFilter = !this.isShowMoreFilter
-    },
-    callBack () {
-      this.isShowDetail = false
-    },
-    isCanShowAllFilters (index) {
-      if (this.isShowMoreFilter) {
-        return true
-      } else {
-        if (index > 7) {
-          return false
-        } else {
-          return true
-        }
-      }
+    closeDetail () {
+      this.$emit('callBack')
     }
-  },
-  components: {
-    designerDetail
   }
 }
 </script>
 
 <style scoped lang="scss">
-.home {
-  .swiper {
-    height: 309px;
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-  .filter-container {
-    padding: 29px 95px 0 95px;
-    display: flex;
-    flex-wrap: wrap;
-
-    .filterBox {
-      width: 100px;
-      height: 162px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      margin-left: 53.3333px;
-      img {
-        width: 80px;
-        height: 80px;
-      }
-      p {
-        margin-top: 24px;
-        text-align: center;
-        font-size: 24px;
-        line-height: 29px;
-      }
-    }
-    .filterBox:nth-child(4n+1){
-        margin-left: 0;
-    }
-  }
-  .clickMore {
-    height: 24px;
-    padding: 0 95px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    span {
-      font-size: 24px;
-      line-height: 24px;
-      color: #9e9e9e;
-      float: right;
-    }
-  }
-  .selectFilter{
-    padding: 0 90px;
-    height: 68px;
-    line-height: 68px;
-    border-top: 3px solid #ebebeb;
-    display: flex;
-    justify-content: space-between;
-    .sortFilter{
-        span{
-            font-size: 24px;
-            margin-right: 40px;
-            color: #808080;
-        }
+.browWork {
+  width: 100%;
+  height: calc(100% - 100px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #ffffff;
+  z-index: 10;
+  overflow-y: auto;
+  .closeHeader{
+    height: 113px;
+    line-height: 113px;
+    text-align: center;
+    padding: 0 27px;
+    position: relative;
+    font-size: 44px;
+    img{
+        width: 22px;
+        height: 41px;
+        position: absolute;
+        top: 50%;
+        left: 27px;
+        margin-top: -20.5px;
     }
   }
   .desingerInfo{
@@ -275,9 +189,56 @@ export default {
         }
     }
   }
-  .bottomBg{
-    height: 200px;
+  .history{
+    padding: 20px 50px 20px 5px;
     background-color: #f0f0f0;
+    font-size: 26px;
+    display: flex;
+    justify-content: space-between;
+    span{
+        strong{
+            font-weight: normal;
+            margin-right: 18px;
+        }
+    }
+  }
+.designBox{
+    border-bottom: 3px solid #ebebeb;
+    .title{
+        padding: 0 15px;
+        line-height: 58px;
+        color: #797979;
+        font-size: 26px;
+    }
+    .designImg{
+        img{
+            width: 100%;
+        }
+    }
+    .designInfo{
+        padding: 0 15px;
+        display: flex;
+        justify-content: space-between;
+        .price{
+            line-height: 58px;
+            color: #797979;
+            font-size: 26px;
+        }
+        .clickGood{
+            display: flex;
+            align-items: center;
+            img{
+                width: 26px;
+                height: 26px;
+            }
+            span{
+                margin-left: 15px;
+                margin-right: 50px;
+                color: #797979;
+                font-size: 26px;
+            }
+        }
+    }
   }
 }
 </style>

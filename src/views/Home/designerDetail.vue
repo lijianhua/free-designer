@@ -1,41 +1,17 @@
 <template>
-    <div class="home">
-        <mt-swipe class="swiper" :auto="4000">
-            <mt-swipe-item v-for="(item, index) in bannersList" :key="index">
-                <img :src="item.pic" alt="banner">
-            </mt-swipe-item>
-        </mt-swipe>
-        <div class="filter-container">
-            <div v-for="(item, index) in filtersList" v-show="isCanShowAllFilters(index)" :key="index" class="filterBox">
-                <img :src="item.pic" alt="filter">
-                <p>{{ item.name }}</p>
-            </div>
-        </div>
-        <div class="clickMore">
-            <span @click="isShowMore">更多 >></span>
-        </div>
-        <div class="selectFilter">
-            <div class="sortFilter">
-                <span>排序</span>
-                <mu-select v-model="selectSort">
-                    <mu-option v-for="option in sortOptions" :key="option" :label="option" :value="option"></mu-option>
-                </mu-select>
-            </div>
-            <div class="sortFilter">
-                <span>筛选</span>
-                <mu-select v-if="showFilter" v-model="selectFilter">
-                    <mu-option v-for="(option, index) in filtersList" :key="index" :label="option.name" :value="option.name"></mu-option>
-                </mu-select>
-            </div>
+    <div class="designerDetail">
+        <div class="closeHeader">
+            <img @click="closeDetail" src="../../assets/images/back.png" alt="back">
+            工作者详情
         </div>
         <div class="desingerInfo">
             <div class="header">
-                <div @click="isShowDetail = true" class="header-img">
+                <div class="header-img">
                     <img src="../../assets/images/avatar.png" alt="avatar">
                 </div>
                 <div class="ownInfo">
                     <div>
-                        <span @click="isShowDetail = true" class="name">豆豆</span>
+                        <span class="name">豆豆</span>
                         <span class="workExperience">五年工作经验</span>
                     </div>
                     <div class="address">
@@ -74,126 +50,82 @@
                 </div>
             </div>
         </div>
-        <div class="bottomBg"></div>
-        <!-- 工作者详情页 -->
+        <div class="history">
+            <span>工作历史和反馈</span>
+            <span @click="isShowBrowWork = true">作品浏览<strong>》</strong></span>
+        </div>
+        <div class="historyDesign">
+            <div class="title">办公室工程 平面规划 1600平米</div>
+            <div class="designInfo">
+                <div class="evaluate">
+                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                    <img src="../../assets/images/homestart.png" alt="homestart">
+                </div>
+                <span class="score">5.00</span>
+                <span class="date">2018年08月</span>
+            </div>
+            <p class="talkAbout">(｡･∀･)ﾉﾞ嗨 豆豆！惊人的自由职业者！非常快速和高效。把事情做对，高度专业，我推荐他！</p>
+        </div>
+        <!-- 工作者作品 -->
         <mu-slide-left-transition>
-            <designerDetail v-if="isShowDetail" :detailData='detailData' @callBack='callBack'></designerDetail>
+            <browWork v-if="isShowBrowWork" @callBack='callBack'></browWork>
         </mu-slide-left-transition>
     </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import designerDetail from './designerDetail'
+import browWork from './browWork'
 export default {
   data () {
     return {
-      isShowMoreFilter: false,
-      sortOptions: ['最多浏览', '最多点赞', '最多下载'],
-      selectSort: '最多浏览',
-      selectFilter: '',
-      detailData: 1,
-      isShowDetail: false,
-      showFilter: false
+      isShowBrowWork: false
     }
   },
-  computed: {
-    ...mapGetters('home', ['bannersList', 'filtersList'])
-  },
-  async created () {
-    this.getBanners()
-    await this.getFilters()
-    this.selectFilter = this.filtersList[0].name
-    this.showFilter = true
+  props: ['detailData'],
+  created () {
+    console.info(this.detailData)
   },
   methods: {
-    ...mapActions('home', ['getBanners', 'getFilters']),
-    isShowMore () {
-      this.isShowMoreFilter = !this.isShowMoreFilter
+    closeDetail () {
+      this.$emit('callBack')
     },
     callBack () {
-      this.isShowDetail = false
-    },
-    isCanShowAllFilters (index) {
-      if (this.isShowMoreFilter) {
-        return true
-      } else {
-        if (index > 7) {
-          return false
-        } else {
-          return true
-        }
-      }
+      this.isShowBrowWork = false
     }
   },
   components: {
-    designerDetail
+    browWork
   }
 }
 </script>
 
 <style scoped lang="scss">
-.home {
-  .swiper {
-    height: 309px;
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-  .filter-container {
-    padding: 29px 95px 0 95px;
-    display: flex;
-    flex-wrap: wrap;
-
-    .filterBox {
-      width: 100px;
-      height: 162px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      margin-left: 53.3333px;
-      img {
-        width: 80px;
-        height: 80px;
-      }
-      p {
-        margin-top: 24px;
-        text-align: center;
-        font-size: 24px;
-        line-height: 29px;
-      }
-    }
-    .filterBox:nth-child(4n+1){
-        margin-left: 0;
-    }
-  }
-  .clickMore {
-    height: 24px;
-    padding: 0 95px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    span {
-      font-size: 24px;
-      line-height: 24px;
-      color: #9e9e9e;
-      float: right;
-    }
-  }
-  .selectFilter{
-    padding: 0 90px;
-    height: 68px;
-    line-height: 68px;
-    border-top: 3px solid #ebebeb;
-    display: flex;
-    justify-content: space-between;
-    .sortFilter{
-        span{
-            font-size: 24px;
-            margin-right: 40px;
-            color: #808080;
-        }
+.designerDetail {
+  width: 100%;
+  height: calc(100% - 100px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #ffffff;
+  z-index: 10;
+  overflow-y: auto;
+  .closeHeader{
+    height: 113px;
+    line-height: 113px;
+    text-align: center;
+    padding: 0 27px;
+    position: relative;
+    font-size: 44px;
+    img{
+        width: 22px;
+        height: 41px;
+        position: absolute;
+        top: 50%;
+        left: 27px;
+        margin-top: -20.5px;
     }
   }
   .desingerInfo{
@@ -275,9 +207,54 @@ export default {
         }
     }
   }
-  .bottomBg{
-    height: 200px;
+  .history{
+    padding: 20px 10px 20px 50px;
     background-color: #f0f0f0;
+    font-size: 26px;
+    display: flex;
+    justify-content: space-between;
+    strong{
+        font-weight: normal;
+        margin-left: 18px;
+    }
+  }
+  .historyDesign{
+    padding: 20px 50px;
+    border-bottom: 3px solid #ebebeb;
+    .title{
+        line-height: 50px;
+        font-size: 26px;
+    }
+    .designInfo{
+        margin-top: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        align-content: center;
+        .evaluate{
+            width: 125px;
+            height: 25px;
+            display: flex;
+            align-content: center;
+            img{
+                width: 25px;
+                height: 25px;
+            }
+        }
+        .score{
+            font-size: 22px;
+            margin-left: 25px;
+            margin-right: 25px;
+        }
+        .date{
+            font-size: 22px;
+            color: #909090;
+        }
+    }
+    .talkAbout{
+        color: #909090;
+        line-height: 35px;
+        font-size: 20px;
+    }
   }
 }
 </style>

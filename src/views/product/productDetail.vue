@@ -1,0 +1,387 @@
+<template>
+    <div class="productDetail" >
+        <div class="closeHeader">
+            <img @click="closeDetail" src="../../assets/images/back.png" alt="back">
+            作品详情
+        </div>
+        <div class="detailContainer">
+            <div class="desingerInfo">
+                <div class="header">
+                    <div class="header-img">
+                        <img src="../../assets/images/avatar.png" alt="avatar">
+                    </div>
+                    <div class="ownInfo">
+                        <div>
+                            <span class="name">豆豆</span>
+                            <span class="workExperience">五年工作经验</span>
+                        </div>
+                        <div class="address">
+                            <img src="../../assets/images/address.png" alt="address">
+                            <span>北京。丰台</span>
+                        </div>
+                    </div>
+                    <div class="evaluate">
+                        <div class="follow">关注</div>
+                        <!-- <div class="followed">已关注</div> -->
+                        <!-- <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                        <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                        <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                        <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                        <img src="../../assets/images/homestart.png" alt="homestart"> -->
+                    </div>
+                </div>
+                <div class="skill">
+                    <div class="skillSort">
+                        <span>【主案设计】【平面规划】【深化施工图】</span>
+                    </div>
+                    <div class="doSomething">
+                        <p>主要承接办公室设计，以及平面规划方案，从规划开始满足甲方的设计需求。并能提高其企业管理效率，对施工工艺比较了解，能独立完成施工图纸。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="productInfo">
+                <p class="warn">压缩包内包含（注 : 请在PC端下载）</p>
+                <p class="intro"><span>高清图纸13张</span><span>全部3D模型</span><span>全套施工图</span></p>
+                <div class="rarFiles">
+                    <img src="../../assets/images/rar.png" alt="rar">
+                    <span>1000平米办公室.rar</span>
+                </div>
+                <div class="swiperBox">
+                    <mt-swipe class="swiper-product" :auto="0" :showIndicators="false" @change="handleChange">
+                        <mt-swipe-item><img src="../../assets/images/jiaju.png" alt="jiaju"></mt-swipe-item>
+                        <mt-swipe-item><img src="../../assets/images/jiaju.png" alt="jiaju"></mt-swipe-item>
+                        <mt-swipe-item><img src="../../assets/images/jiaju.png" alt="jiaju"></mt-swipe-item>
+                    </mt-swipe>
+                    <div class="dicators">
+                        {{ nowDicator + ' / ' + allPicture}}
+                    </div>
+                </div>
+                <div class="todos">
+                    <div>
+                        <img src="../../assets/images/shareIcon.png" alt="shareIcon">
+                        <span>66</span>
+                    </div>
+                    <div>
+                        <img src="../../assets/images/collect.png" alt="collect">
+                        <span>77</span>
+                    </div>
+                    <div>
+                        <img src="../../assets/images/talk.png" alt="talk">
+                        <span>99</span>
+                    </div>
+                    <div>
+                        <img src="../../assets/images/good.png" alt="good">
+                        <span>88</span>
+                    </div>
+                </div>
+                <div class="talk">
+                    <div class="talkBox">
+                        <div class="talk-headImg">
+                            <img src="../../assets/images/avatar.png" alt="avatar">
+                        </div>
+                        <div class="talk-content">
+                            <p class="talkerName">不明飞</p>
+                            <div class="talkerContent">
+                                <p>这个作品不错，前台比较大气，要是能有个720全景图就更好了，另外楼主能发一些竣工照片么？</p>
+                                <div class="talk-good">
+                                    <img src="../../assets/images/good.png" alt="good">
+                                    <span>88</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="talkBox">
+                        <div class="talk-headImg">
+                            <img src="../../assets/images/avatar.png" alt="avatar">
+                        </div>
+                        <div class="talk-content">
+                            <p class="talkerName">不明飞</p>
+                            <div class="talkerContent">
+                                <p>这个作品不错，前台比较大气，要是能有个720全景图就更好了，另外楼主能发一些竣工照片么？</p>
+                                <div class="talk-good">
+                                    <img src="../../assets/images/good.png" alt="good">
+                                    <span>8888</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="DetailFooter">
+            <input type="text" placeholder="添加评论">
+            <img src="../../assets/images/sendto.png" alt="sendto">
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      allPicture: 3,
+      nowDicator: 1
+    }
+  },
+  props: ['detailData'],
+  created () {
+    console.info(this.detailData)
+  },
+  methods: {
+    closeDetail () {
+      this.$emit('callBack')
+    },
+    handleChange (index) {
+      this.nowDicator = index + 1
+    }
+  }
+}
+</script>
+<style scoped lang="scss">
+.productDetail {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #ffffff;
+  z-index: 10;
+  .closeHeader{
+    height: 113px;
+    line-height: 113px;
+    text-align: center;
+    padding: 0 27px;
+    position: relative;
+    font-size: 44px;
+    img{
+        width: 22px;
+        height: 41px;
+        position: absolute;
+        top: 50%;
+        left: 27px;
+        margin-top: -20.5px;
+    }
+  }
+  .detailContainer{
+    height: calc(100% - 113px - 67px);
+    overflow-y: auto;
+    .desingerInfo{
+        padding: 30px 50px 60px 50px;
+        background-color: #f0f0f0;
+        border-bottom: 5px solid #ffffff;
+        .header{
+            display: flex;
+            align-items: center;
+            position: relative;
+            .header-img{
+                width: 120px;
+                height: 120px;
+                overflow: hidden;
+                border-radius: 50%;
+                margin-right: 40px;
+                img{
+                    width: 120px;
+                    height: 120px;
+                }
+            }
+            .ownInfo{
+                .name{
+                    font-size: 24px;
+                    margin-right: 35px;
+                }
+                .workExperience{
+                    font-size: 18px;
+                    color: #808080;
+                }
+                .address{
+                    img{
+                        width: 17px;
+                        height: 20px;
+                        margin-right: 15px;
+                        vertical-align: middle;
+                    }
+                    span{
+                        font-size: 18px;
+                        color: #808080;
+                        line-height: 70px;
+                    }
+                }
+            }
+            .evaluate{
+                height: 25px;
+                position: absolute;
+                top: 8px;
+                right: 0;
+                display: flex;
+                img{
+                    width: 25px;
+                    height: 25px;
+                }
+                div{
+                    padding: 0 15px;
+                    height: 27px;
+                    line-height: 27px;
+                    text-align: center;
+                    border-radius: 15px;
+                    font-size: 14px;
+                    margin-right: 22px;
+                }
+                .follow{
+                    color: #f1768f;
+                    border: 1px solid #f1768f;
+                }
+                .followed{
+                    color: #c8c6c6;
+                    border: 1px solid #c8c6c6;
+                }
+            }
+        }
+        .skill{
+            margin-top: 30px;
+            .doSomething{
+                margin-top: 10px;
+                p{
+                    font-size: 20px;
+                    color: #808080;
+                    line-height: 35px;
+                }
+            }
+        }
+    }
+    .productInfo{
+        padding: 15px 50px 0px 50px;
+        .warn{
+            font-size: 19px;
+            line-height: 29px;
+        }
+        .intro{
+            font-size: 20px;
+            line-height: 32px;
+            color: #848484;
+            span{
+                margin-right: 12px;
+            }
+        }
+        .rarFiles{
+            margin-top: 16px;
+            margin-bottom: 25px;
+            font-size: 19px;
+            color: #848484;
+            img{
+                width: 29px;
+                height: 21px;
+                margin-right: 15px;
+            }
+        }
+        .swiperBox{
+            position: relative;
+            .swiper-product{
+                width: 100%;
+                height: 440px;
+                img{
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .dicators{
+                color: #ffffff;
+                font-size: 24px;
+                position: absolute;
+                right: 15px;
+                bottom: 15px;
+            }
+        }
+        .todos{
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+            div{
+                margin-right: 17px;
+                img{
+                    width: 27px;
+                    height: 27px;
+                }
+                span{
+                    color: #8a96ba;
+                    font-size: 16px;
+                    height: 27px;
+                    vertical-align: top;
+                    margin-left: 2px;
+                    line-height: 17px;
+                }
+            }
+        }
+        .talk{
+            .talkBox{
+                margin-top: 20px;
+                .talk-headImg{
+                    display: block;
+                    width: 66px;
+                    height: 66px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    float: left;
+                    img{
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                .talk-content{
+                    display: inline-block;
+                    width: 570px;
+                    font-size: 20px;
+                    margin-left: 14px;
+                    .talkerName{
+                        color: #848484;
+                        margin-bottom: 14px;
+                    }
+                    .talkerContent{
+                        p{
+                            line-height: 32px;
+                            width: 490px;
+                            display: inline-block;
+                        }
+                        .talk-good{
+                            display: inline-block;
+                            margin-left: 10px;
+                            width: 70px;
+                            position: relative;
+                            vertical-align: top;
+                            img{
+                                width: 27px;
+                                height: 27px;
+                            }
+                            span{
+                                color: #8a96ba;
+                                font-size: 16px;
+                                height: 27px;
+                                margin-left: 2px;
+                                line-height: 5px;
+                                position: absolute;
+                                top: 0px;
+                                left: 27px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+  }
+  .DetailFooter{
+    padding: 0px 50px 21px 50px;
+    height: 43px;
+    input{
+        width: 580px;
+        line-height: 43px;
+        border: none;
+        border-bottom: 3px solid #848484;
+    }
+    img{
+        width: 61px;
+        height: 53px;
+        margin-left: 5px;
+    }
+  }
+}
+</style>

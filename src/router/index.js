@@ -3,7 +3,6 @@ import Router from 'vue-router'
 
 // const Home = () => import('@/views/Home/index')
 const Login = () => import('@/views/login/index')
-
 // Mobile页面
 const mobileLayout = () => import('@/views/mobileLayout/index')
 const Home = () => import('@/views/home/index') // 首页

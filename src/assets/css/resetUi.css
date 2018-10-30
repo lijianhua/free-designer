@@ -1,0 +1,22 @@
+/* muse-ui */
+.mu-select-content{
+    font-size: 24px;
+}
+.mu-select-action{
+    display: none;
+}
+.mu-list li{
+    height: 40px;
+    line-height: 40px;
+    font-size: 24px;
+    padding-left: 15px;
+}
+.mu-input-line{
+    display: none;
+}
+.mu-input-focus-line{
+    display: none;
+}
+.mu-input{
+    width: 170px;
+}

@@ -1,4 +1,4 @@
-import { getBanners, getFilters } from '@/api/home'
+import { getBanners, getFilters } from '@/api/product'
 
 export default {
   namespaced: true,
@@ -21,7 +21,7 @@ export default {
   actions: {
     async getBanners ({ commit }) {
       const dataFrom = {
-        from: 1
+        from: 2
       }
       const { data } = await getBanners(dataFrom)
       commit('getBanners', data)
