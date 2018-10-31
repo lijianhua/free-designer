@@ -4,7 +4,7 @@
             <div class="avatar">
                 <img src="http://www.free-designer.cn/M00/00/64/wKgABVt30lKAYOf6AAAz0yXWPI4179.png">
             </div>
-            <div class="setting">
+            <div class="setting" @click="$router.push('my-info')">
                 <img src="~@/assets/images/my/ico_pencil.png" alt="">
                 <span>编辑资料</span>
             </div>

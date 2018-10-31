@@ -58,7 +58,8 @@
           "mu-picker",
           "mu-date",
           "mu-day",
-          "mu-icon-button"
+          "mu-icon-button",
+          "mint-actionsheet"
         ]
       }
     }

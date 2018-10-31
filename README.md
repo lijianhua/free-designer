@@ -36,6 +36,7 @@ postcss  selectorBlackList   设置不转换rem白名单
 实名认证结果页：/views/my/my-certification-result.vue
 平台说明页：/views/my/my-about.vue
 积分充值：/views/my/my-pay-new.vue
+个人信息：/views/my/my-info.vue
 ```
 
 ## 订单

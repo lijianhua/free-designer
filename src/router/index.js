@@ -23,7 +23,9 @@ const MyCertificationResult = () => import('@/views/my/my-certification-result')
 // 企业说明
 const MyAbout = () => import('@/views/my/my-about')
 // 积分充值
-const myPayNew = () => import('@/views/my/my-pay-new')
+const MyPayNew = () => import('@/views/my/my-pay-new')
+// 个人信息
+const MyInfo = () => import('@/views/my/my-info')
 
 Vue.use(Router)
 
@@ -67,6 +69,11 @@ export default new Router({
           component: My
         },
         {
+          name: 'my-info',
+          path: '/my-info',
+          component: MyInfo
+        },
+        {
           name: 'my-work',
           path: '/my-work',
           component: MyWork
@@ -84,7 +91,7 @@ export default new Router({
         {
           name: 'my-pay-new',
           path: '/my-pay-new',
-          component: myPayNew
+          component: MyPayNew
         },
         {
           name: 'send-creat-order',
