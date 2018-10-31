@@ -78,8 +78,39 @@
       <div class="item">
         <div class="name">修改密码</div>
         <div class="content">
-          <img class="go" @click="$router.push('my')" src="../../assets/images/back.png" alt="">
+          <img class="go" @click="passwordVisible=true" src="../../assets/images/back.png" alt="">
         </div>
+        <mt-popup
+          v-model="passwordVisible"
+          :modal="false"
+          class="mint-popup-3"
+          position="right">
+              <div class="header">
+                <img @click="passwordVisible = false" src="../../assets/images/back.png" alt="">
+                <h3>修改密码</h3>
+              </div>
+              <div class="popup-1-main">
+                <div class="popup-1-item">
+                  <div>原密码</div>
+                  <div>
+                      <mu-text-field placeholder="请输入原密码"></mu-text-field>
+                  </div>
+                </div>
+                <div class="popup-1-item">
+                  <div>新密码</div>
+                  <div>
+                      <mu-text-field placeholder="请输入新密码"></mu-text-field>
+                  </div>
+                </div>
+                <div class="popup-1-item">
+                  <div>确认新密码</div>
+                  <div>
+                      <mu-text-field placeholder="请确认新密码"></mu-text-field>
+                  </div>
+                </div>
+              </div>
+              <div class="submit">确认修改</div>
+        </mt-popup>
       </div>
     </div>
   </div>
@@ -89,6 +120,7 @@ export default {
   data () {
     return {
       sheetVisible: false,
+      passwordVisible: false,
       actions: [
         { name: '男', method: (val) => { console.log(val) } },
         { name: '男', method: (val) => { console.log(val) } }
@@ -154,6 +186,39 @@ export default {
         }
       }
     }
+    .mint-popup-3 {
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+    }
   }
+}
+.popup-1-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    height: 100px;
+    border-bottom: 1px solid #eee;
+
+    >div:first-child {
+      font-size: 32px;
+      width: 25%;
+      color: #aaa;
+    }
+    >div:last-child {
+      padding-left: 30px;
+      flex: 1;
+      font-size: 32px;
+    }
+}
+.submit {
+  width: 436px;
+  height: 67px;
+  color: #fff;
+  line-height: 67px;
+  text-align: center;
+  background-color: #4195f7;
+  margin: 40px auto 0;
 }
 </style>
