@@ -15,6 +15,13 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   response => {
     if (response && response.data && response.data.success) {
+      if (response.data.page_info) {
+        response.data.data = {
+          data: response.data.data,
+          page_info: response.data.page_info
+        }
+      }
+      delete response.data.page_info
       return response.data
     } else if (response && response.data && response.data.message) {
       Toast({

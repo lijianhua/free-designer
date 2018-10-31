@@ -2,7 +2,7 @@ import { fetchLogin } from '@/api/login'
 import Cookie from 'js-cookie'
 
 const initForm = () => ({
-  mobile: '13911519564',
+  mobile: '13601236259',
   password: '123456'
 })
 
