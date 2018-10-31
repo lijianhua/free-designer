@@ -27,3 +27,8 @@ export function getHistory (data) {
     method: 'GET'
   })
 }
+export function getPicture (data) {
+  return fetchUtil('/api/user/' + data + '/gallery/', {
+    method: 'GET'
+  })
+}

@@ -56,20 +56,24 @@
             <span>工作历史和反馈</span>
             <span @click="isShowBrowWork = true">作品浏览<strong>》</strong></span>
         </div>
-        <div class="historyDesign">
-            <div class="title">办公室工程 平面规划 1600平米</div>
-            <div class="designInfo">
-                <div class="evaluate">
-                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                    <img src="../../assets/images/homestart.png" alt="homestart">
+        <div class="loadmore-content">
+            <mu-load-more @refresh="getList" :refreshing="refreshing" :loading="loading" @load="load" :loaded-all="isLoadedAll">
+                <div class="historyDesign" v-for="(item, index) in historyList" :key="index">
+                    <div class="title">{{ item.order }}</div>
+                    <div class="designInfo">
+                        <!-- <div class="evaluate">
+                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                            <img src="../../assets/images/homestart.png" alt="homestart">
+                        </div> -->
+                        <!-- <span class="score">5.00</span> -->
+                        <span class="date">2018年08月</span>
+                    </div>
+                    <p class="talkAbout">{{ item.comment }}</p>
                 </div>
-                <span class="score">5.00</span>
-                <span class="date">2018年08月</span>
-            </div>
-            <p class="talkAbout">(｡･∀･)ﾉﾞ嗨 豆豆！惊人的自由职业者！非常快速和高效。把事情做对，高度专业，我推荐他！</p>
+            </mu-load-more>
         </div>
         <!-- 工作者作品 -->
         <mu-slide-left-transition>
@@ -84,12 +88,15 @@ import browWork from './browWork'
 export default {
   data () {
     return {
-      isShowBrowWork: false
+      isShowBrowWork: false,
+      refreshing: false,
+      loading: false,
+      isLoadedAll: false
     }
   },
   props: ['detailData'],
   computed: {
-    ...mapGetters('home', ['userInfo', 'historyList'])
+    ...mapGetters('home', ['userInfo', 'historyList', 'historyPageInfo'])
   },
   async created () {
     console.info(this.detailData)
@@ -98,12 +105,29 @@ export default {
     console.info(this.userInfo, this.historyList)
   },
   methods: {
-    ...mapActions('home', ['getUserInfo', 'getHistory']),
+    ...mapActions('home', ['getUserInfo', 'getHistory', 'getMoreHistory']),
     closeDetail () {
       this.$emit('callBack')
     },
     callBack () {
       this.isShowBrowWork = false
+    },
+    async getList () {
+      if (this.isLoadedAll) {
+        this.isLoadedAll = false
+      }
+      this.refreshing = true
+      await this.getHistory(this.detailData)
+      this.refreshing = false
+    },
+    async load () {
+      if (this.historyPageInfo.page + 1 > this.historyPageInfo.total_page) {
+        this.isLoadedAll = true
+        return
+      }
+      this.loading = true
+      await this.getMoreHistory(this.detailData)
+      this.loading = false
     }
   },
   components: {
@@ -121,7 +145,6 @@ export default {
   left: 0;
   background-color: #ffffff;
   z-index: 10;
-  overflow-y: auto;
   .closeHeader{
     height: 113px;
     line-height: 113px;
@@ -227,6 +250,12 @@ export default {
         font-weight: normal;
         margin-left: 18px;
     }
+  }
+  .loadmore-content{
+    height: 700px;
+    flex: 1;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .historyDesign{
     padding: 20px 50px;
