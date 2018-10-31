@@ -53,8 +53,12 @@
       "autoprefixer": {},
       "postcss-pxtorem": {
         "rootValue": 75,
-        "propList": [
-          "*"
+        "propList": ["*"],
+        "selectorBlackList": [
+          "mu-picker",
+          "mu-date",
+          "mu-day",
+          "mu-icon-button"
         ]
       }
     }

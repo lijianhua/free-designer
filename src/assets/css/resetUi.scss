@@ -1,0 +1,56 @@
+/* muse-ui */
+.mu-select-content{
+    font-size: 24px;
+}
+.mu-select-action{
+    display: none;
+}
+.mu-list li{
+    height: 40px;
+    line-height: 40px;
+    font-size: 24px;
+    padding-left: 15px;
+}
+.mu-input-line{
+    display: none;
+}
+.mu-input-focus-line{
+    display: none;
+}
+.mu-input{
+    width: 170px;
+}
+
+/* 创建订单页 */
+.creat-order-container {
+
+    .select {
+        .mu-input {
+            width: 100px;
+        }
+    }
+    .mu-input {
+        padding: 0;
+        margin-bottom: 0;
+        min-height: 0;
+        width: auto;
+    }
+    .mu-input-content {
+        z-index: 2;
+    }
+    .mu-input.has-label .mu-input-label.float {
+        opacity: 1;
+        transform: none;
+        color: rgba(0,0,0,.54);
+    }
+    .mu-input.has-label .mu-input-label {
+        opacity: 0;
+    }
+    .mu-select-action {
+        display: block;
+
+        >svg {
+            transform: scale(2);
+        }
+    }
+}

@@ -21,7 +21,9 @@ $ open http://localhost:8080/
 
 [vue-cli3.0引入px2rem与lib-flexible 移动端适配](https://blog.csdn.net/qq_31393401/article/details/82353267)
 原项目rem * 40 = 现在px       原项目px * 20 = 现在px
-//ignored  px不转rem   例：1px //ignored  不会被转换成rem
+//ignored   不会被转换成rem 像素大写  PX || Px
+
+postcss  selectorBlackList   设置不转换rem白名单
 
 
 # 路由
@@ -40,6 +42,7 @@ $ open http://localhost:8080/
 
 ```bash
 订单页：/views/order/index.vue
+发布订单页：/views/order/send-creat-order.vue
 ```
 
 ## 登录
