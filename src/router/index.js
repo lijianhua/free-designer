@@ -8,7 +8,11 @@ const mobileLayout = () => import('@/views/mobileLayout/index')
 const Home = () => import('@/views/home/index') // 首页
 const Apply = () => import('@/views/apply/index') // 需求池
 const Product = () => import('@/views/product/index') // 作品展
-const Order = () => import('@/views/order/index') // 我的
+
+// 订单
+const Order = () => import('@/views/order/index')
+// 发布订单
+const sendCreatOrder = () => import('@/views/order/send-creat-order')
 
 // 个人中心
 const My = () => import('@/views/my/index')
@@ -81,6 +85,11 @@ export default new Router({
           name: 'my-pay-new',
           path: '/my-pay-new',
           component: myPayNew
+        },
+        {
+          name: 'send-creat-order',
+          path: '/send-creat-order',
+          component: sendCreatOrder
         }
       ]
     }

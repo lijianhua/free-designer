@@ -126,11 +126,25 @@
             </mt-tab-container-item>
             <mt-tab-container-item id="worker">
                 <div class="tab-main">
+                    <div class="item">
+                        <div class="state">
+                            <img src="../../assets/images/order/ico_true.jpg" alt="">
+                        </div>
+                        <div class="main">
+                            <div class="title">
+                                <p>办公室内工程&nbsp;施工图</p>
+                                <span>2800 积分</span>
+                            </div>
+                            <div class="date">
+                                发单时间 2018-10-10 交稿时间 2018-11-11
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </mt-tab-container-item>
         </mt-tab-container>
         <div class="btn-box">
-            <div class="btn-demand">
+            <div class="btn-demand" @click="$router.push('send-creat-order')">
                 发需求
             </div>
         </div>
@@ -155,7 +169,7 @@
     line-height: 57px;
     text-align: center;
     background-color: #ebebeb;
-    border: 1px solid #ebebeb; //ignored
+    border: 1PX solid #ebebeb;
     .btn {
         flex: 1;
         &.active {
