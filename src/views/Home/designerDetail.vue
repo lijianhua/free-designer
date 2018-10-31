@@ -7,44 +7,46 @@
         <div class="desingerInfo">
             <div class="header">
                 <div class="header-img">
-                    <img src="../../assets/images/avatar.png" alt="avatar">
+                    <img :src="userInfo.avatar" alt="avatar">
                 </div>
                 <div class="ownInfo">
                     <div>
-                        <span class="name">豆豆</span>
-                        <span class="workExperience">五年工作经验</span>
+                        <span class="name">{{ userInfo.name }}</span>
+                        <span class="workExperience">{{ userInfo.career }}年工作经验</span>
                     </div>
                     <div class="address">
                         <img src="../../assets/images/address.png" alt="address">
-                        <span>北京。丰台</span>
+                        <span>{{ userInfo.province }}。{{ userInfo.city }}</span>
                     </div>
                 </div>
-                <div class="evaluate">
+                <!-- <div class="evaluate">
                     <img src="../../assets/images/homestartlight.png" alt="homestartlight">
                     <img src="../../assets/images/homestartlight.png" alt="homestartlight">
                     <img src="../../assets/images/homestartlight.png" alt="homestartlight">
                     <img src="../../assets/images/homestartlight.png" alt="homestartlight">
                     <img src="../../assets/images/homestart.png" alt="homestart">
-                </div>
+                </div> -->
             </div>
             <div class="skill">
-                <div class="skillSort">
-                    <span>【主案设计】【平面规划】【深化施工图】</span>
+                <div v-if="userInfo.role" class="skillSort">
+                    <span v-for="(childItem, idx) in userInfo.role.split(',')" :key="idx">
+                        【{{ childItem }}】
+                    </span>
                 </div>
                 <div class="doSomething">
-                    <p>主要承接办公室设计，以及平面规划方案，从规划开始满足甲方的设计需求。并能提高其企业管理效率，对施工工艺比较了解，能独立完成施工图纸。</p>
+                    <p>{{ userInfo.desc }}</p>
                 </div>
                 <div class="worked">
-                    <div>
+                    <!-- <div>
                         <span>96%</span>
                         <span>工作完成率</span>
-                    </div>
+                    </div> -->
                     <div>
-                        <span>31</span>
+                        <span>{{ userInfo.apply_count }}</span>
                         <span>接单量</span>
                     </div>
                     <div>
-                        <span>33</span>
+                        <span>{{ userInfo.gallery_count }}</span>
                         <span>作品展示/套</span>
                     </div>
                 </div>
@@ -54,20 +56,24 @@
             <span>工作历史和反馈</span>
             <span @click="isShowBrowWork = true">作品浏览<strong>》</strong></span>
         </div>
-        <div class="historyDesign">
-            <div class="title">办公室工程 平面规划 1600平米</div>
-            <div class="designInfo">
-                <div class="evaluate">
-                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                    <img src="../../assets/images/homestart.png" alt="homestart">
+        <div class="loadmore-content">
+            <mu-load-more @refresh="getList" :refreshing="refreshing" :loading="loading" @load="load" :loaded-all="isLoadedAll">
+                <div class="historyDesign" v-for="(item, index) in historyList" :key="index">
+                    <div class="title">{{ item.order }}</div>
+                    <div class="designInfo">
+                        <!-- <div class="evaluate">
+                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                            <img src="../../assets/images/homestart.png" alt="homestart">
+                        </div> -->
+                        <!-- <span class="score">5.00</span> -->
+                        <span class="date">2018年08月</span>
+                    </div>
+                    <p class="talkAbout">{{ item.comment }}</p>
                 </div>
-                <span class="score">5.00</span>
-                <span class="date">2018年08月</span>
-            </div>
-            <p class="talkAbout">(｡･∀･)ﾉﾞ嗨 豆豆！惊人的自由职业者！非常快速和高效。把事情做对，高度专业，我推荐他！</p>
+            </mu-load-more>
         </div>
         <!-- 工作者作品 -->
         <mu-slide-left-transition>
@@ -77,23 +83,51 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import browWork from './browWork'
 export default {
   data () {
     return {
-      isShowBrowWork: false
+      isShowBrowWork: false,
+      refreshing: false,
+      loading: false,
+      isLoadedAll: false
     }
   },
   props: ['detailData'],
-  created () {
+  computed: {
+    ...mapGetters('home', ['userInfo', 'historyList', 'historyPageInfo'])
+  },
+  async created () {
     console.info(this.detailData)
+    await this.getUserInfo(this.detailData)
+    await this.getHistory(this.detailData)
+    console.info(this.userInfo, this.historyList)
   },
   methods: {
+    ...mapActions('home', ['getUserInfo', 'getHistory', 'getMoreHistory']),
     closeDetail () {
       this.$emit('callBack')
     },
     callBack () {
       this.isShowBrowWork = false
+    },
+    async getList () {
+      if (this.isLoadedAll) {
+        this.isLoadedAll = false
+      }
+      this.refreshing = true
+      await this.getHistory(this.detailData)
+      this.refreshing = false
+    },
+    async load () {
+      if (this.historyPageInfo.page + 1 > this.historyPageInfo.total_page) {
+        this.isLoadedAll = true
+        return
+      }
+      this.loading = true
+      await this.getMoreHistory(this.detailData)
+      this.loading = false
     }
   },
   components: {
@@ -111,7 +145,6 @@ export default {
   left: 0;
   background-color: #ffffff;
   z-index: 10;
-  overflow-y: auto;
   .closeHeader{
     height: 113px;
     line-height: 113px;
@@ -217,6 +250,12 @@ export default {
         font-weight: normal;
         margin-left: 18px;
     }
+  }
+  .loadmore-content{
+    height: 700px;
+    flex: 1;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .historyDesign{
     padding: 20px 50px;

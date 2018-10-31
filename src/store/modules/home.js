@@ -1,4 +1,4 @@
-import { getBanners, getFilters, getUsers } from '@/api/home'
+import { getBanners, getFilters, getUsers, getUserInfo, getHistory, getPicture } from '@/api/home'
 
 export default {
   namespaced: true,
@@ -6,13 +6,23 @@ export default {
     bannersList: [],
     filtersList: [],
     usersList: [],
-    pageInfo: {}
+    pageInfo: {},
+    userInfo: {},
+    historyList: [],
+    historyPageInfo: {},
+    pictureList: [],
+    picturePageInfo: {}
   },
   getters: {
     bannersList: state => state.bannersList,
     filtersList: state => state.filtersList,
-    usersList: state => state.filtersList,
-    pageInfo: state => state.pageInfo
+    usersList: state => state.usersList,
+    pageInfo: state => state.pageInfo,
+    userInfo: state => state.userInfo,
+    historyList: state => state.historyList,
+    historyPageInfo: state => state.historyPageInfo,
+    pictureList: state => state.pictureList,
+    picturePageInfo: state => state.picturePageInfo
   },
   mutations: {
     getBanners (state, data) {
@@ -29,6 +39,27 @@ export default {
     },
     getPageInfo (state, data) {
       state.pageInfo = data
+    },
+    getUserInfo (state, data) {
+      state.userInfo = data
+    },
+    getHistory (state, data) {
+      state.historyList = data
+    },
+    getMoreHistory (state, data) {
+      state.historyList = state.historyList.concat(data)
+    },
+    getHisPageInfo (state, data) {
+      state.historyPageInfo = data
+    },
+    getPicture (state, data) {
+      state.pictureList = data
+    },
+    getMorePicture (state, data) {
+      state.pictureList = state.pictureList.concat(data)
+    },
+    getPicPageInfo (state, data) {
+      state.picturePageInfo = data
     }
   },
   actions: {
@@ -45,12 +76,37 @@ export default {
     },
     async getUsers ({ commit }, dataFrom) {
       const { data } = await getUsers(dataFrom)
-      console.info(data)
-      commit('getUsers', data)
+      commit('getUsers', data.data)
+      commit('getPageInfo', data.page_info)
     },
     async getMoreUsers ({ commit }, dataFrom) {
       const { data } = await getUsers(dataFrom)
-      commit('getMoreUsers', data)
+      commit('getMoreUsers', data.data)
+      commit('getPageInfo', data.page_info)
+    },
+    async getUserInfo ({ commit }, dataFrom) {
+      const { data } = await getUserInfo(dataFrom)
+      commit('getUserInfo', data)
+    },
+    async getHistory ({ commit }, dataFrom) {
+      const { data } = await getHistory(dataFrom)
+      commit('getHistory', data.data)
+      commit('getHisPageInfo', data.page_info)
+    },
+    async getMoreHistory ({ commit }, dataFrom) {
+      const { data } = await getHistory(dataFrom)
+      commit('getMoreHistory', data.data)
+      commit('getHisPageInfo', data.page_info)
+    },
+    async getPicture ({ commit }, dataFrom) {
+      const { data } = await getPicture(dataFrom)
+      commit('getPicture', data.data)
+      commit('getPicPageInfo', data.page_info)
+    },
+    async getMorePicture ({ commit }, dataFrom) {
+      const { data } = await getPicture(dataFrom)
+      commit('getMorePicture', data.data)
+      commit('getPicPageInfo', data.page_info)
     }
   }
 }

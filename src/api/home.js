@@ -17,3 +17,18 @@ export function getUsers (data = {}) {
     data
   })
 }
+export function getUserInfo (data) {
+  return fetchUtil('/users/' + data, {
+    method: 'GET'
+  })
+}
+export function getHistory (data) {
+  return fetchUtil('/apply_records/?status=finished&user=' + data, {
+    method: 'GET'
+  })
+}
+export function getPicture (data) {
+  return fetchUtil('/api/user/' + data + '/gallery/', {
+    method: 'GET'
+  })
+}

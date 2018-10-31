@@ -7,44 +7,46 @@
         <div class="desingerInfo">
             <div class="header">
                 <div class="header-img">
-                    <img src="../../assets/images/avatar.png" alt="avatar">
+                    <img :src="userInfo.avatar" alt="avatar">
                 </div>
                 <div class="ownInfo">
                     <div>
-                        <span class="name">豆豆</span>
-                        <span class="workExperience">五年工作经验</span>
+                        <span class="name">{{ userInfo.name }}</span>
+                        <span class="workExperience">{{ userInfo.career }}年工作经验</span>
                     </div>
                     <div class="address">
                         <img src="../../assets/images/address.png" alt="address">
-                        <span>北京。丰台</span>
+                        <span>{{ userInfo.province }}。{{ userInfo.city }}</span>
                     </div>
                 </div>
-                <div class="evaluate">
+                <!-- <div class="evaluate">
                     <img src="../../assets/images/homestartlight.png" alt="homestartlight">
                     <img src="../../assets/images/homestartlight.png" alt="homestartlight">
                     <img src="../../assets/images/homestartlight.png" alt="homestartlight">
                     <img src="../../assets/images/homestartlight.png" alt="homestartlight">
                     <img src="../../assets/images/homestart.png" alt="homestart">
-                </div>
+                </div> -->
             </div>
             <div class="skill">
-                <div class="skillSort">
-                    <span>【主案设计】【平面规划】【深化施工图】</span>
+                <div v-if="userInfo.role" class="skillSort">
+                    <span v-for="(childItem, idx) in userInfo.role.split(',')" :key="idx">
+                        【{{ childItem }}】
+                    </span>
                 </div>
                 <div class="doSomething">
-                    <p>主要承接办公室设计，以及平面规划方案，从规划开始满足甲方的设计需求。并能提高其企业管理效率，对施工工艺比较了解，能独立完成施工图纸。</p>
+                    <p>{{ userInfo.desc }}</p>
                 </div>
                 <div class="worked">
-                    <div>
+                    <!-- <div>
                         <span>96%</span>
                         <span>工作完成率</span>
-                    </div>
+                    </div> -->
                     <div>
-                        <span>31</span>
+                        <span>{{ userInfo.apply_count }}</span>
                         <span>接单量</span>
                     </div>
                     <div>
-                        <span>33</span>
+                        <span>{{ userInfo.gallery_count }}</span>
                         <span>作品展示/套</span>
                     </div>
                 </div>
@@ -54,31 +56,66 @@
             <span @click="closeDetail"><strong>《</strong>工作历史和反馈</span>
             <span>作品浏览</span>
         </div>
-        <div class="designBox">
-            <div class="title">1000平米办公室项目</div>
-            <div class="designImg" @click="isShowDetail = true">
-                <img src="../../assets/images/designImg.png" alt="designImg">
-            </div>
-            <div class="designInfo">
-                <div class="price">本案授权 39积分/套</div>
-                <div class="clickGood">
-                    <img src="../../assets/images/good.png" alt="good">
-                    <span>587</span>
-                    <img src="../../assets/images/talk.png" alt="talk">
-                    <span>6</span>
+        <div class="loadmore-content">
+            <mu-load-more @refresh="getList" :refreshing="refreshing" :loading="loading" @load="load" :loaded-all="isLoadedAll">
+                <div class="designBox">
+                    <div class="title">1000平米办公室项目</div>
+                    <div class="designImg">
+                        <img src="../../assets/images/designImg.png" alt="designImg">
+                    </div>
+                    <div class="designInfo">
+                        <div class="price">本案授权 39积分/套</div>
+                        <div class="clickGood">
+                            <img src="../../assets/images/good.png" alt="good">
+                            <span>587</span>
+                            <img src="../../assets/images/talk.png" alt="talk">
+                            <span>6</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </mu-load-more>
         </div>
     </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
+  data () {
+    return {
+      refreshing: false,
+      loading: false,
+      isLoadedAll: false
+    }
+  },
+  computed: {
+    ...mapGetters('home', ['userInfo', 'pictureList', 'picturePageInfo'])
+  },
   created () {
+    console.info(this.userInfo)
+    this.getPicture(this.userInfo.id)
   },
   methods: {
+    ...mapActions('home', ['getPicture', 'getMorePicture']),
     closeDetail () {
       this.$emit('callBack')
+    },
+    async getList () {
+      if (this.isLoadedAll) {
+        this.isLoadedAll = false
+      }
+      this.refreshing = true
+      await this.getPicture(this.userInfo.id)
+      this.refreshing = false
+    },
+    async load () {
+      if (this.picturePageInfo.page + 1 > this.picturePageInfo.total_page) {
+        this.isLoadedAll = true
+        return
+      }
+      this.loading = true
+      await this.getMorePicture(this.userInfo.id)
+      this.loading = false
     }
   }
 }
@@ -93,7 +130,6 @@ export default {
   left: 0;
   background-color: #ffffff;
   z-index: 10;
-  overflow-y: auto;
   .closeHeader{
     height: 113px;
     line-height: 113px;
@@ -201,6 +237,12 @@ export default {
             margin-right: 18px;
         }
     }
+  }
+  .loadmore-content{
+    height: 1500px;
+    flex: 1;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
   }
 .designBox{
     border-bottom: 3px solid #ebebeb;

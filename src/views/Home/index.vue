@@ -6,7 +6,7 @@
             </mt-swipe-item>
         </mt-swipe>
         <div class="filter-container">
-            <div v-for="(item, index) in filtersList" v-show="isCanShowAllFilters(index)" :key="index" class="filterBox">
+            <div v-for="(item, index) in filtersList" @click="clickFilters(item.id)" v-show="isCanShowAllFilters(index)" :key="index" class="filterBox">
                 <img :src="item.pic" alt="filter">
                 <p>{{ item.name }}</p>
             </div>
@@ -17,8 +17,8 @@
         <div class="selectFilter">
             <div class="sortFilter">
                 <span>排序</span>
-                <mu-select v-model="selectSort">
-                    <mu-option v-for="option in sortOptions" :key="option" :label="option" :value="option"></mu-option>
+                <mu-select v-model="selectSort" @change="getUsersList">
+                    <mu-option v-for="(option, index) in sortOptions" :key="index" :label="option.name" :value="option.value"></mu-option>
                 </mu-select>
             </div>
             <div class="sortFilter">
@@ -28,63 +28,58 @@
                 </mu-select>
             </div>
         </div>
-        <!-- <mu-load-more @refresh="refresh" :refreshing="refreshing" :loading="loading" @load="load">
-            <mu-list>
-                <template v-for="i in num">
-                <mu-list-item>
-                    <mu-list-item-title>{{text}} Item {{i}}</mu-list-item-title>
-                </mu-list-item>
-                <mu-divider />
-                </template>
-            </mu-list>
-        </mu-load-more> -->
-        <!-- <div class="desingerInfo">
-            <div class="header">
-                <div @click="isShowDetail = true" class="header-img">
-                    <img src="../../assets/images/avatar.png" alt="avatar">
-                </div>
-                <div class="ownInfo">
-                    <div>
-                        <span @click="isShowDetail = true" class="name">豆豆</span>
-                        <span class="workExperience">五年工作经验</span>
+        <div class="loadmore-content">
+            <mu-load-more @refresh="getUsersList" :refreshing="refreshing" :loading="loading" @load="load" :loaded-all="isLoadedAll">
+                <div class="desingerInfo" v-for="(item, index) in usersList" :key="index">
+                    <div class="header">
+                        <div @click="showDetail(item.id)" class="header-img">
+                            <img :src="item.avatar" alt="avatar">
+                        </div>
+                        <div class="ownInfo">
+                            <div>
+                                <span @click="showDetail(item.id)" class="name">{{ item.name }}</span>
+                                <span class="workExperience">{{ item.career }}年工作经验</span>
+                            </div>
+                            <div class="address">
+                                <img src="../../assets/images/address.png" alt="address">
+                                <span>{{ item.province }}。{{ item.city }}</span>
+                            </div>
+                        </div>
+                        <!-- <div class="evaluate">
+                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                            <img src="../../assets/images/homestart.png" alt="homestart">
+                        </div> -->
                     </div>
-                    <div class="address">
-                        <img src="../../assets/images/address.png" alt="address">
-                        <span>北京。丰台</span>
-                    </div>
-                </div>
-                <div class="evaluate">
-                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                    <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                    <img src="../../assets/images/homestart.png" alt="homestart">
-                </div>
-            </div>
-            <div class="skill">
-                <div class="skillSort">
-                    <span>【主案设计】【平面规划】【深化施工图】</span>
-                </div>
-                <div class="doSomething">
-                    <p>主要承接办公室设计，以及平面规划方案，从规划开始满足甲方的设计需求。并能提高其企业管理效率，对施工工艺比较了解，能独立完成施工图纸。</p>
-                </div>
-                <div class="worked">
-                    <div>
-                        <span>96%</span>
-                        <span>工作完成率</span>
-                    </div>
-                    <div>
-                        <span>31</span>
-                        <span>接单量</span>
-                    </div>
-                    <div>
-                        <span>33</span>
-                        <span>作品展示/套</span>
+                    <div class="skill">
+                        <div class="skillSort">
+                            <span v-for="(childItem, idx) in item.role.split(',')" :key="idx">
+                                【{{ childItem }}】
+                            </span>
+                        </div>
+                        <div class="doSomething">
+                            <p>{{ item.desc }}</p>
+                        </div>
+                        <div class="worked">
+                            <!-- <div>
+                                <span>96%</span>
+                                <span>工作完成率</span>
+                            </div> -->
+                            <div>
+                                <span>{{ item.apply_count }}</span>
+                                <span>接单量</span>
+                            </div>
+                            <div>
+                                <span>{{ item.gallery_count }}</span>
+                                <span>作品展示/套</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div> -->
-        <div class="bottomBg"></div>
+            </mu-load-more>
+        </div>
         <!-- 工作者详情页 -->
         <mu-slide-left-transition>
             <designerDetail v-if="isShowDetail" :detailData='detailData' @callBack='callBack'></designerDetail>
@@ -99,16 +94,25 @@ export default {
   data () {
     return {
       isShowMoreFilter: false,
-      sortOptions: ['最多浏览', '最多点赞', '最多下载'],
-      selectSort: '最多浏览',
+      sortOptions: [{
+        name: '最多接单',
+        value: 'apply_count'
+      }, {
+        name: '最多作品',
+        value: 'gallery_count'
+      }],
+      selectSort: 'apply_count',
       selectFilter: '',
-      detailData: 1,
+      detailData: '',
       isShowDetail: false,
-      showFilter: false
+      showFilter: false,
+      refreshing: false,
+      loading: false,
+      isLoadedAll: false
     }
   },
   computed: {
-    ...mapGetters('home', ['bannersList', 'filtersList', 'usersList'])
+    ...mapGetters('home', ['bannersList', 'filtersList', 'usersList', 'pageInfo'])
   },
   async created () {
     this.getBanners()
@@ -118,7 +122,7 @@ export default {
     this.getUsersList()
   },
   methods: {
-    ...mapActions('home', ['getBanners', 'getFilters', 'getUsers']),
+    ...mapActions('home', ['getBanners', 'getFilters', 'getUsers', 'getMoreUsers']),
     isShowMore () {
       this.isShowMoreFilter = !this.isShowMoreFilter
     },
@@ -136,11 +140,39 @@ export default {
         }
       }
     },
-    getUsersList () {
-      const dataFrom = {
-        role: this.selectFilter
+    async getUsersList () {
+      if (this.isLoadedAll) {
+        this.isLoadedAll = false
       }
-      this.getUsers(dataFrom)
+      this.refreshing = true
+      const dataFrom = {
+        role: this.selectFilter,
+        sort_by: this.selectSort
+      }
+      await this.getUsers(dataFrom)
+      this.refreshing = false
+    },
+    async load () {
+      if (this.pageInfo.page + 1 > this.pageInfo.total_page) {
+        this.isLoadedAll = true
+        return
+      }
+      this.loading = true
+      const dataFrom = {
+        role: this.selectFilter,
+        sort_by: this.selectSort,
+        page: this.pageInfo.page + 1
+      }
+      await this.getMoreUsers(dataFrom)
+      this.loading = false
+    },
+    showDetail (userid) {
+      this.detailData = userid
+      this.isShowDetail = true
+    },
+    clickFilters (id) {
+      this.selectFilter = id
+      this.getUsersList()
     }
   },
   components: {
@@ -292,8 +324,11 @@ export default {
         }
     }
   }
-  .bottomBg{
-    height: 200px;
+  .loadmore-content{
+    height: 2000px;
+    flex: 1;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
     background-color: #f0f0f0;
   }
 }
