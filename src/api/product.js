@@ -11,3 +11,9 @@ export function getFilters () {
     method: 'GET'
   })
 }
+export function getProduct (data = {}) {
+  return fetchUtil('/hot_gallery/', {
+    method: 'GET',
+    data
+  })
+}

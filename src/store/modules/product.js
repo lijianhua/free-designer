@@ -1,14 +1,18 @@
-import { getBanners, getFilters } from '@/api/product'
+import { getBanners, getFilters, getProduct } from '@/api/product'
 
 export default {
   namespaced: true,
   state: {
     bannersList: [],
-    filtersList: []
+    filtersList: [],
+    productList: [],
+    proPageInfo: {}
   },
   getters: {
     bannersList: state => state.bannersList,
-    filtersList: state => state.filtersList
+    filtersList: state => state.filtersList,
+    productList: state => state.productList,
+    proPageInfo: state => state.proPageInfo
   },
   mutations: {
     getBanners (state, data) {
@@ -16,6 +20,15 @@ export default {
     },
     getFilters (state, data) {
       state.filtersList = data
+    },
+    getProducts (state, data) {
+      state.productList = data
+    },
+    getMoreProducts (state, data) {
+      state.productList = state.productList.concat(data)
+    },
+    getProPageInfo (state, data) {
+      state.proPageInfo = data
     }
   },
   actions: {
@@ -29,6 +42,16 @@ export default {
     async getFilters ({ commit }) {
       const { data } = await getFilters()
       commit('getFilters', data)
+    },
+    async getProducts ({ commit }, dataFrom) {
+      const { data } = await getProduct(dataFrom)
+      commit('getProducts', data.data.galleries)
+      commit('getProPageInfo', data.page_info)
+    },
+    async getMoreProducts ({ commit }, dataFrom) {
+      const { data } = await getProduct(dataFrom)
+      commit('getMoreProducts', data.data.galleries)
+      commit('getProPageInfo', data.page_info)
     }
   }
 }

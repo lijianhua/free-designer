@@ -22,13 +22,15 @@ export function getUserInfo (data) {
     method: 'GET'
   })
 }
-export function getHistory (data) {
-  return fetchUtil('/apply_records/?status=finished&user=' + data, {
-    method: 'GET'
+export function getHistory (data = {}) {
+  return fetchUtil('/apply_records/', {
+    method: 'GET',
+    data
   })
 }
-export function getPicture (data) {
+export function getPicture (data, pageData = {}) {
   return fetchUtil('/users/' + data + '/gallery/', {
-    method: 'GET'
+    method: 'GET',
+    pageData
   })
 }

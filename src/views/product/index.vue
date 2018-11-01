@@ -8,31 +8,35 @@
         <div class="selectFilter">
             <div class="sortFilter">
                 <span>排序</span>
-                <mu-select v-model="selectSort">
-                    <mu-option v-for="option in sortOptions" :key="option" :label="option" :value="option"></mu-option>
+                <mu-select v-model="selectSort" @change="getList">
+                    <mu-option v-for="(option, index) in sortOptions" :key="index" :label="option.name" :value="option.value"></mu-option>
                 </mu-select>
             </div>
             <div class="sortFilter">
                 <span>筛选</span>
-                <mu-select v-if="showFilter" v-model="selectFilter">
+                <mu-select v-if="showFilter" v-model="selectFilter" @change="getList">
                     <mu-option v-for="(option, index) in filtersList" :key="index" :label="option.name" :value="option.name"></mu-option>
                 </mu-select>
             </div>
         </div>
-        <div class="designBox">
-            <div class="title">1000平米办公室项目</div>
-            <div class="designImg" @click="isShowDetail = true">
-                <img src="../../assets/images/designImg.png" alt="designImg">
-            </div>
-            <div class="designInfo">
-                <div class="price">本案授权 39积分/套</div>
-                <div class="clickGood">
-                    <img src="../../assets/images/good.png" alt="good">
-                    <span>587</span>
-                    <img src="../../assets/images/talk.png" alt="talk">
-                    <span>6</span>
+        <div class="productBox">
+            <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
+                <div class="designBox" v-for="(item, index) in productList" :key="index">
+                    <div class="title">{{ item.name }}</div>
+                    <div class="designImg" @click="isShowDetail = true">
+                        <img :src="item.thumb" alt="designImg">
+                    </div>
+                    <div class="designInfo">
+                        <!-- <div class="price">本案授权 39积分/套</div> -->
+                        <div class="clickGood">
+                            <img src="../../assets/images/good.png" alt="good">
+                            <span>{{ item.like_count }}</span>
+                            <!-- <img src="../../assets/images/talk.png" alt="talk"> -->
+                            <!-- <span>6</span> -->
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </mt-loadmore>
         </div>
         <!-- 作品详情 -->
         <mu-slide-left-transition>
@@ -47,27 +51,63 @@ import productDetail from './productDetail'
 export default {
   data () {
     return {
-      sortOptions: ['最多浏览', '最多点赞', '最多下载'],
-      selectSort: '最多浏览',
+      sortOptions: [{
+        name: '最多浏览',
+        value: 'view_count'
+      }, {
+        name: '最多点赞',
+        value: 'like_count'
+      }, {
+        name: '最多下载',
+        value: 'download_count'
+      }],
+      selectSort: 'view_count',
       selectFilter: '',
       detailData: 1,
       isShowDetail: false,
-      showFilter: false
+      showFilter: false,
+      isLoadedAll: false
     }
   },
   computed: {
-    ...mapGetters('product', ['bannersList', 'filtersList'])
+    ...mapGetters('product', ['bannersList', 'filtersList', 'productList', 'proPageInfo'])
   },
   async created () {
     this.getBanners()
     await this.getFilters()
     this.selectFilter = this.filtersList[0].name
     this.showFilter = true
+    this.getList()
   },
   methods: {
-    ...mapActions('product', ['getBanners', 'getFilters']),
+    ...mapActions('product', ['getBanners', 'getFilters', 'getProducts', 'getMoreProducts']),
     callBack () {
       this.isShowDetail = false
+    },
+    async getList () {
+      if (this.isLoadedAll) {
+        this.isLoadedAll = false
+      }
+      const dataFrom = {
+        role: this.selectFilter,
+        sort_by: this.selectSort
+      }
+      await this.getProducts(dataFrom)
+      this.$refs.loadmore.onTopLoaded()
+    },
+    async load () {
+      if (!this.proPageInfo.page) return
+      if (this.proPageInfo.page + 1 > this.proPageInfo.total_page) {
+        this.isLoadedAll = true
+        return
+      }
+      const dataFrom = {
+        page: this.proPageInfo.page + 1,
+        role: this.selectFilter,
+        sort_by: this.selectSort
+      }
+      await this.getMoreProducts(dataFrom)
+      this.$refs.loadmore.onBottomLoaded()
     }
   },
   components: {
@@ -78,6 +118,7 @@ export default {
 
 <style scoped lang="scss">
 .product {
+  height: calc(100% - 100px);
   .swiper {
     height: 309px;
     img {
@@ -100,6 +141,10 @@ export default {
         }
     }
   }
+  .productBox{
+    overflow-y: auto;
+    height: calc(100% - 309px - 68px);
+  }
   .designBox{
     border-bottom: 3px solid #ebebeb;
     .title{
@@ -116,7 +161,8 @@ export default {
     .designInfo{
         padding: 0 15px;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
+        // justify-content: space-between;
         .price{
             line-height: 58px;
             color: #797979;
