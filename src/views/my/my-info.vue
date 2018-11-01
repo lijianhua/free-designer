@@ -71,9 +71,25 @@
       </div>
       <div class="item">
         <div class="name">我的简介</div>
-        <div class="content" style="flex:1;margin-left:10px;">
-          <mu-text-field placeholder="请输入简介" multi-line :rows="3" :rows-max="10"></mu-text-field><br/>
+        <div class="content">
+          <img class="go" @click="introVisible=true" src="../../assets/images/back.png" alt="">
         </div>
+        <mt-popup
+          v-model="introVisible"
+          :modal="false"
+          class="mint-popup-3"
+          position="right">
+              <div class="header">
+                <img @click="introVisible = false" src="../../assets/images/back.png" alt="">
+                <h3>修改简介</h3>
+              </div>
+              <div class="popup-1-main">
+                <div class="popup-1-item">
+                  <mu-text-field style="width:100%;" placeholder="请添加个人简介" multi-line :rows="3" :rows-max="6"></mu-text-field>
+                </div>
+              </div>
+              <div class="submit">确认修改</div>
+        </mt-popup>
       </div>
       <div class="item">
         <div class="name">修改密码</div>
@@ -121,6 +137,7 @@ export default {
     return {
       sheetVisible: false,
       passwordVisible: false,
+      introVisible: false,
       actions: [
         { name: '男', method: (val) => { console.log(val) } },
         { name: '男', method: (val) => { console.log(val) } }
@@ -198,7 +215,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     padding: 0 30px;
-    height: 100px;
+    min-height: 100px;
     border-bottom: 1px solid #eee;
 
     >div:first-child {
