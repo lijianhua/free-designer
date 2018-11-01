@@ -56,25 +56,23 @@
             <span @click="closeDetail"><strong>《</strong>工作历史和反馈</span>
             <span>作品浏览</span>
         </div>
-        <div class="loadmore-content">
-            <mu-load-more @refresh="getList" :refreshing="refreshing" :loading="loading" @load="load" :loaded-all="isLoadedAll">
-                <div class="designBox">
-                    <div class="title">1000平米办公室项目</div>
-                    <div class="designImg">
-                        <img src="../../assets/images/designImg.png" alt="designImg">
-                    </div>
-                    <div class="designInfo">
-                        <div class="price">本案授权 39积分/套</div>
-                        <div class="clickGood">
-                            <img src="../../assets/images/good.png" alt="good">
-                            <span>587</span>
-                            <img src="../../assets/images/talk.png" alt="talk">
-                            <span>6</span>
-                        </div>
+        <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
+            <div class="designBox" v-for="(item, index) in pictureList" :key="index">
+                <div class="title">{{ item.name }}</div>
+                <div class="designImg">
+                    <img :src="item.thumb" alt="designImg">
+                </div>
+                <div class="designInfo">
+                    <!-- <div class="price">本案授权 39积分/套</div> -->
+                    <div class="clickGood">
+                        <img src="../../assets/images/good.png" alt="good">
+                        <span>{{ item.like_count }}</span>
+                        <!-- <img src="../../assets/images/talk.png" alt="talk"> -->
+                        <!-- <span>6</span> -->
                     </div>
                 </div>
-            </mu-load-more>
-        </div>
+            </div>
+        </mt-loadmore>
     </div>
 </template>
 
@@ -83,8 +81,6 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      refreshing: false,
-      loading: false,
       isLoadedAll: false
     }
   },
@@ -92,7 +88,6 @@ export default {
     ...mapGetters('home', ['userInfo', 'pictureList', 'picturePageInfo'])
   },
   created () {
-    console.info(this.userInfo)
     this.getPicture(this.userInfo.id)
   },
   methods: {
@@ -104,18 +99,16 @@ export default {
       if (this.isLoadedAll) {
         this.isLoadedAll = false
       }
-      this.refreshing = true
       await this.getPicture(this.userInfo.id)
-      this.refreshing = false
+      this.$refs.loadmore.onTopLoaded()
     },
     async load () {
       if (this.picturePageInfo.page + 1 > this.picturePageInfo.total_page) {
         this.isLoadedAll = true
         return
       }
-      this.loading = true
       await this.getMorePicture(this.userInfo.id)
-      this.loading = false
+      this.$refs.loadmore.onBottomLoaded()
     }
   }
 }
@@ -130,6 +123,7 @@ export default {
   left: 0;
   background-color: #ffffff;
   z-index: 10;
+  overflow-y: auto;
   .closeHeader{
     height: 113px;
     line-height: 113px;
@@ -238,12 +232,6 @@ export default {
         }
     }
   }
-  .loadmore-content{
-    height: 1500px;
-    flex: 1;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-  }
 .designBox{
     border-bottom: 3px solid #ebebeb;
     .title{
@@ -260,7 +248,8 @@ export default {
     .designInfo{
         padding: 0 15px;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
+        // justify-content: space-between;
         .price{
             line-height: 58px;
             color: #797979;

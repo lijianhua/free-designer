@@ -100,12 +100,12 @@ export default {
     },
     async getPicture ({ commit }, dataFrom) {
       const { data } = await getPicture(dataFrom)
-      commit('getPicture', data.data)
+      commit('getPicture', data.data.galleries)
       commit('getPicPageInfo', data.page_info)
     },
     async getMorePicture ({ commit }, dataFrom) {
       const { data } = await getPicture(dataFrom)
-      commit('getMorePicture', data.data)
+      commit('getMorePicture', data.data.galleries)
       commit('getPicPageInfo', data.page_info)
     }
   }
