@@ -94,9 +94,9 @@ export default {
   computed: {
     ...mapGetters('home', ['userInfo', 'historyList', 'historyPageInfo'])
   },
-  created () {
+  async created () {
     this.getUserInfo(this.detailData)
-    this.getHistory(this.detailData)
+    await this.getList()
   },
   methods: {
     ...mapActions('home', ['getUserInfo', 'getHistory', 'getMoreHistory']),
@@ -110,15 +110,25 @@ export default {
       if (this.isLoadedAll) {
         this.isLoadedAll = false
       }
-      await this.getHistory(this.detailData)
+      const dataFrom = {
+        user: this.detailData,
+        status: 'finished'
+      }
+      await this.getHistory(dataFrom)
       this.$refs.loadmore.onTopLoaded()
     },
     async load () {
+      if (!this.historyPageInfo.page) return
       if (this.historyPageInfo.page + 1 > this.historyPageInfo.total_page) {
         this.isLoadedAll = true
         return
       }
-      await this.getMoreHistory(this.detailData)
+      const dataFrom = {
+        user: this.detailData,
+        page: this.historyPageInfo.page + 1,
+        status: 'finished'
+      }
+      await this.getMoreHistory(dataFrom)
       this.$refs.loadmore.onBottomLoaded()
     }
   },

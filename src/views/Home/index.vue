@@ -148,6 +148,7 @@ export default {
       this.$refs.loadmore.onTopLoaded()
     },
     async load () {
+      if (!this.pageInfo.page) return
       if (this.pageInfo.page + 1 > this.pageInfo.total_page) {
         this.isLoadedAll = true
         return
