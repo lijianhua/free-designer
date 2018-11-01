@@ -2,7 +2,7 @@
     <div class="my-container">
         <div class="header">
             <div class="avatar">
-                <img src="http://www.free-designer.cn/M00/00/64/wKgABVt30lKAYOf6AAAz0yXWPI4179.png">
+                <img :src="userInfo.avatar" alt="">
             </div>
             <div class="setting" @click="$router.push('my-info')">
                 <img src="~@/assets/images/my/ico_pencil.png" alt="">
@@ -10,15 +10,15 @@
             </div>
             <div class="desc">
                 <div>
-                    <div>2000</div>
+                    <div>{{userInfo.available_points}}</div>
                     <div>可用积分</div>
                 </div>
                 <div>
-                    <div>0</div>
+                    <div>{{userInfo.available_cash_points}}</div>
                     <div>可提现积分</div>
                 </div>
                 <div>
-                    <div>0</div>
+                    <div>{{userInfo.career}}</div>
                     <div>工作年限</div>
                 </div>
             </div>
@@ -59,6 +59,14 @@
         </div>
     </div>
 </template>
+<script>
+import { mapGetters } from 'vuex'
+export default {
+  computed: {
+    ...mapGetters(['userInfo'])
+  }
+}
+</script>
 <style lang="scss" scoped>
 .my-container {
     width: 100%;
@@ -73,6 +81,8 @@
         width: 160px;
         height: 160px;
         margin: 0 auto 25px;
+        border-radius: 50%;
+        overflow: hidden;
 
         img {
             width: 100%;

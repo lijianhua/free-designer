@@ -59,7 +59,7 @@
           "mu-date",
           "mu-day",
           "mu-icon-button",
-          "mint-actionsheet"
+          "mint-popup"
         ]
       }
     }
