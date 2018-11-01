@@ -8,6 +8,17 @@ import product from './modules/product'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  state: {
+    userInfo: null
+  },
+  getters: {
+    userInfo: state => state.userInfo
+  },
+  mutations: {
+    SET_USER_INFO (state, v) {
+      state.userInfo = v
+    }
+  },
   modules: {
     home,
     login,

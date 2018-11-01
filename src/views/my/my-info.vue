@@ -143,6 +143,9 @@ export default {
         { name: '男', method: (val) => { console.log(val) } }
       ]
     }
+  },
+  created () {
+    // let user = JSON.parse(this.$cookie.get('user'))
   }
 }
 </script>
