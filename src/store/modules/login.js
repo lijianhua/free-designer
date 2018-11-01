@@ -21,6 +21,7 @@ export default {
     async submit ({ state }, $router) {
       const { data: formData } = state.form
       const { data } = await fetchLogin(formData)
+      data.roles = data.role.split(',')
       Cookie.set('user', JSON.stringify(data))
       $router.push({
         name: 'home'
