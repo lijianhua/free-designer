@@ -17,69 +17,67 @@
         <div class="selectFilter">
             <div class="sortFilter">
                 <span>排序</span>
-                <mu-select v-model="selectSort" @change="getUsersList">
+                <mu-select v-model="selectSort" @change="getList">
                     <mu-option v-for="(option, index) in sortOptions" :key="index" :label="option.name" :value="option.value"></mu-option>
                 </mu-select>
             </div>
             <div class="sortFilter">
                 <span>筛选</span>
-                <mu-select v-if="showFilter" v-model="selectFilter" @change="getUsersList">
+                <mu-select v-if="showFilter" v-model="selectFilter" @change="getList">
                     <mu-option v-for="(option, index) in filtersList" :key="index" :label="option.name" :value="option.id"></mu-option>
                 </mu-select>
             </div>
         </div>
-        <div class="loadmore-content">
-            <mu-load-more @refresh="getUsersList" :refreshing="refreshing" :loading="loading" @load="load" :loaded-all="isLoadedAll">
-                <div class="desingerInfo" v-for="(item, index) in usersList" :key="index">
-                    <div class="header">
-                        <div @click="showDetail(item.id)" class="header-img">
-                            <img :src="item.avatar" alt="avatar">
-                        </div>
-                        <div class="ownInfo">
-                            <div>
-                                <span @click="showDetail(item.id)" class="name">{{ item.name }}</span>
-                                <span class="workExperience">{{ item.career }}年工作经验</span>
-                            </div>
-                            <div class="address">
-                                <img src="../../assets/images/address.png" alt="address">
-                                <span>{{ item.province }}。{{ item.city }}</span>
-                            </div>
-                        </div>
-                        <!-- <div class="evaluate">
-                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                            <img src="../../assets/images/homestart.png" alt="homestart">
-                        </div> -->
+        <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
+            <div class="desingerInfo" v-for="(item, index) in usersList" :key="index">
+                <div class="header">
+                    <div @click="showDetail(item.id)" class="header-img">
+                        <img :src="item.avatar" alt="avatar">
                     </div>
-                    <div class="skill">
-                        <div class="skillSort">
-                            <span v-for="(childItem, idx) in item.role.split(',')" :key="idx">
-                                【{{ childItem }}】
-                            </span>
+                    <div class="ownInfo">
+                        <div>
+                            <span @click="showDetail(item.id)" class="name">{{ item.name }}</span>
+                            <span class="workExperience">{{ item.career }}年工作经验</span>
                         </div>
-                        <div class="doSomething">
-                            <p>{{ item.desc }}</p>
+                        <div class="address">
+                            <img src="../../assets/images/address.png" alt="address">
+                            <span>{{ item.province }}。{{ item.city }}</span>
                         </div>
-                        <div class="worked">
-                            <!-- <div>
-                                <span>96%</span>
-                                <span>工作完成率</span>
-                            </div> -->
-                            <div>
-                                <span>{{ item.apply_count }}</span>
-                                <span>接单量</span>
-                            </div>
-                            <div>
-                                <span>{{ item.gallery_count }}</span>
-                                <span>作品展示/套</span>
-                            </div>
+                    </div>
+                    <!-- <div class="evaluate">
+                        <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                        <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                        <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                        <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                        <img src="../../assets/images/homestart.png" alt="homestart">
+                    </div> -->
+                </div>
+                <div class="skill">
+                    <div class="skillSort">
+                        <span v-for="(childItem, idx) in item.role.split(',')" :key="idx">
+                            【{{ childItem }}】
+                        </span>
+                    </div>
+                    <div class="doSomething">
+                        <p>{{ item.desc }}</p>
+                    </div>
+                    <div class="worked">
+                        <!-- <div>
+                            <span>96%</span>
+                            <span>工作完成率</span>
+                        </div> -->
+                        <div>
+                            <span>{{ item.apply_count }}</span>
+                            <span>接单量</span>
+                        </div>
+                        <div>
+                            <span>{{ item.gallery_count }}</span>
+                            <span>作品展示/套</span>
                         </div>
                     </div>
                 </div>
-            </mu-load-more>
-        </div>
+            </div>
+        </mt-loadmore>
         <!-- 工作者详情页 -->
         <mu-slide-left-transition>
             <designerDetail v-if="isShowDetail" :detailData='detailData' @callBack='callBack'></designerDetail>
@@ -106,8 +104,6 @@ export default {
       detailData: '',
       isShowDetail: false,
       showFilter: false,
-      refreshing: false,
-      loading: false,
       isLoadedAll: false
     }
   },
@@ -119,7 +115,7 @@ export default {
     await this.getFilters()
     this.selectFilter = this.filtersList[0].id
     this.showFilter = true
-    this.getUsersList()
+    this.getList()
   },
   methods: {
     ...mapActions('home', ['getBanners', 'getFilters', 'getUsers', 'getMoreUsers']),
@@ -140,31 +136,29 @@ export default {
         }
       }
     },
-    async getUsersList () {
+    async getList () {
       if (this.isLoadedAll) {
         this.isLoadedAll = false
       }
-      this.refreshing = true
       const dataFrom = {
         role: this.selectFilter,
         sort_by: this.selectSort
       }
       await this.getUsers(dataFrom)
-      this.refreshing = false
+      this.$refs.loadmore.onTopLoaded()
     },
     async load () {
       if (this.pageInfo.page + 1 > this.pageInfo.total_page) {
         this.isLoadedAll = true
         return
       }
-      this.loading = true
       const dataFrom = {
         role: this.selectFilter,
         sort_by: this.selectSort,
         page: this.pageInfo.page + 1
       }
       await this.getMoreUsers(dataFrom)
-      this.loading = false
+      this.$refs.loadmore.onBottomLoaded()
     },
     showDetail (userid) {
       this.detailData = userid
@@ -172,7 +166,7 @@ export default {
     },
     clickFilters (id) {
       this.selectFilter = id
-      this.getUsersList()
+      this.getList()
     }
   },
   components: {
@@ -323,13 +317,6 @@ export default {
             }
         }
     }
-  }
-  .loadmore-content{
-    height: 2000px;
-    flex: 1;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-    background-color: #f0f0f0;
   }
 }
 </style>

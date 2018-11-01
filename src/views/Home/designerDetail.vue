@@ -56,25 +56,23 @@
             <span>工作历史和反馈</span>
             <span @click="isShowBrowWork = true">作品浏览<strong>》</strong></span>
         </div>
-        <div class="loadmore-content">
-            <mu-load-more @refresh="getList" :refreshing="refreshing" :loading="loading" @load="load" :loaded-all="isLoadedAll">
-                <div class="historyDesign" v-for="(item, index) in historyList" :key="index">
-                    <div class="title">{{ item.order }}</div>
-                    <div class="designInfo">
-                        <!-- <div class="evaluate">
-                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                            <img src="../../assets/images/homestart.png" alt="homestart">
-                        </div> -->
-                        <!-- <span class="score">5.00</span> -->
-                        <span class="date">2018年08月</span>
-                    </div>
-                    <p class="talkAbout">{{ item.comment }}</p>
+        <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
+            <div class="historyDesign" v-for="(item, index) in historyList" :key="index">
+                <div class="title">{{ item.order }}</div>
+                <div class="designInfo">
+                    <!-- <div class="evaluate">
+                        <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                        <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                        <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                        <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                        <img src="../../assets/images/homestart.png" alt="homestart">
+                    </div> -->
+                    <!-- <span class="score">5.00</span> -->
+                    <span class="date">2018年08月</span>
                 </div>
-            </mu-load-more>
-        </div>
+                <p class="talkAbout">{{ item.comment }}</p>
+            </div>
+        </mt-loadmore>
         <!-- 工作者作品 -->
         <mu-slide-left-transition>
             <browWork v-if="isShowBrowWork" @callBack='callBack'></browWork>
@@ -89,8 +87,6 @@ export default {
   data () {
     return {
       isShowBrowWork: false,
-      refreshing: false,
-      loading: false,
       isLoadedAll: false
     }
   },
@@ -98,11 +94,9 @@ export default {
   computed: {
     ...mapGetters('home', ['userInfo', 'historyList', 'historyPageInfo'])
   },
-  async created () {
-    console.info(this.detailData)
-    await this.getUserInfo(this.detailData)
-    await this.getHistory(this.detailData)
-    console.info(this.userInfo, this.historyList)
+  created () {
+    this.getUserInfo(this.detailData)
+    this.getHistory(this.detailData)
   },
   methods: {
     ...mapActions('home', ['getUserInfo', 'getHistory', 'getMoreHistory']),
@@ -116,18 +110,16 @@ export default {
       if (this.isLoadedAll) {
         this.isLoadedAll = false
       }
-      this.refreshing = true
       await this.getHistory(this.detailData)
-      this.refreshing = false
+      this.$refs.loadmore.onTopLoaded()
     },
     async load () {
       if (this.historyPageInfo.page + 1 > this.historyPageInfo.total_page) {
         this.isLoadedAll = true
         return
       }
-      this.loading = true
       await this.getMoreHistory(this.detailData)
-      this.loading = false
+      this.$refs.loadmore.onBottomLoaded()
     }
   },
   components: {
@@ -250,12 +242,6 @@ export default {
         font-weight: normal;
         margin-left: 18px;
     }
-  }
-  .loadmore-content{
-    height: 700px;
-    flex: 1;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
   }
   .historyDesign{
     padding: 20px 50px;
