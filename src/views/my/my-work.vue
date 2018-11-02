@@ -98,7 +98,6 @@ export default {
       .img {
         width: 127px;
         height: 96px;
-        background-color: red;
         img {
           width: 100%;
           height: 100%;
