@@ -48,14 +48,14 @@
                 <img src="../../assets/images/my/ico_setting.png" alt="">
                 <p>积分管理</p>
             </router-link>
-            <router-link class="item" :to="{name:'my-work'}">
+            <!-- <router-link class="item" :to="{name:'my-work'}">
                 <img src="../../assets/images/my/ico_msg.png" alt="">
                 <p>我的消息</p>
             </router-link>
             <router-link class="item" :to="{name:'my-work'}">
                 <img src="../../assets/images/my/ico_start.png" alt="">
                 <p>我的收藏</p>
-            </router-link>
+            </router-link> -->
         </div>
     </div>
 </template>
