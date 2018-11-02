@@ -23,7 +23,7 @@
             <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
                 <div class="designBox" v-for="(item, index) in productList" :key="index">
                     <div class="title">{{ item.name }}</div>
-                    <div class="designImg" @click="isShowDetail = true">
+                    <div class="designImg" @click="showDetail(item)">
                         <img :src="item.thumb" alt="designImg">
                     </div>
                     <div class="designInfo">
@@ -63,7 +63,10 @@ export default {
       }],
       selectSort: 'view_count',
       selectFilter: '',
-      detailData: 1,
+      detailData: {
+        user: '',
+        gallery: ''
+      },
       isShowDetail: false,
       showFilter: false,
       isLoadedAll: false
@@ -108,6 +111,13 @@ export default {
       }
       await this.getMoreProducts(dataFrom)
       this.$refs.loadmore.onBottomLoaded()
+    },
+    showDetail (item) {
+      this.detailData = Object.assign({}, this.detailData, {
+        user: item.uid,
+        gallery: item.id
+      })
+      this.isShowDetail = true
     }
   },
   components: {

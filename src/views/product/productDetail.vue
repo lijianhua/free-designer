@@ -5,23 +5,23 @@
             作品详情
         </div>
         <div class="detailContainer">
-            <div class="desingerInfo">
+            <div v-if="!isMy" class="desingerInfo">
                 <div class="header">
                     <div class="header-img">
-                        <img src="../../assets/images/avatar.png" alt="avatar">
+                        <img :src="userInfo.thumb" alt="avatar">
                     </div>
                     <div class="ownInfo">
                         <div>
-                            <span class="name">豆豆</span>
-                            <span class="workExperience">五年工作经验</span>
+                            <span class="name">{{ userInfo.name }}</span>
+                            <span class="workExperience">{{ userInfo.career }}年工作经验</span>
                         </div>
                         <div class="address">
                             <img src="../../assets/images/address.png" alt="address">
-                            <span>北京。丰台</span>
+                            <span>{{ userInfo.province }}。{{ userInfo.city }}</span>
                         </div>
                     </div>
                     <div class="evaluate">
-                        <div class="follow">关注</div>
+                        <!-- <div class="follow">关注</div> -->
                         <!-- <div class="followed">已关注</div> -->
                         <!-- <img src="../../assets/images/homestartlight.png" alt="homestartlight">
                         <img src="../../assets/images/homestartlight.png" alt="homestartlight">
@@ -30,33 +30,35 @@
                         <img src="../../assets/images/homestart.png" alt="homestart"> -->
                     </div>
                 </div>
-                <div class="skill">
+                <div v-if="userInfo.role" class="skill">
                     <div class="skillSort">
-                        <span>【主案设计】【平面规划】【深化施工图】</span>
+                        <span v-for="(childItem, idx) in userInfo.role.split(',')" :key="idx">
+                            【{{ childItem }}】
+                        </span>
                     </div>
                     <div class="doSomething">
-                        <p>主要承接办公室设计，以及平面规划方案，从规划开始满足甲方的设计需求。并能提高其企业管理效率，对施工工艺比较了解，能独立完成施工图纸。</p>
+                        <p>{{ userInfo.desc }}</p>
                     </div>
                 </div>
             </div>
             <div class="productInfo">
-                <p class="warn">压缩包内包含（注 : 请在PC端下载）</p>
+                <!-- <p class="warn">压缩包内包含（注 : 请在PC端下载）</p>
                 <p class="intro"><span>高清图纸13张</span><span>全部3D模型</span><span>全套施工图</span></p>
                 <div class="rarFiles">
                     <img src="../../assets/images/rar.png" alt="rar">
                     <span>1000平米办公室.rar</span>
-                </div>
+                </div> -->
                 <div class="swiperBox">
                     <mt-swipe class="swiper-product" :auto="0" :showIndicators="false" @change="handleChange">
-                        <mt-swipe-item><img src="../../assets/images/jiaju.png" alt="jiaju"></mt-swipe-item>
-                        <mt-swipe-item><img src="../../assets/images/jiaju.png" alt="jiaju"></mt-swipe-item>
-                        <mt-swipe-item><img src="../../assets/images/jiaju.png" alt="jiaju"></mt-swipe-item>
+                        <mt-swipe-item v-for="(item, index) in galleryList" :key="index">
+                            <img :src="item.mid_image" alt="jiaju">
+                        </mt-swipe-item>
                     </mt-swipe>
                     <div class="dicators">
                         {{ nowDicator + ' / ' + allPicture}}
                     </div>
                 </div>
-                <div class="todos">
+                <!-- <div class="todos">
                     <div>
                         <img src="../../assets/images/shareIcon.png" alt="shareIcon">
                         <span>66</span>
@@ -73,66 +75,93 @@
                         <img src="../../assets/images/good.png" alt="good">
                         <span>88</span>
                     </div>
-                </div>
+                </div> -->
                 <div class="talk">
-                    <div class="talkBox">
-                        <div class="talk-headImg">
-                            <img src="../../assets/images/avatar.png" alt="avatar">
-                        </div>
-                        <div class="talk-content">
-                            <p class="talkerName">不明飞</p>
-                            <div class="talkerContent">
-                                <p>这个作品不错，前台比较大气，要是能有个720全景图就更好了，另外楼主能发一些竣工照片么？</p>
-                                <div class="talk-good">
-                                    <img src="../../assets/images/good.png" alt="good">
-                                    <span>88</span>
+                    <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
+                        <div class="talkBox" v-for="(item, index) in galleryCommentList" :key="index">
+                            <div class="talk-headImg">
+                                <img :src="item.user_avatar" alt="avatar">
+                            </div>
+                            <div class="talk-content">
+                                <p class="talkerName">{{ item.username }}</p>
+                                <div class="talkerContent">
+                                    <p>{{ item.content }}</p>
+                                    <!-- <div class="talk-good">
+                                        <img src="../../assets/images/good.png" alt="good">
+                                        <span>88</span>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="talkBox">
-                        <div class="talk-headImg">
-                            <img src="../../assets/images/avatar.png" alt="avatar">
-                        </div>
-                        <div class="talk-content">
-                            <p class="talkerName">不明飞</p>
-                            <div class="talkerContent">
-                                <p>这个作品不错，前台比较大气，要是能有个720全景图就更好了，另外楼主能发一些竣工照片么？</p>
-                                <div class="talk-good">
-                                    <img src="../../assets/images/good.png" alt="good">
-                                    <span>8888</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </mt-loadmore>
                 </div>
             </div>
         </div>
-        <div class="DetailFooter">
-            <input type="text" placeholder="添加评论">
-            <img src="../../assets/images/sendto.png" alt="sendto">
+        <div v-if="!isMy" class="DetailFooter">
+            <input type="text" placeholder="添加评论" v-model="commentValue">
+            <img @click="addComment" src="../../assets/images/sendto.png" alt="sendto">
         </div>
     </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      allPicture: 3,
-      nowDicator: 1
+      allPicture: 0,
+      nowDicator: 1,
+      isLoadedAll: false,
+      commentValue: ''
     }
   },
-  props: ['detailData'],
-  created () {
-    console.info(this.detailData)
+  computed: {
+    ...mapGetters('productDetail', ['userInfo', 'galleryList', 'galleryCommentList', 'commentPageInfo'])
+  },
+  props: ['detailData', 'isMy'],
+  async created () {
+    await this.getUserInfo(this.detailData)
+    await this.getGalleryList(this.detailData)
+    this.allPicture = this.galleryList.length
+    this.getList()
   },
   methods: {
+    ...mapActions('productDetail', ['getUserInfo', 'getGalleryList', 'getCommentList', 'getMoreComment', 'addGalleryComment']),
     closeDetail () {
       this.$emit('callBack')
     },
     handleChange (index) {
       this.nowDicator = index + 1
+    },
+    async getList () {
+      if (this.isLoadedAll) {
+        this.isLoadedAll = false
+      }
+      await this.getCommentList(this.detailData)
+      this.$refs.loadmore.onTopLoaded()
+    },
+    async load () {
+      if (!this.commentPageInfo.page) return
+      if (this.commentPageInfo.page + 1 > this.commentPageInfo.total_page) {
+        this.isLoadedAll = true
+        return
+      }
+      const dataFrom = {
+        gallery: this.detailData.gallery,
+        page: this.commentPageInfo.page + 1
+      }
+      await this.getMoreComment(this.detailData.gallery, dataFrom)
+      this.$refs.loadmore.onBottomLoaded()
+    },
+    async addComment () {
+      const dataFrom = {
+        uid: this.detailData.user,
+        content: this.commentValue,
+        gallery: this.detailData.gallery
+      }
+      await this.addGalleryComment(dataFrom)
+      this.commentValue = ''
+      this.getList()
     }
   }
 }
