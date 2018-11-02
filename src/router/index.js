@@ -26,6 +26,8 @@ const MyAbout = () => import('@/views/my/my-about')
 const MyPayNew = () => import('@/views/my/my-pay-new')
 // 个人信息
 const MyInfo = () => import('@/views/my/my-info')
+// 历史订单
+const MyHistoryOrder = () => import('@/views/my/my-history-order')
 
 Vue.use(Router)
 
@@ -97,6 +99,11 @@ export default new Router({
           name: 'send-creat-order',
           path: '/send-creat-order',
           component: sendCreatOrder
+        },
+        {
+          name: 'my-history-order',
+          path: '/my-history-order',
+          component: MyHistoryOrder
         }
       ]
     }

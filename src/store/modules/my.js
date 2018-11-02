@@ -1,4 +1,4 @@
-import { updateUserInfoApi, changePasswordApi, getWorkListApi } from '@/api/my'
+import { updateUserInfoApi, changePasswordApi, getWorkListApi, getOrderListApi } from '@/api/my'
 import Cookie from 'js-cookie'
 
 const defaultWorkPagination = {
@@ -12,11 +12,17 @@ export default {
   state: {
     formData: {}, // 个人信息表单
     workList: [], // 作品列表
-    workPagination: defaultWorkPagination // 作品分页
+    workPagination: defaultWorkPagination, // 作品分页
+    orderTabActive: 'send', // send 发单 apply 接单
+    sendOrderList: [], // 发单已完成列表
+    applyOrderList: [] // 接单已完成列表
   },
   getters: {
     formData: state => state.formData,
-    workList: state => state.workList
+    workList: state => state.workList,
+    orderTabActive: state => state.orderTabActive,
+    sendOrderList: state => state.sendOrderList,
+    applyOrderList: state => state.applyOrderList
   },
   mutations: {
     SET_FORM_DATA (state, v) {
@@ -25,6 +31,15 @@ export default {
     SET_WORK (state, v) {
       state.workList = v.data.galleries
       state.workPagination = v.page_info
+    },
+    SET_ORDER_TAB_ACTIVE (state, v) {
+      state.orderTabActive = v
+    },
+    SET_SEND_ORDER_LIST (state, v) {
+      state.sendOrderList = v.data
+    },
+    SET_APPLY_ORDER_LIST (state, v) {
+      state.applyOrderList = v.data
     }
   },
   actions: {
@@ -63,6 +78,15 @@ export default {
         data.data.galleries = workList.concat(data.data.galleries)
       }
       commit('SET_WORK', data)
+    },
+    async getOrderList ({ state, commit }, tabActive) {
+      const { orderTabActive } = state
+      const { data } = await getOrderListApi(tabActive || orderTabActive)
+      if (orderTabActive === 'send') {
+        commit('SET_SEND_ORDER_LIST', data)
+      } else if (orderTabActive === 'apply') {
+        commit('SET_APPLY_ORDER_LIST', data)
+      }
     }
   }
 }
