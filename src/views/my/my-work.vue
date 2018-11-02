@@ -5,7 +5,7 @@
       <h3>我的作品</h3>
     </div>
     <div class="main">
-      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" bottomPullText="" :auto-fill="false" ref="loadmore">
         <ul class="list">
           <li class="item" v-for="(item, index) in workList" :key="index">
             <div class="img">
@@ -27,7 +27,7 @@
 </template>
 <script>
 import Store from '@/store'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   async beforeRouteEnter (to, from, next) {
     await Store.dispatch('my/getWorkList')
@@ -42,12 +42,13 @@ export default {
     ...mapGetters('my', ['workList'])
   },
   methods: {
-    loadTop () {
-      this.list = [3, 4, 5, 6, 6]
+    ...mapActions('my', ['getWorkList']),
+    async loadTop () {
+      await this.getWorkList()
       this.$refs.loadmore.onTopLoaded()
     },
-    loadBottom () {
-      this.list.push(1, 2, 3, 4, 5)
+    async loadBottom () {
+      await this.getWorkList(false)
       // this.allLoaded = true// 若数据已全部获取完毕
       this.$refs.loadmore.onBottomLoaded()
     }
@@ -84,6 +85,7 @@ export default {
 .main {
   flex: 1;
   padding-bottom: 100px;
+  overflow: scroll;
 
   .list {
 

@@ -1,16 +1,18 @@
 import { updateUserInfoApi, changePasswordApi, getWorkListApi } from '@/api/my'
 import Cookie from 'js-cookie'
 
+const defaultWorkPagination = {
+  order_by: 'view_count',
+  page: 1,
+  per_page: 8
+}
+
 export default {
   namespaced: true,
   state: {
     formData: {}, // 个人信息表单
     workList: [], // 作品列表
-    workPagination: {
-      order_by: 'view_count',
-      page: 1,
-      per_page: 8
-    } // 作品分页
+    workPagination: defaultWorkPagination // 作品分页
   },
   getters: {
     formData: state => state.formData,
@@ -43,10 +45,23 @@ export default {
       Cookie.remove('user')
       location.reload()
     },
-    async getWorkList ({ state, rootState, commit }) {
+    async getWorkList ({ state, rootState, commit }, isPullDown = true) {
       const { id } = rootState.userInfo
-      const { workPagination } = state
-      const { data } = await getWorkListApi(id, workPagination)
+      const { workPagination, workList } = state
+      const pagination = defaultWorkPagination
+
+      if (!isPullDown) {
+        if (pagination.page > workPagination.total_page) {
+          return
+        }
+        pagination.page = workPagination.page + 1
+      }
+
+      const { data } = await getWorkListApi(id, pagination)
+
+      if (!isPullDown) {
+        data.data.galleries = workList.concat(data.data.galleries)
+      }
       commit('SET_WORK', data)
     }
   }
