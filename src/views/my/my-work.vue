@@ -1,102 +1,133 @@
 <template>
-  <div class="container">
+  <div class="work-container">
     <div class="header">
-      <div class="avatar">
-        <img src="http://www.free-designer.cn/M00/00/64/wKgABVt30lKAYOf6AAAz0yXWPI4179.png">
-      </div>
-      <div class="desc">
-          <div class="info">
-              <div class="tel">137****0000</div>
-              <div class="exp">6年从业经验</div>
-          </div>
-          <div class="intro">测试一下啦</div>
-      </div>
+      <img @click="$router.push('my')" src="../../assets/images/back.png" alt="">
+      <h3>我的作品</h3>
     </div>
-    <div class="work-desc">
-      <div class="item">
-        <div>接单量</div>
-        <div>3</div>
-      </div>
-      <div class="item">
-        <div>作品下载量</div>
-        <div>43</div>
-      </div>
-      <div class="item">
-        <div>被点赞量</div>
-        <div>19</div>
-      </div>
+    <div class="main">
+      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" bottomPullText="" :auto-fill="false" ref="loadmore">
+        <ul class="list">
+          <li class="item" v-for="(item, index) in workList" :key="index">
+            <div class="img">
+              <img :src="item.thumb" alt="">
+            </div>
+            <div class="info">
+              <div class="title">
+                {{item.name}}
+              </div>
+              <div class="intro">
+                {{item.desc}}
+              </div>
+            </div>
+          </li>
+        </ul>
+      </mt-loadmore>
     </div>
   </div>
 </template>
-<style lang="scss" scoped>
-.container {
-
-  .header {
-    padding: 20px;
-    overflow: hidden;
-    background: url('~@/assets/images/my_background.png');
-    background-size: cover;
-    height: 440px;
-
-    .avatar {
-        overflow: hidden;
-        border-radius: 50%;
-        background: #eee;
-        color: #fff;
-        text-align: center;
-        line-height: 120px;
-        height: 120px;
-        width: 120px;
-        margin: 40px auto 0;
-
-        img {
-            height: 100%;
-            width: 100%;
-        }
+<script>
+import Store from '@/store'
+import { mapGetters, mapActions } from 'vuex'
+export default {
+  async beforeRouteEnter (to, from, next) {
+    await Store.dispatch('my/getWorkList')
+    next()
+  },
+  data () {
+    return {
+      allLoaded: false
     }
-
-    .desc {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      .info {
-        display: flex;
-        align-items: flex-end;
-        .tel {
-          font-size: 40px;
-        }
-        .exp {
-          margin-left: 40px;
-          font-size: 28px;
-          margin-bottom: 4px;
-        }
-      }
-
-      .intro {
-        margin-top: 32px;
-        font-size: 24px;
-        line-height: 48px;
-      }
+  },
+  computed: {
+    ...mapGetters('my', ['workList'])
+  },
+  methods: {
+    ...mapActions('my', ['getWorkList']),
+    async loadTop () {
+      await this.getWorkList()
+      this.$refs.loadmore.onTopLoaded()
+    },
+    async loadBottom () {
+      await this.getWorkList(false)
+      // this.allLoaded = true// 若数据已全部获取完毕
+      this.$refs.loadmore.onBottomLoaded()
     }
   }
-
-  .work-desc {
-    display: flex;
-    justify-content: space-between;
-    background-color: #444;
-    font-size: 28px;
-    color: #fff;
-    border-bottom: 4px solid #aaa;
+}
+</script>
+<style lang="scss" scoped>
+.work-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+}
+.header {
+  position: relative;
+  height: 113px;
+  border-bottom: 10px solid #ededed;
+  background-color: #fff;
+  img{
+    width: 22px;
+    height: 41px;
+    position: absolute;
+    top: 50%;
+    left: 27px;
+    margin-top: -20.5px;
+  }
+  h3 {
+    font-size: 46px;
     text-align: center;
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
+    line-height: 113px;
+  }
+}
+.main {
+  flex: 1;
+  padding-bottom: 100px;
+  overflow: scroll;
+
+  .list {
 
     .item {
-      flex: 1;
+      display: flex;
+      padding-left: 50px;
+      padding-right: 50px;
+      margin-top: 30px;
+
+      .img {
+        width: 127px;
+        height: 96px;
+        background-color: red;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .info {
+        flex: 1;
+        padding-left: 20px;
+
+        .title {
+          font-size: 24px;
+          font-weight: bold;
+        }
+
+        .intro {
+          line-height: 1.34;
+          font-size: 20px;
+          color: #808080;
+          text-overflow: -o-ellipsis-lastline;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
+      }
     }
   }
-
 }
 </style>

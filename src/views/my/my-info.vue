@@ -7,7 +7,8 @@
     <div class="main">
       <div class="item">
         <div class="name">更换头像</div>
-        <div class="content">
+        <div class="content" @click="uploadImg">
+          <upload-img></upload-img>
           <div class="avatar">
             <img :src="formData.avatar" alt="">
           </div>
@@ -139,6 +140,7 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import Store from '@/store'
+import UploadImg from '@/components/upload'
 
 export default {
   beforeRouteEnter (to, from, next) {
@@ -165,6 +167,9 @@ export default {
       newPassword: '',
       confirmPassword: ''
     }
+  },
+  components: {
+    UploadImg
   },
   watch: {
     ageVisible (val) {
@@ -248,6 +253,9 @@ export default {
         new_passwd: this.newPassword,
         again_passwd: this.confirmPassword
       })
+    },
+    uploadImg () {
+      this.$el.querySelector('#upload').click()
     }
   },
   created () {
@@ -358,6 +366,14 @@ export default {
     this.role2DataSlots = role2DataSlots()
     this.careerDataSlots = careerDataSlots()
     this.introValue = this.formData.desc
+  },
+  mounted () {
+    this.$root.$on('uploadComplete', resp => {
+      let data = resp.data
+      this.updateUserInfo({
+        avatar: data['168x168'] || data.ori
+      })
+    })
   }
 }
 </script>

@@ -13,3 +13,9 @@ export function changePasswordApi (data = {}) {
     data
   })
 }
+
+export function getWorkListApi (id, data = {}) {
+  return fetchUtil(`/users/${id}/gallery/`, {
+    data
+  })
+}
