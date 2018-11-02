@@ -34,7 +34,7 @@
             </router-link>
             <router-link class="item" :to="{name:'my-about'}">
                 <img src="../../assets/images/my/ico_about.png" alt="">
-                <p>企业说明</p>
+                <p>平台简介</p>
             </router-link>
             <router-link class="item" :to="{name:'my-pay-new'}">
                 <img src="../../assets/images/my/ico_order.png" alt="">
