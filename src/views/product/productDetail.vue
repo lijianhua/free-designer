@@ -123,7 +123,6 @@ export default {
     await this.getUserInfo(this.detailData)
     await this.getGalleryList(this.detailData)
     this.allPicture = this.galleryList.length
-    this.getList()
   },
   methods: {
     ...mapActions('productDetail', ['getUserInfo', 'getGalleryList', 'getCommentList', 'getMoreComment', 'addGalleryComment']),
@@ -141,16 +140,18 @@ export default {
       this.$refs.loadmore.onTopLoaded()
     },
     async load () {
-      if (!this.commentPageInfo.page) return
       if (this.commentPageInfo.page + 1 > this.commentPageInfo.total_page) {
         this.isLoadedAll = true
         return
       }
       const dataFrom = {
-        gallery: this.detailData.gallery,
-        page: this.commentPageInfo.page + 1
+        user: this.detailData.user,
+        gallery: this.detailData.gallery
       }
-      await this.getMoreComment(this.detailData.gallery, dataFrom)
+      if (this.commentPageInfo.page) {
+        dataFrom.page = this.commentPageInfo.page + 1
+      }
+      await this.getMoreComment(dataFrom)
       this.$refs.loadmore.onBottomLoaded()
     },
     async addComment () {

@@ -96,7 +96,6 @@ export default {
   },
   async created () {
     this.getUserInfo(this.detailData)
-    await this.getList()
   },
   methods: {
     ...mapActions('home', ['getUserInfo', 'getHistory', 'getMoreHistory']),
@@ -118,15 +117,16 @@ export default {
       this.$refs.loadmore.onTopLoaded()
     },
     async load () {
-      if (!this.historyPageInfo.page) return
       if (this.historyPageInfo.page + 1 > this.historyPageInfo.total_page) {
         this.isLoadedAll = true
         return
       }
       const dataFrom = {
         user: this.detailData,
-        page: this.historyPageInfo.page + 1,
         status: 'finished'
+      }
+      if (this.historyPageInfo.page) {
+        dataFrom.page = this.historyPageInfo.page + 1
       }
       await this.getMoreHistory(dataFrom)
       this.$refs.loadmore.onBottomLoaded()

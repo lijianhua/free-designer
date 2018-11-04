@@ -112,10 +112,6 @@ export default {
   },
   async created () {
     this.getBanners()
-    await this.getFilters()
-    this.selectFilter = this.filtersList[0].id
-    this.showFilter = true
-    this.getList()
   },
   methods: {
     ...mapActions('home', ['getBanners', 'getFilters', 'getUsers', 'getMoreUsers']),
@@ -148,15 +144,21 @@ export default {
       this.$refs.loadmore.onTopLoaded()
     },
     async load () {
-      if (!this.pageInfo.page) return
       if (this.pageInfo.page + 1 > this.pageInfo.total_page) {
         this.isLoadedAll = true
         return
       }
+      if (!this.showFilter) {
+        await this.getFilters()
+        this.selectFilter = this.filtersList[0].id
+        this.showFilter = true
+      }
       const dataFrom = {
         role: this.selectFilter,
-        sort_by: this.selectSort,
-        page: this.pageInfo.page + 1
+        sort_by: this.selectSort
+      }
+      if (this.pageInfo.page) {
+        dataFrom.page = this.pageInfo.page + 1
       }
       await this.getMoreUsers(dataFrom)
       this.$refs.loadmore.onBottomLoaded()

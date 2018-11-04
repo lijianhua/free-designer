@@ -103,13 +103,13 @@ export default {
       this.$refs.loadmore.onTopLoaded()
     },
     async load () {
-      if (!this.picturePageInfo.page) return
       if (this.picturePageInfo.page + 1 > this.picturePageInfo.total_page) {
         this.isLoadedAll = true
         return
       }
-      const dataFrom = {
-        page: this.picturePageInfo.page + 1
+      const dataFrom = {}
+      if (this.picturePageInfo.page) {
+        dataFrom.page = this.picturePageInfo.page + 1
       }
       await this.getMorePicture(this.userInfo.id, dataFrom)
       this.$refs.loadmore.onBottomLoaded()
