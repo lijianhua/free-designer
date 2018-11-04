@@ -1,15 +1,45 @@
 <template>
-  <div class="container">
+  <div class="pay-new-container">
     <div class="header">
-      <div class="back">
-        <i class="fas fa-chevron-left"></i>
-      </div>
+      <img @click="$router.push('my')" src="../../assets/images/back.png" alt="">
       <h3>积分充值</h3>
     </div>
     <div class="main">
       <h4>第一步：选择溜币充值套包</h4>
       <div class="list">
-        <div class="item">
+        <div
+          class="item"
+          v-for="(item, index) in payList"
+          :key="index"
+          :class="{active:activeIndex === index}"
+          @click="handleSwitchItem(index,item.id)">
+          <div class="box">
+            <div class="t">
+              <h5>{{item.total_points}}积分</h5>
+              <p>积分:{{item.ori_points}} 赠送:{{item.extra_points}}</p>
+              <p>{{item.name}}</p>
+            </div>
+            <div class="b">
+              <p>{{item.order_cost}}元</p>
+            </div>
+          </div>
+        </div>
+        <div class="item" :class="{active:activeIndex === -1}" @click="handleSwitchItem(-1)">
+          <div class="box">
+            <div class="t">
+              <h5>自定义充值</h5>
+              <p>无积分优惠</p>
+              <p>自定义套餐</p>
+            </div>
+            <div class="b">
+              <p>
+                <input type="text" placeholder="请输入金额/">
+                元
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="item" :class="{active:active === 1000}" @click="handleSwitchItem(1000)">
           <div class="box">
             <div class="t">
               <h5>1000积分</h5>
@@ -21,7 +51,7 @@
             </div>
           </div>
         </div>
-        <div class="item">
+        <div class="item" :class="{active:active === 5000}" @click="handleSwitchItem(5000)">
           <div class="box">
             <div class="t">
               <h5>1000积分</h5>
@@ -33,7 +63,7 @@
             </div>
           </div>
         </div>
-        <div class="item">
+        <div class="item" :class="{active:active === 10000}" @click="handleSwitchItem(10000)">
           <div class="box">
             <div class="t">
               <h5>1000积分</h5>
@@ -44,59 +74,98 @@
               <p>800元</p>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
       <h4>第二步：选择支付方式并付款</h4>
       <div class="wechat-pay"></div>
-      <div class="pay-btn">立即支付</div>
+      <div class="pay-btn" @click="handlePay">立即支付</div>
     </div>
   </div>
 </template>
-<style lang="scss" scoped>
-.container {
-  padding-top: 96px;
-  padding-bottom: 100px;
-  height: 100%;
-  box-sizing: border-box;
-  background-color: #eee;
-
-  .header {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 96px;
-    background-color: #fafafa;
-    border: 2px #eee solid;
-
-    .back {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 75px;
-      height: 100%;
-      text-align: center;
-      line-height: 96px;
+<script>
+import { MessageBox } from 'mint-ui'
+import { payApi } from '@/api/my'
+import Store from '@/store'
+import { mapGetters } from 'vuex'
+export default {
+  async beforeRouteEnter (to, from, next) {
+    await Store.dispatch('my/getPayList')
+    next()
+  },
+  data () {
+    return {
+      activeIndex: null,
+      curPayId: null,
+      money: 0
     }
+  },
+  computed: {
+    ...mapGetters('my', ['payList'])
+  },
+  methods: {
+    handleSwitchItem (index, id) {
+      this.activeIndex = index
+      this.curPayId = id
+    },
+    handlePay () {
+      MessageBox({
+        title: '提示',
+        message: '确认支付?',
+        showCancelButton: true
+      }).then(async action => {
+        if (action !== 'confirm') return
 
-    h3 {
-      text-align: center;
-      font-size: 40px;
-      height: 96px;
-      line-height: 96px;
-      font-weight: normal;
+        const { data } = await payApi({
+          goods_id: this.curPayId,
+          goods_type: 'prestore',
+          price_type: 'prestore',
+          pay_type: 1
+        })
+
+        location.href = data.url
+      })
     }
   }
+}
+</script>
+<style lang="scss" scoped>
+.pay-new-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+}
+.header {
+  position: relative;
+  height: 113px;
+  border-bottom: 3px solid #ededed;
+  background-color: #fff;
+  img{
+    width: 22px;
+    height: 41px;
+    position: absolute;
+    top: 50%;
+    left: 27px;
+    margin-top: -20.5px;
+  }
+  h3 {
+    font-size: 46px;
+    text-align: center;
+    line-height: 113px;
+  }
+}
+.main {
+  flex: 1;
+  padding: 0 36px 100px;
+  overflow-y: auto;
 
-  .main {
-    padding: 0 20px;
-    height: 100%;
-    overflow-y: auto;
-
-    h4 {
-      margin: 44px 0;
-      font-size: 34px;
-    }
+  h4 {
+    padding-left: 10px;
+    font-size: 25px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
 
     .list {
       display: flex;
@@ -104,11 +173,21 @@
 
       .item {
         width: 50%;
+        margin-bottom: 50px;
+
+        &.active {
+
+          .box {
+            border-color: #4195f7;
+          }
+        }
+
         .box {
           margin: 12px;
           text-align: center;
           border: 2px solid #e2e2e2;
           background-color: #fff;
+          border-radius: 6PX;
 
           .t {
             padding-bottom: 20px;
@@ -118,6 +197,7 @@
               font-weight: normal;
             }
             p {
+              color: #bababa;
               margin: 24px 0;
             }
           }
@@ -126,8 +206,18 @@
             border-top: dashed 2px #e2e2e2;
             p {
               font-size: 32px;
-              color: #ff9900;
+              color: #4195f7;
               margin: 32px 0;
+              display: flex;
+              justify-content: center;
+              input {
+                border: none;
+                width: 56%;
+              }
+              input::-webkit-input-placeholder {
+                color: #4195f7;
+                font-size: 32px;
+              }
             }
           }
         }
@@ -137,9 +227,11 @@
     .wechat-pay {
       width: 312px;
       height: 76px;
-      border: solid 2px #e2e2e2;
+      border: solid 2PX #4195f7;
       background: url('../../assets/images/icon-pay.png') no-repeat 36px -72px;
+      background-size: 74%;
       background-color: #fff;
+      margin: 0 auto;
     }
 
     .pay-btn {
@@ -154,8 +246,7 @@
       line-height: 76px;
       margin-bottom: 40px;
       box-sizing: border-box;
+      margin: 100px auto;
     }
-
-  }
 }
 </style>

@@ -420,6 +420,7 @@ export default {
     .content {
       flex: 1;
       text-align: right;
+      min-height: 70px;
 
       &.txt {
         white-space: nowrap;

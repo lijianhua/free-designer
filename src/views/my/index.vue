@@ -40,7 +40,7 @@
                 <img src="../../assets/images/my/ico_order.png" alt="">
                 <p>历史订单</p>
             </router-link>
-            <router-link class="item" :to="{name:'my-work'}">
+            <router-link class="item" :to="{name:'my-pay-new'}">
                 <img src="../../assets/images/my/ico_recharge.png" alt="">
                 <p>积分充值</p>
             </router-link>
