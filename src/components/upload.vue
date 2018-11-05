@@ -1,5 +1,5 @@
 <template>
-  <input id="upload" style="width:0;height:0;" type="file" :accept="accept" @change="uploadImage">
+  <input id="upload" style="width:0;height:0;display:none;" type="file" :accept="accept" @change="uploadImage">
 </template>
 <script>
 

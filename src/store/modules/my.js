@@ -1,4 +1,4 @@
-import { updateUserInfoApi, changePasswordApi, getWorkListApi, getOrderListApi } from '@/api/my'
+import { updateUserInfoApi, changePasswordApi, getWorkListApi, getOrderListApi, getPayListApi } from '@/api/my'
 import Cookie from 'js-cookie'
 
 const defaultWorkPagination = {
@@ -15,14 +15,16 @@ export default {
     workPagination: defaultWorkPagination, // 作品分页
     orderTabActive: 'send', // send 发单 apply 接单
     sendOrderList: [], // 发单已完成列表
-    applyOrderList: [] // 接单已完成列表
+    applyOrderList: [], // 接单已完成列表
+    payList: [] // 支付选项列表
   },
   getters: {
     formData: state => state.formData,
     workList: state => state.workList,
     orderTabActive: state => state.orderTabActive,
     sendOrderList: state => state.sendOrderList,
-    applyOrderList: state => state.applyOrderList
+    applyOrderList: state => state.applyOrderList,
+    payList: state => state.payList
   },
   mutations: {
     SET_FORM_DATA (state, v) {
@@ -40,6 +42,9 @@ export default {
     },
     SET_APPLY_ORDER_LIST (state, v) {
       state.applyOrderList = v.data
+    },
+    SET_PAY_LIST (state, v) {
+      state.payList = v
     }
   },
   actions: {
@@ -87,6 +92,10 @@ export default {
       } else if (orderTabActive === 'apply') {
         commit('SET_APPLY_ORDER_LIST', data)
       }
+    },
+    async getPayList ({ commit }) {
+      const { data } = await getPayListApi()
+      commit('SET_PAY_LIST', data.data)
     }
   }
 }

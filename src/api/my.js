@@ -27,3 +27,16 @@ export function getOrderListApi (active) {
   }
   return fetchUtil(url)
 }
+
+export function payApi (data = {}) {
+  return fetchUtil('/pay/create_order/', {
+    method: 'POST',
+    data
+  })
+}
+
+export function getPayListApi (data = {}) {
+  return fetchUtil('/prestore/', {
+    data
+  })
+}

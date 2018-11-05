@@ -6,6 +6,7 @@ import login from './modules/login'
 import product from './modules/product'
 import productDetail from './modules/productDetail'
 import my from './modules/my'
+import order from './modules/order'
 
 Vue.use(Vuex)
 
@@ -26,6 +27,7 @@ export default new Vuex.Store({
     login,
     product,
     productDetail,
-    my
+    my,
+    order
   }
 })

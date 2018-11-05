@@ -15,7 +15,7 @@ import './assets/css/resetUi.scss' // 修改muse-ui mint-ui 默认样式
 
 import delay from './utils/delay'
 import hook from './router/hook'
-
+console.log(13601236259)
 Vue.use(delay)
 Vue.use(MintUI)
 Vue.use(MuseUI)
