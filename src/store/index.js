@@ -7,6 +7,7 @@ import product from './modules/product'
 import productDetail from './modules/productDetail'
 import my from './modules/my'
 import order from './modules/order'
+import points from './modules/points'
 
 Vue.use(Vuex)
 
@@ -28,6 +29,7 @@ export default new Vuex.Store({
     product,
     productDetail,
     my,
-    order
+    order,
+    points
   }
 })

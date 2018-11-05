@@ -28,6 +28,8 @@ const MyPayNew = () => import('@/views/my/my-pay-new')
 const MyInfo = () => import('@/views/my/my-info')
 // 历史订单
 const MyHistoryOrder = () => import('@/views/my/my-history-order')
+// 积分
+const MyPoints = () => import('@/views/my/my-points')
 
 Vue.use(Router)
 
@@ -104,6 +106,11 @@ export default new Router({
           name: 'my-history-order',
           path: '/my-history-order',
           component: MyHistoryOrder
+        },
+        {
+          name: 'my-points',
+          path: '/my-points',
+          component: MyPoints
         }
       ]
     }

@@ -44,7 +44,7 @@
                 <img src="../../assets/images/my/ico_recharge.png" alt="">
                 <p>积分充值</p>
             </router-link>
-            <router-link class="item" :to="{name:'my-work'}">
+            <router-link class="item" :to="{name:'my-points'}">
                 <img src="../../assets/images/my/ico_setting.png" alt="">
                 <p>积分管理</p>
             </router-link>

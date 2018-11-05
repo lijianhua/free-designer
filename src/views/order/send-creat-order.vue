@@ -187,10 +187,24 @@
               <div class="title">项目资料</div>
               <div class="intro">上传您项目的资料供接单人进行准确判断</div>
             </div>
-            <div class="item" @click="uploadImg">
-              <div class="upload-txt">未选择文件</div>
-              <div class="upload">选择文件</div>
-              <upload-img></upload-img>
+            <div class="item">
+              <div class="img-box">
+                <div class="img-item">
+
+                </div>
+                <div class="img-item">
+
+                </div>
+                <div class="img-item">
+
+                </div>
+                <div class="img-item btn" @click="uploadImg">
+
+                </div>
+              </div>
+              <!-- <div class="upload-txt">未选择文件</div> -->
+              <!-- <div class="upload">选择文件</div> -->
+               <upload-img type="resource"></upload-img>
               <!-- <input id="upload" type="file" accept="image/png, image/jpeg, image/jpg, image/gif"> -->
             </div>
           </div>
@@ -422,4 +436,27 @@ export default {
   background-color: #4195f7;
   margin: 0 auto 125px;
 }
+.img-box {
+  display: flex;
+  flex-wrap: wrap;
+
+  .img-item {
+    width: 140px;
+    height: 105px;
+    background-color: #ececec;
+    margin-right: 12px;
+
+    &:nth-child(3n+0){
+      margin-right: 0;
+    }
+    &:nth-child(n+4){
+      margin-top: 10px;
+    }
+    &.btn {
+      background: url('../../assets/images/add.png') no-repeat center #ececee;
+      background-size: 50%;
+    }
+  }
+}
+
 </style>

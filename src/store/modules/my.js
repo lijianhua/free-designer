@@ -71,7 +71,7 @@ export default {
       const pagination = defaultWorkPagination
 
       if (!isPullDown) {
-        if (pagination.page > workPagination.total_page) {
+        if (pagination.page >= workPagination.total_page) {
           return
         }
         pagination.page = workPagination.page + 1
