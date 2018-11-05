@@ -22,3 +22,4 @@ caption,th {text-align: left;}
 article,aside,footer,header,hgroup,nav,section,figure,figcaption {display: block;}
 .clearfix{overflow:hidden;_zoom:1;}
 a,input,textarea,button,span,li,textarea{outline:none;}
+.ellipsis{white-space: nowrap;text-overflow: ellipsis;overflow: hidden;}

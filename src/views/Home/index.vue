@@ -136,11 +136,11 @@ export default {
       if (this.isLoadedAll) {
         this.isLoadedAll = false
       }
-      const dataFrom = {
+      const dataForm = {
         role: this.selectFilter,
         sort_by: this.selectSort
       }
-      await this.getUsers(dataFrom)
+      await this.getUsers(dataForm)
       this.$refs.loadmore.onTopLoaded()
     },
     async load () {
@@ -153,14 +153,14 @@ export default {
         this.selectFilter = this.filtersList[0].id
         this.showFilter = true
       }
-      const dataFrom = {
+      const dataForm = {
         role: this.selectFilter,
         sort_by: this.selectSort
       }
       if (this.pageInfo.page) {
-        dataFrom.page = this.pageInfo.page + 1
+        dataForm.page = this.pageInfo.page + 1
       }
-      await this.getMoreUsers(dataFrom)
+      await this.getMoreUsers(dataForm)
       this.$refs.loadmore.onBottomLoaded()
     },
     showDetail (userid) {
