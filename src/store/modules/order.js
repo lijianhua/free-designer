@@ -13,9 +13,17 @@ export default {
       task_unit: '张', // 总任务量单位
       system_cost: 0, // 系统报价
       pub_cost: 0, // 最终报价
-      fee: null // 小费
+      fee: null, // 小费
+      desc: '', // 任务要求
+      extra_resource: '' // 项目资料
     },
-    systemCost: '', // 系统报价
+    question: {
+      a: '',
+      b: '',
+      c: '',
+      d: '',
+      e: ''
+    },
     dynamicInfo: {}, // 项目需求详情
     dynamicInfoOptions: [], // 项目需求详情KEYS
     category: {
@@ -26,7 +34,8 @@ export default {
     formData: state => state.formData,
     categoryList: state => state.category,
     dynamicInfoOptions: state => state.dynamicInfoOptions,
-    dynamicInfo: state => state.dynamicInfo
+    dynamicInfo: state => state.dynamicInfo,
+    question: state => state.question
   },
   mutations: {
     SET_CATEGORY (state, v) {

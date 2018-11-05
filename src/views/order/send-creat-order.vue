@@ -150,7 +150,7 @@
               <div class="intro">描述项目简介以及任务的更多细节</div>
             </div>
             <div class="item">
-              <mu-text-field style="width:100%;" v-model="validateForm.n" placeholder="请填写任务描述" multi-line :rows="3" :rows-max="6"></mu-text-field>
+              <mu-text-field style="width:100%;" v-model="formData.desc" placeholder="请填写任务描述" multi-line :rows="3" :rows-max="6"></mu-text-field>
             </div>
           </div>
         </div>
@@ -163,19 +163,19 @@
               <div class="intro">对接单者的能力考核，以及对您的项目解决方案</div>
             </div>
             <div class="item">
-              <mu-text-field style="width:100%;" v-model="validateForm.n" placeholder="请输入第一题"></mu-text-field>
+              <mu-text-field style="width:100%;" v-model="question.a" placeholder="请输入第一题"></mu-text-field>
             </div>
             <div class="item">
-              <mu-text-field style="width:100%;" v-model="validateForm.n" placeholder="请输入第二题"></mu-text-field>
+              <mu-text-field style="width:100%;" v-model="question.b" placeholder="请输入第二题"></mu-text-field>
             </div>
             <div class="item">
-              <mu-text-field style="width:100%;" v-model="validateForm.n" placeholder="请输入第三题"></mu-text-field>
+              <mu-text-field style="width:100%;" v-model="question.c" placeholder="请输入第三题"></mu-text-field>
             </div>
             <div class="item">
-              <mu-text-field style="width:100%;" v-model="validateForm.n" placeholder="请输入第四题"></mu-text-field>
+              <mu-text-field style="width:100%;" v-model="question.d" placeholder="请输入第四题"></mu-text-field>
             </div>
             <div class="item">
-              <mu-text-field style="width:100%;" v-model="validateForm.n" placeholder="请输入第五题"></mu-text-field>
+              <mu-text-field style="width:100%;" v-model="question.e" placeholder="请输入第五题"></mu-text-field>
             </div>
           </div>
         </div>
@@ -187,10 +187,11 @@
               <div class="title">项目资料</div>
               <div class="intro">上传您项目的资料供接单人进行准确判断</div>
             </div>
-            <div class="item">
+            <div class="item" @click="uploadImg">
               <div class="upload-txt">未选择文件</div>
               <div class="upload">选择文件</div>
-              <input id="upload" type="file" accept="image/png, image/jpeg, image/jpg, image/gif">
+              <upload-img></upload-img>
+              <!-- <input id="upload" type="file" accept="image/png, image/jpeg, image/jpg, image/gif"> -->
             </div>
           </div>
         </div>
@@ -202,18 +203,23 @@
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import Store from '@/store'
+import uploadImg from '@/components/upload'
 export default {
   async beforeRouteEnter (to, from, next) {
     await Store.dispatch('order/getCategory')
     next()
   },
-  computed: {
-    ...mapGetters('order', ['formData', 'categoryList', 'dynamicInfoOptions', 'dynamicInfo'])
+  data () {
+    return {
+      orderTypeOptions: ['项目分包', '短期雇佣'],
+      taskUnitOptions: ['张', '套', '项']
+    }
   },
-  mounted () {
-    // setInterval(() => {
-    //   console.log(this.formData)
-    // }, 3000)
+  computed: {
+    ...mapGetters('order', ['formData', 'categoryList', 'dynamicInfoOptions', 'dynamicInfo', 'question'])
+  },
+  components: {
+    uploadImg
   },
   methods: {
     ...mapMutations('order', ['SET_DYNAMIC_INFO', 'SET_PUB_COST']),
@@ -257,36 +263,16 @@ export default {
     },
     handleFeeChange (val) {
       this.SET_PUB_COST(val)
+    },
+    uploadImg () {
+      this.$el.querySelector('#upload').click()
     }
   },
-  data () {
-    return {
-      // formData: {
-      // orderType: '1' // 订单类型  1=项目分包  2=短期雇佣
-      // },
-      orderTypeOptions: ['项目分包', '短期雇佣'],
-
-      openAlert: false,
-      options: [
-        'Option 1', 'Option 2', 'Option 3', 'Option 4',
-        'Option 5', 'Option 6', 'Option 7', 'Option 8',
-        'Option 9', 'Option 10'
-      ],
-      taskUnitOptions: ['张', '套', '项'],
-      validateForm: {
-        type: '',
-        a: 0,
-        s: '张'
-      },
-      usernameRules: [
-        { validate: (val) => {
-          console.log(val)
-          return !!val
-        },
-        message: '必须填写用户名' },
-        { validate: (val) => val.length >= 3, message: '用户名长度大于3' }
-      ]
-    }
+  mounted () {
+    this.$root.$on('uploadComplete', resp => {
+      let data = resp.data
+      console.log(data.ori)
+    })
   }
 }
 </script>

@@ -39,42 +39,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="item" :class="{active:active === 1000}" @click="handleSwitchItem(1000)">
-          <div class="box">
-            <div class="t">
-              <h5>1000积分</h5>
-              <p>积分:800 赠送:200</p>
-              <p>基础套餐</p>
-            </div>
-            <div class="b">
-              <p>800元</p>
-            </div>
-          </div>
-        </div>
-        <div class="item" :class="{active:active === 5000}" @click="handleSwitchItem(5000)">
-          <div class="box">
-            <div class="t">
-              <h5>1000积分</h5>
-              <p>积分:800 赠送:200</p>
-              <p>基础套餐</p>
-            </div>
-            <div class="b">
-              <p>800元</p>
-            </div>
-          </div>
-        </div>
-        <div class="item" :class="{active:active === 10000}" @click="handleSwitchItem(10000)">
-          <div class="box">
-            <div class="t">
-              <h5>1000积分</h5>
-              <p>积分:800 赠送:200</p>
-              <p>基础套餐</p>
-            </div>
-            <div class="b">
-              <p>800元</p>
-            </div>
-          </div>
-        </div> -->
       </div>
       <h4>第二步：选择支付方式并付款</h4>
       <div class="wechat-pay"></div>
