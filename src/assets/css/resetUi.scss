@@ -84,3 +84,48 @@
         }
     }
 }
+
+// 需求池
+.apply {
+
+    .select {
+        .mu-input {
+            width: 100px;
+        }
+    }
+    .mu-input {
+        padding: 0;
+        margin-bottom: 0;
+        min-height: 0;
+        width: auto;
+    }
+    .mu-input-content {
+        z-index: 2;
+    }
+    .mu-input.has-label .mu-input-label.float {
+        opacity: 1;
+        transform: none;
+        color: rgba(0,0,0,.54);
+    }
+    .mu-input.has-label .mu-input-label {
+        opacity: 0;
+        line-height: 10px;
+        font-size: 18px;
+    }
+    .mu-select-action {
+        display: block;
+
+        >svg {
+            transform: scale(2);
+        }
+    }
+    .mu-input-line{
+        display: block;
+    }
+    .mu-input-focus-line{
+        display: block;
+    }
+    .mu-select-input{
+        text-align: center;
+    }
+}

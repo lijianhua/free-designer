@@ -59,7 +59,7 @@
         <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
             <div class="designBox" v-for="(item, index) in pictureList" :key="index">
                 <div class="title">{{ item.name }}</div>
-                <div class="designImg">
+                <div class="designImg" @click="showDetail(item)">
                     <img :src="item.thumb" alt="designImg">
                 </div>
                 <div class="designInfo">
@@ -73,15 +73,25 @@
                 </div>
             </div>
         </mt-loadmore>
+        <!-- 作品详情 -->
+        <mu-slide-left-transition>
+            <productDetail v-if="isShowDetail" :detailData='detailData' @callBack='callBack'></productDetail>
+        </mu-slide-left-transition>
     </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import productDetail from '../product/productDetail'
 export default {
   data () {
     return {
-      isLoadedAll: false
+      isLoadedAll: false,
+      isShowDetail: false,
+      detailData: {
+        user: '',
+        gallery: ''
+      }
     }
   },
   computed: {
@@ -94,6 +104,9 @@ export default {
     ...mapActions('home', ['getPicture', 'getMorePicture']),
     closeDetail () {
       this.$emit('callBack')
+    },
+    callBack () {
+      this.isShowDetail = false
     },
     async getList () {
       if (this.isLoadedAll) {
@@ -113,7 +126,17 @@ export default {
       }
       await this.getMorePicture(this.userInfo.id, dataFrom)
       this.$refs.loadmore.onBottomLoaded()
+    },
+    showDetail (item) {
+      this.detailData = Object.assign({}, this.detailData, {
+        user: item.uid,
+        gallery: item.id
+      })
+      this.isShowDetail = true
     }
+  },
+  components: {
+    productDetail
   }
 }
 </script>
