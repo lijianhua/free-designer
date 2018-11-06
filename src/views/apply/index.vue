@@ -56,14 +56,17 @@ export default {
     return {
       selectType: '项目分类',
       selectApply: '项目需求',
-      showFilter: false,
+      showFilter: true,
       isLoadedAll: false
     }
   },
   computed: {
     ...mapGetters('apply', ['filterClass', 'filterApply', 'demandsList', 'demandPage'])
   },
-  async created () {},
+  async created () {
+    await this.getFilterInfo()
+    this.getList()
+  },
   methods: {
     ...mapActions('apply', ['getFilterInfo', 'getDemandsList', 'getMoreDemands']),
     async getList () {
@@ -84,10 +87,6 @@ export default {
       if (this.demandPage.page + 1 > this.demandPage.total_page) {
         this.isLoadedAll = true
         return
-      }
-      if (!this.showFilter) {
-        await this.getFilterInfo()
-        this.showFilter = true
       }
       let dataForm = {}
       if (this.selectType !== '项目分类') {

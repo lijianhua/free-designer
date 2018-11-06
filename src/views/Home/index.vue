@@ -103,7 +103,7 @@ export default {
       selectFilter: '',
       detailData: '',
       isShowDetail: false,
-      showFilter: false,
+      showFilter: true,
       isLoadedAll: false
     }
   },
@@ -112,6 +112,9 @@ export default {
   },
   async created () {
     this.getBanners()
+    await this.getFilters()
+    this.selectFilter = this.filtersList[0].id
+    this.getList()
   },
   methods: {
     ...mapActions('home', ['getBanners', 'getFilters', 'getUsers', 'getMoreUsers']),
@@ -147,11 +150,6 @@ export default {
       if (this.pageInfo.page + 1 > this.pageInfo.total_page) {
         this.isLoadedAll = true
         return
-      }
-      if (!this.showFilter) {
-        await this.getFilters()
-        this.selectFilter = this.filtersList[0].id
-        this.showFilter = true
       }
       const dataForm = {
         role: this.selectFilter,
@@ -235,6 +233,12 @@ export default {
     display: flex;
     justify-content: space-between;
     .sortFilter{
+        display: flex;
+        align-content: center;
+        .mu-input{
+          margin-bottom: 0;
+          padding-bottom: 0;
+        }
         span{
             font-size: 24px;
             margin-right: 40px;
