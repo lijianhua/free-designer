@@ -144,6 +144,11 @@
                     </div>
                 </div>
             </div>
+            <div class="submit">提交</div>
+            <div class="agree">
+                <img src="../../assets/images/redyes.png" alt="redyes">
+                <p>我已阅读并同意遵守<span>服务许可协议 隐私政策</span></p>
+            </div>
         </div>
     </div>
 </template>
@@ -352,6 +357,30 @@ export default {
         margin-bottom: 30px;
         line-height: 50px;
         height: 50px;
+    }
+    .agree{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        color: #ececec;
+        img{
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+        }
+        span{
+            color: red;
+        }
+    }
+    .submit {
+        width: 436px;
+        height: 67px;
+        color: #fff;
+        line-height: 67px;
+        text-align: center;
+        background-color: #4195f7;
+        margin: 0 auto 60px;
     }
 }
 </style>
