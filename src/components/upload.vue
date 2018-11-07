@@ -4,7 +4,7 @@
 <script>
 
 export default {
-  props: ['maxsize', 'type', 'subtype'],
+  props: ['maxsize', 'type', 'subtype', 'camera'],
   created () {
     this.MAX_SIZE = this.maxsize * 1024 // *KB
     this.FILE_NAME_NOT_CONTAINS = [';'] // 文件名不能包含的内容
@@ -18,6 +18,9 @@ export default {
           break
         case 'resource':
           accept = '*'
+          break
+        case 'camera':
+          accept = 'image/*'
           break
       }
       return accept

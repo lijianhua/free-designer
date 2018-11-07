@@ -8,7 +8,7 @@
       <div class="item">
         <div class="name">更换头像</div>
         <div class="content" @click="uploadImg">
-          <upload-img></upload-img>
+          <upload-img type="work"></upload-img>
           <div class="avatar">
             <img :src="formData.avatar" alt="">
           </div>

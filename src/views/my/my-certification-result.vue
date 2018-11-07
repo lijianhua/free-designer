@@ -4,78 +4,50 @@
       <img @click="$router.push('my')" src="../../assets/images/back.png" alt="">
       <h3>实名认证</h3>
     </div>
-    <div class="auth-form">
-      <div class="form-item padding">
-        <div class="name">请上传身份证照片</div>
-        <div class="content">
-          <upload-img></upload-img>
-          <div class="img" style=""></div>
-        </div>
+    <div class="auth-info">
+      <div>
+        <p>认证审核中</p>
+        <p class="intro">资料已提交认证，预计XX小时内认证完成</p>
       </div>
+    </div>
+    <h5>认证信息</h5>
+    <div class="auth-form">
       <div class="form-item">
-        <div class="name">真实姓名</div>
+        <div class="name">证件类型</div>
         <div class="content">
-          <mu-text-field class="input" v-model="formData.a" placeholder="请输入姓名"></mu-text-field><br/>
+          <span style="colo:#4195f7;">身份证</span>
         </div>
       </div>
       <div class="form-item">
         <div class="name">证件号</div>
         <div class="content">
-          <mu-text-field class="input" v-model="formData.a" placeholder="请填写证件号"></mu-text-field><br/>
+          <mu-text-field class="input" v-model="formData.license_id" placeholder="请填写证件号"></mu-text-field><br/>
         </div>
       </div>
-      <div class="submit">提交</div>
+      <div class="form-item uploadImg">
+        <p>请上传身份证照片</p>
+        <div class="img" @click="uploadImg">
+          <upload-img type="work"></upload-img>
+          <img v-if="!formData.license_pic" src="../../assets/images/uploadImg.png" alt="">
+          <img v-else :src="formData.license_pic" alt="">
+        </div>
+      </div>
+      <div class="submit" @click="updateUserInfo">提交</div>
     </div>
-    <!-- <div class="auth-info">
-      <div class="main" v-if="false">
-        <img src="@/assets/images/certification_true.png" alt="">
-        <h4>认证成功</h4>
-        <p>恭喜你，提交的资料已成功认证</p>
-      </div>
-      <div class="main" v-if="false">
-        <img src="@/assets/images/certification_false.png" alt="">
-        <h4>还未认证</h4>
-        <p>还未进行实名制认证哦，点击按钮提交资料</p>
-        <mt-button type="primary" size="small">实名认证</mt-button>
-      </div>
-      <div class="main" v-if="false">
-        <img src="@/assets/images/certification_false.png" alt="">
-        <h4>认证失败</h4>
-        <p>您提交的资料不完整未通过认证</p>
-        <mt-button type="primary" size="small">重新提交</mt-button>
-      </div>
-      <div class="main" v-if="true">
-        <img src="@/assets/images/certification.png" alt="">
-        <h4>认证审核中</h4>
-        <p>资料已提交认证，预计48小时内认证完毕</p>
-      </div>
-    </div>
-    <div class="info">
-      <h3>认证信息</h3>
-      <div class="item">
-        <span>真实姓名：</span>
-        <span>137****0000</span>
-      </div>
-      <div class="item">
-        <span>证件类型：</span>
-        <span>身份证</span>
-      </div>
-      <div class="item">
-        <span>证件号码：</span>
-        <span>123456345723984792834</span>
-      </div>
-    </div> -->
   </div>
 </template>
 <script>
 import UploadImg from '@/components/upload'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+import Store from '@/store'
 export default {
-  data () {
-    return {
-      formData: {
-        a: ''
-      }
-    }
+  beforeRouteEnter (to, from, next) {
+    const userInfo = Store.state.userInfo
+    Store.commit('my/SET_FORM_DATA', userInfo)
+    next()
+  },
+  computed: {
+    ...mapGetters('my', ['formData'])
   },
   components: {
     UploadImg
@@ -83,12 +55,15 @@ export default {
   mounted () {
     this.$root.$on('uploadComplete', resp => {
       let data = resp.data
-      this.updateUserInfo({
-        avatar: data.ori
+      this.SET_FORM_DATA({
+        ...this.formData,
+        license_pic: data.ori
       })
     })
   },
   methods: {
+    ...mapActions('my', ['updateUserInfo']),
+    ...mapMutations('my', ['SET_FORM_DATA']),
     uploadImg () {
       this.$el.querySelector('#upload').click()
     }
@@ -100,11 +75,12 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #fff;
+  overflow-y: scroll;
 }
 .header {
   position: relative;
   height: 113px;
-  border-bottom: 3px solid #ededed;
+  border-bottom: 10px solid #bababa;
   background-color: #fff;
   img{
     width: 22px;
@@ -120,6 +96,25 @@ export default {
     line-height: 113px;
   }
 }
+.auth-info {
+  padding-top: 160px;
+  padding-bottom: 160px;
+  text-align: center;
+  p {
+    font-size: 33px;
+    font-weight: bold;
+  }
+  .intro {
+    font-size: 24px;
+    color: #bababa;
+    font-weight: normal;
+  }
+}
+h5 {
+  font-size: 33px;
+  background-color: #bababa;
+  padding: 36px 100px;
+}
 .auth-form {
   .form-item {
     display: flex;
@@ -128,8 +123,23 @@ export default {
     padding: 0 44px;
     border-bottom: 2PX solid #bebebe;
 
-    &.padding {
-      padding:18px 44px;
+    &.uploadImg {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-bottom: none;
+      padding-top: 56px;
+      color: #ddd;
+      .img {
+        width: 435px;
+        height: 297px;
+        border: 2PX solid #ddd;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
     }
     .name {
       width: 266px;

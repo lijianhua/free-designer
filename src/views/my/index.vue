@@ -24,30 +24,34 @@
             </div>
         </div>
         <div class="list">
-            <router-link class="item" :to="{name:'my-work'}">
-                <img src="../../assets/images/my/ico_work.png" alt="">
-                <p>我的作品</p>
-            </router-link>
-            <router-link class="item" :to="{name:'my-certification-result'}">
-                <img src="../../assets/images/my/ico_certification.png" alt="">
-                <p>实名认证</p>
-            </router-link>
-            <router-link class="item" :to="{name:'my-about'}">
-                <img src="../../assets/images/my/ico_about.png" alt="">
-                <p>平台简介</p>
-            </router-link>
-            <router-link class="item" :to="{name:'my-history-order'}">
-                <img src="../../assets/images/my/ico_order.png" alt="">
-                <p>历史订单</p>
-            </router-link>
-            <router-link class="item" :to="{name:'my-pay-new'}">
-                <img src="../../assets/images/my/ico_recharge.png" alt="">
-                <p>积分充值</p>
-            </router-link>
-            <router-link class="item" :to="{name:'my-points'}">
-                <img src="../../assets/images/my/ico_setting.png" alt="">
-                <p>积分管理</p>
-            </router-link>
+            <div class="row">
+                <router-link class="item" :to="{name:'my-work'}">
+                    <img src="../../assets/images/my/ico_work.png" alt="">
+                    <p>我的作品</p>
+                </router-link>
+                <router-link class="item" :to="{name:'my-certification-result'}">
+                    <img src="../../assets/images/my/ico_certification.png" alt="">
+                    <p>实名认证</p>
+                </router-link>
+                <router-link class="item" :to="{name:'my-about'}">
+                    <img src="../../assets/images/my/ico_about.png" alt="">
+                    <p>平台简介</p>
+                </router-link>
+            </div>
+            <div class="row">
+                <router-link class="item" :to="{name:'my-history-order'}">
+                    <img src="../../assets/images/my/ico_order.png" alt="">
+                    <p>历史订单</p>
+                </router-link>
+                <router-link class="item" :to="{name:'my-pay-new'}">
+                    <img src="../../assets/images/my/ico_recharge.png" alt="">
+                    <p>积分充值</p>
+                </router-link>
+                <router-link class="item" :to="{name:'my-points'}">
+                    <img src="../../assets/images/my/ico_setting.png" alt="">
+                    <p>积分管理</p>
+                </router-link>
+            </div>
             <!-- <router-link class="item" :to="{name:'my-work'}">
                 <img src="../../assets/images/my/ico_msg.png" alt="">
                 <p>我的消息</p>
@@ -130,26 +134,26 @@ export default {
     flex-wrap: wrap;
     margin: 39px 118px 0;
 
-    >a {
-        text-align: center;
-        margin-right: 109px;
+    .row {
         display: flex;
-        flex-direction: column;
-        align-items: center;
         justify-content: space-between;
-        img {
-            width: 40px;
-        }
-        p {
-            padding-top: 24px;
+        width: 100%;
+        margin-bottom: 50px;
+
+        >a {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            img {
+                width: 40px;
+            }
+            p {
+                padding-top: 24px;
+            }
         }
     }
 
-    >a:nth-child(3n+0){
-        margin-right: 0;
-    }
-    >a:nth-child(n+4){
-        margin-top: 50px;
-    }
 }
 </style>
