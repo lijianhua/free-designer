@@ -133,6 +133,10 @@ export default {
     >a {
         text-align: center;
         margin-right: 109px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
         img {
             width: 40px;
         }

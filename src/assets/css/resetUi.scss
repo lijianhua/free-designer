@@ -21,6 +21,25 @@
     width: 170px;
 }
 
+// 积分管理
+.my-points-container {
+    .mint-tab-container-wrap {
+        height: 100%;
+    }
+}
+
+// 实名认证
+.my-certification-container {
+    .mu-input {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    .mu-text-field-input {
+        height: 100px;
+    }
+}
+
 /* 个人信息页 */
 .my-info-container {
     .mu-input {
@@ -32,11 +51,13 @@
         .mu-text-field-input {
             text-align: right;
             color: #a8a8a8;
+            height: auto;
         }
     }
     .popup-1-item {
         .mu-text-field-input {
             text-align: left;
+            height: 100px;
         }
     }
     .mint-popup-bottom {
