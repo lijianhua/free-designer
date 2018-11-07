@@ -1,7 +1,7 @@
 import fetchUtil from '@/utils/fetch'
 
 export function getFilters () {
-  return fetchUtil('/order/category/', {
+  return fetchUtil('/orders/categories/', {
     method: 'GET'
   })
 }

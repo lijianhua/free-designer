@@ -23,7 +23,7 @@
         </div>
         <div class="applyContainer">
           <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
-            <div class="send-card" v-for="(item, index) in demandsList" :key="index">
+            <div class="send-card" v-for="(item, index) in demandsList" :key="index" @click="isShowDetail = true">
               <img src="../../assets/images/demand_background.png" alt="">
               <div class="card-body">
                 <div class="body-left">
@@ -46,10 +46,15 @@
             </div>
           </mt-loadmore>
         </div>
+        <!-- 订单详情 -->
+        <mu-slide-left-transition>
+            <orderDetail v-if="isShowDetail" :detailData='detailData' @callBack='callBack'></orderDetail>
+        </mu-slide-left-transition>
     </div>
 </template>
 
 <script>
+import orderDetail from '../order/orderDetail'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   data () {
@@ -57,7 +62,9 @@ export default {
       selectType: '项目分类',
       selectApply: '项目需求',
       showFilter: true,
-      isLoadedAll: false
+      isLoadedAll: false,
+      isShowDetail: false,
+      detailData: {}
     }
   },
   computed: {
@@ -100,7 +107,13 @@ export default {
       }
       await this.getMoreDemands(dataForm)
       this.$refs.loadmore.onBottomLoaded()
+    },
+    callBack () {
+      this.isShowDetail = false
     }
+  },
+  components: {
+    orderDetail
   }
 }
 </script>
