@@ -1,4 +1,10 @@
-import { getCategoryApi, getSuggestCostApi } from '@/api/order'
+import { getCategoryApi, getSuggestCostApi, getEmployerListApi, createOrderApi, getWorkerListApi, createQuestionApi } from '@/api/order'
+
+const defaultListPagination = {
+  order_by: 'created_on',
+  page: 1,
+  per_page: 20
+}
 
 export default {
   namespaced: true,
@@ -15,7 +21,8 @@ export default {
       pub_cost: 0, // 最终报价
       fee: null, // 小费
       desc: '', // 任务要求
-      extra_resource: '' // 项目资料
+      files: '' // 项目资料
+      // extra_resource: '1,2,3' // 项目资料
     },
     question: {
       a: '',
@@ -23,19 +30,27 @@ export default {
       c: '',
       d: '',
       e: ''
-    },
+    }, // 问题
+    projectFiles: [], // 处理过的项目资料 =>formData.extra_resource
     dynamicInfo: {}, // 项目需求详情
     dynamicInfoOptions: [], // 项目需求详情KEYS
     category: {
       scateList: [] // 项目需求列表
-    } // 类别列表
+    }, // 类别列表
+    employerList: [], // 发单列表
+    employerPagination: defaultListPagination, // 发单分页
+    workerList: [], // 接单列表
+    workerPagination: defaultListPagination // 接单分页
   },
   getters: {
     formData: state => state.formData,
     categoryList: state => state.category,
     dynamicInfoOptions: state => state.dynamicInfoOptions,
     dynamicInfo: state => state.dynamicInfo,
-    question: state => state.question
+    question: state => state.question,
+    projectFiles: state => state.projectFiles,
+    employerList: state => state.employerList,
+    workerList: state => state.workerList
   },
   mutations: {
     SET_CATEGORY (state, v) {
@@ -80,6 +95,17 @@ export default {
       state.formData = Object.assign({}, state.formData, {
         pub_cost: Number(v) + Number(SystemCost)
       })
+    },
+    SET_EMPLOYER_LIST (state, v) {
+      state.employerList = v.data
+      state.employerPagination = v.page_info
+    },
+    SET_WORKER_LIST (state, v) {
+      state.workerList = v.data
+      state.workerPagination = v.page_info
+    },
+    SET_PROJECT_FILE (state, v) {
+      state.projectFiles.push(v)
     }
   },
   actions: {
@@ -90,6 +116,70 @@ export default {
     async getSuggestCost ({ commit }, v) {
       const { data } = await getSuggestCostApi(v)
       commit('SET_SYSTEM_COST', data)
+    },
+    async getEmployerList ({ commit, state }, isPullDown = true) {
+      const { employerPagination, employerList } = state
+      const pagination = Object.assign({}, defaultListPagination)
+
+      if (!isPullDown) {
+        if (employerPagination.page >= employerPagination.total_page) return
+        pagination.page = employerPagination.page + 1
+      } else {
+        pagination.page = 1
+      }
+
+      const { data } = await getEmployerListApi(Object.assign({}, pagination, {
+        status__gt: 0
+      }))
+
+      if (!isPullDown) {
+        data.data = employerList.concat(data.data)
+      }
+      commit('SET_EMPLOYER_LIST', data)
+    },
+    async getWorkerList ({ commit, state }, isPullDown = true) {
+      const { workerPagination, workerList } = state
+      const pagination = Object.assign({}, defaultListPagination)
+
+      if (!isPullDown) {
+        if (workerPagination.page >= workerPagination.total_page) return
+        pagination.page = workerPagination.page + 1
+      } else {
+        pagination.page = 1
+      }
+
+      const { data } = await getWorkerListApi(Object.assign({}, pagination, {
+        status__in: 'confirmed,active'
+      }))
+
+      if (!isPullDown) {
+        data.data = workerList.concat(data.data)
+      }
+      commit('SET_WORKER_LIST', data)
+    },
+    async submit ({ commit, state }) {
+      const { formData, question, dynamicInfo, projectFiles } = state
+
+      const params = Object.assign({}, formData, {
+        deadline: new Date(formData.deadline).toLocaleDateString().split('/').join('-'),
+        dynamic_info: dynamicInfo,
+        orderType: Number(formData.orderType),
+        fee: Number(formData.fee),
+        files: projectFiles.map(v => {
+          return v[2]
+        }).join()
+      })
+
+      const { data } = await createOrderApi(params)
+      await Promise.all([
+        Object.keys(question).map((v, i) =>
+          createQuestionApi(data.id, {
+            qid: i,
+            question: question[v]
+          })
+        )
+      ])
+      console.log(' 创建完了')
     }
   }
 }

@@ -4,7 +4,7 @@
 <script>
 
 export default {
-  props: ['maxsize', 'type', 'subtype'],
+  props: ['maxsize', 'type', 'subtype', 'camera'],
   created () {
     this.MAX_SIZE = this.maxsize * 1024 // *KB
     this.FILE_NAME_NOT_CONTAINS = [';'] // 文件名不能包含的内容
@@ -13,11 +13,17 @@ export default {
     accept () {
       let accept = '*'
       switch (this.type) {
+        case 'avatar':
         case 'work':
+        case 'deliveries':
+        case 'order_work':
           accept = 'image/png, image/jpeg, image/jpg, image/gif'
           break
         case 'resource':
           accept = '*'
+          break
+        case 'camera':
+          accept = 'image/*'
           break
       }
       return accept
@@ -54,13 +60,13 @@ export default {
       }
       let fd = new FormData()
       fd.append('content', file)
-      fd.append('type', this.type)
+      fd.append('ftype', this.type)
       let xhr = new XMLHttpRequest()
       xhr.upload.addEventListener('progress', this.onUploadProgress)
       xhr.addEventListener('load', this.onUploadComplete)
       xhr.addEventListener('error', this.onUploadFailed)
       // xhr.addEventListener('abort', this.onUploadCanceled)
-      xhr.open('POST', '/api/upload_file/')
+      xhr.open('POST', '/api/upload_files/')
       xhr.send(fd)
       e.target.value = ''
     }

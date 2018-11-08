@@ -5,7 +5,7 @@
       <h3>我的作品</h3>
     </div>
     <div class="main">
-      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" bottomPullText="" :auto-fill="false" ref="loadmore">
+      <mt-loadmore style="height:100%;" :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" bottomPullText="" :auto-fill="false" ref="loadmore">
         <ul class="list">
           <li class="item" v-for="(item, index) in workList" :key="index">
             <div class="img">

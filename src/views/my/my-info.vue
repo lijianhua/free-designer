@@ -8,8 +8,8 @@
       <div class="item">
         <div class="name">更换头像</div>
         <div class="content" @click="uploadImg">
-          <upload-img></upload-img>
-          <div class="avatar">
+          <upload-img type="avatar"></upload-img>
+          <div class="avatar" style="padding-top:4px;">
             <img :src="formData.avatar" alt="">
           </div>
         </div>
@@ -242,6 +242,7 @@ export default {
         ...this.formData,
         career: values[0]
       })
+      this.careerVisible = false
     },
     handleSaveIntro () {
       this.introVisible = false
@@ -371,7 +372,7 @@ export default {
     this.$root.$on('uploadComplete', resp => {
       let data = resp.data
       this.updateUserInfo({
-        avatar: data['168x168'] || data.ori
+        avatar: data[0][1]
       })
     })
   }
@@ -420,7 +421,6 @@ export default {
     .content {
       flex: 1;
       text-align: right;
-      min-height: 70px;
 
       &.txt {
         white-space: nowrap;

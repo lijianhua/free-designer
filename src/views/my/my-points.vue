@@ -8,7 +8,7 @@
       <div class="btn" :class="{active:tabActive === 'record'}" @click="tabActive = 'record'">交易记录</div>
       <div class="btn" :class="{active:tabActive === 'putForward'}" @click="tabActive = 'putForward'">积分提现</div>
     </div>
-    <mt-tab-container v-model="tabActive">
+    <mt-tab-container class="tab-container" v-model="tabActive">
       <mt-tab-container-item id="record">
         <div class="tab-main">
           <div class="item">
@@ -36,7 +36,7 @@
         </div>
       </mt-tab-container-item>
       <mt-tab-container-item id="putForward">
-        <div class="tab-main">
+        <div class="tab-main" style="overflow:scroll;">
           <div class="tab-main-header">
             <p>可提现积分<span style="color:#4195f7;">1200</span>，折换成人民币¥<span style="color:#ff0000;">1200</span></p>
             <p>(1积分=1人民币，满100积分可提现）</p>
@@ -104,9 +104,6 @@ export default {
   computed: {
     ...mapGetters('points', ['pointsList'])
   },
-  mounted () {
-    // console.log(this.pointsList)
-  },
   methods: {
     ...mapActions('points', ['getPointsList']),
     async loadTop () {
@@ -125,6 +122,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #fff;
+  overflow-y: scroll;
 }
 .header {
   position: relative;
@@ -153,7 +151,7 @@ export default {
   line-height: 57px;
   text-align: center;
   background-color: #ebebeb;
-  border: 1PX solid #ebebeb;
+  border-bottom: 1PX solid #fff;
   .btn {
       flex: 1;
       &.active {
@@ -161,14 +159,12 @@ export default {
       }
   }
 }
+.tab-container {
+  height: calc(100% - 274px);
+}
 .tab-main {
-  position: fixed;
-  left: 0;
-  top: 0;
   width: 100vw;
-  height: 100vh;
-  padding-top: 173px;
-  padding-bottom: 100px;
+  height: 100%;
 
   .item {
     display: flex;

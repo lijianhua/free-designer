@@ -68,13 +68,15 @@ export default {
     async getWorkList ({ state, rootState, commit }, isPullDown = true) {
       const { id } = rootState.userInfo
       const { workPagination, workList } = state
-      const pagination = defaultWorkPagination
+      const pagination = Object.assign({}, defaultWorkPagination)
 
       if (!isPullDown) {
-        if (pagination.page >= workPagination.total_page) {
+        if (workPagination.page >= workPagination.total_page) {
           return
         }
         pagination.page = workPagination.page + 1
+      } else {
+        pagination.page = 1
       }
 
       const { data } = await getWorkListApi(id, pagination)
