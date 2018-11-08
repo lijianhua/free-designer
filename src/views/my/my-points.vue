@@ -45,35 +45,35 @@
             <div class="form-item">
               <div class="name">提现金额</div>
               <div class="content">
-                <mu-text-field class="input" v-model="formData.a" placeholder="提现金额必须是10的倍数"></mu-text-field><br/>
+                <mu-text-field class="input" v-model="pointsFormData.points" placeholder="提现金额必须是10的倍数"></mu-text-field><br/>
               </div>
             </div>
             <div class="form-item">
               <div class="name">银行账号</div>
               <div class="content">
-                <mu-text-field class="input" v-model="formData.b" placeholder="请输入银行卡账号"></mu-text-field><br/>
+                <mu-text-field class="input" v-model="pointsFormData.card_number" placeholder="请输入银行卡账号"></mu-text-field><br/>
               </div>
             </div>
             <div class="form-item">
               <div class="name">开户行</div>
               <div class="content">
-                <mu-text-field class="input" v-model="formData.c" placeholder="请输入开户行信息"></mu-text-field><br/>
+                <mu-text-field class="input" v-model="pointsFormData.card_name" placeholder="请输入开户行信息"></mu-text-field><br/>
               </div>
             </div>
             <div class="form-item">
               <div class="name">姓名</div>
               <div class="content">
-                <mu-text-field class="input" v-model="formData.d" placeholder="请输入您的真实姓名"></mu-text-field><br/>
+                <mu-text-field class="input" v-model="pointsFormData.username" placeholder="请输入您的真实姓名"></mu-text-field><br/>
               </div>
             </div>
             <div class="form-item">
               <div class="name">手机号</div>
               <div class="content">
-                <mu-text-field type="number" class="input" v-model="formData.e" placeholder="请输入手机号码"></mu-text-field><br/>
+                <mu-text-field type="number" class="input" v-model="pointsFormData.mobile" placeholder="请输入手机号码"></mu-text-field><br/>
               </div>
             </div>
           </div>
-          <div class="submit">提交申请</div>
+          <div class="submit" @click="pointsSubmit">提交申请</div>
           <div class="footer">
             <p>提现说明：
             <p>1、提现仅能在每周二申请，审核通过后会在1至7个工作日内打款</p>
@@ -95,17 +95,14 @@ export default {
   },
   data () {
     return {
-      formData: {
-
-      },
       tabActive: 'record' // record 记录  putforward 提现
     }
   },
   computed: {
-    ...mapGetters('points', ['pointsList'])
+    ...mapGetters('points', ['pointsList', 'pointsFormData'])
   },
   methods: {
-    ...mapActions('points', ['getPointsList']),
+    ...mapActions('points', ['getPointsList', 'pointsSubmit']),
     async loadTop () {
       await this.getPointsList()
       this.$refs.loadmore.onTopLoaded()

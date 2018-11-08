@@ -5,3 +5,10 @@ export function getPointsListApi (data = {}) {
     data
   })
 }
+
+export function withdrawApi (data = {}) {
+  return fetchUtil('/withdraws/', {
+    method: 'POST',
+    data
+  })
+}

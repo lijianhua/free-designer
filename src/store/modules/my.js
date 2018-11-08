@@ -16,7 +16,8 @@ export default {
     orderTabActive: 'send', // send 发单 apply 接单
     sendOrderList: [], // 发单已完成列表
     applyOrderList: [], // 接单已完成列表
-    payList: [] // 支付选项列表
+    payList: [], // 支付选项列表
+    pointsFormData: [] // 提现表单
   },
   getters: {
     formData: state => state.formData,
@@ -24,7 +25,8 @@ export default {
     orderTabActive: state => state.orderTabActive,
     sendOrderList: state => state.sendOrderList,
     applyOrderList: state => state.applyOrderList,
-    payList: state => state.payList
+    payList: state => state.payList,
+    pointsFormData: state => state.pointsFormData
   },
   mutations: {
     SET_FORM_DATA (state, v) {
@@ -99,5 +101,6 @@ export default {
       const { data } = await getPayListApi()
       commit('SET_PAY_LIST', data.data)
     }
+
   }
 }
