@@ -189,28 +189,18 @@
             </div>
             <div class="item">
               <div class="img-box">
-                <div class="img-item">
-
+                <div class="img-item" v-for="(item, index) in projectFiles" :key="index">
+                  <img v-if="item[3] === 'img'" :src="item[1]" alt="">
+                  <span v-else>{{item[0]}}</span>
                 </div>
-                <div class="img-item">
-
-                </div>
-                <div class="img-item">
-
-                </div>
-                <div class="img-item btn" @click="uploadImg">
-
-                </div>
+                <div class="img-item btn" @click="uploadImg"></div>
               </div>
-              <!-- <div class="upload-txt">未选择文件</div> -->
-              <!-- <div class="upload">选择文件</div> -->
                <upload-img type="resource"></upload-img>
-              <!-- <input id="upload" type="file" accept="image/png, image/jpeg, image/jpg, image/gif"> -->
             </div>
           </div>
         </div>
       </div>
-      <div class="submit">发布</div>
+      <div class="submit" @click="submit">发布</div>
     </div>
   </div>
 </template>
@@ -230,14 +220,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('order', ['formData', 'categoryList', 'dynamicInfoOptions', 'dynamicInfo', 'question'])
+    ...mapGetters('order', ['formData', 'categoryList', 'dynamicInfoOptions', 'dynamicInfo', 'question', 'projectFiles'])
   },
   components: {
     uploadImg
   },
   methods: {
-    ...mapMutations('order', ['SET_DYNAMIC_INFO', 'SET_PUB_COST']),
-    ...mapActions('order', ['getSuggestCost']),
+    ...mapMutations('order', ['SET_DYNAMIC_INFO', 'SET_PUB_COST', 'SET_PROJECT_FILE']),
+    ...mapActions('order', ['getSuggestCost', 'submit']),
     handleChangeScate (val) {
       this.SET_DYNAMIC_INFO(val)
     },
@@ -285,7 +275,19 @@ export default {
   mounted () {
     this.$root.$on('uploadComplete', resp => {
       let data = resp.data
-      console.log(data.ori)
+
+      switch (data[0][0].split('.')[1]) {
+        case 'png':
+        case 'jpeg':
+        case 'jpg':
+        case 'gif':
+          data[0][3] = 'img'
+          break
+        default:
+          data[0][3] = 'file'
+          break
+      }
+      this.SET_PROJECT_FILE(data[0])
     })
   }
 }
@@ -445,6 +447,16 @@ export default {
     height: 105px;
     background-color: #ececec;
     margin-right: 12px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+
+    span {
+      color: #959595;
+    }
 
     &:nth-child(3n+0){
       margin-right: 0;

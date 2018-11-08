@@ -4,13 +4,16 @@
       <img @click="$router.push('my')" src="../../assets/images/back.png" alt="">
       <h3>实名认证</h3>
     </div>
-    <div class="auth-info">
-      <div>
+    <div class="auth-info" v-if="formData.audit_status !== 2">
+      <div v-if="formData.audit_status === 1">
         <p>认证审核中</p>
-        <p class="intro">资料已提交认证，预计XX小时内认证完成</p>
+        <p class="intro">资料已提交认证，预计48小时内认证完成</p>
+      </div>
+      <div v-if="formData.audit_status === -1">
+        <p>认证失败，请<span style="color:#4195f7;">重新提交</span></p>
       </div>
     </div>
-    <h5>认证信息</h5>
+    <h5 v-if="formData.audit_status !== 2">认证信息</h5>
     <div class="auth-form">
       <div class="form-item">
         <div class="name">证件类型</div>
@@ -21,18 +24,18 @@
       <div class="form-item">
         <div class="name">证件号</div>
         <div class="content">
-          <mu-text-field class="input" v-model="formData.license_id" placeholder="请填写证件号"></mu-text-field><br/>
+          <mu-text-field class="input" :disabled="formData.audit_status !== 2" v-model="formData.license_id" placeholder="请填写证件号"></mu-text-field><br/>
         </div>
       </div>
       <div class="form-item uploadImg">
         <p>请上传身份证照片</p>
         <div class="img" @click="uploadImg">
-          <upload-img type="work"></upload-img>
+          <upload-img type="work" v-if="formData.audit_status === 2"></upload-img>
           <img v-if="!formData.license_pic" src="../../assets/images/uploadImg.png" alt="">
           <img v-else :src="formData.license_pic" alt="">
         </div>
       </div>
-      <div class="submit" @click="updateUserInfo">提交</div>
+      <div class="submit" @click="updateUserInfo" v-if="formData.audit_status === 2">提交</div>
     </div>
   </div>
 </template>
@@ -57,7 +60,7 @@ export default {
       let data = resp.data
       this.SET_FORM_DATA({
         ...this.formData,
-        license_pic: data.ori
+        license_pic: data[0][1]
       })
     })
   },

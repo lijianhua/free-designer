@@ -7,142 +7,52 @@
             <div class="btn" :class="{active:tabActive === 'employer'}" @click="tabActive = 'employer'">我是雇主</div>
             <div class="btn" :class="{active:tabActive === 'worker'}" @click="tabActive = 'worker'">我是工作者</div>
         </div>
-        <mt-tab-container v-model="tabActive">
-            <mt-tab-container-item id="employer">
-                <div class="tab-main">
-                    <div class="item">
-                        <div class="state">
-                            <img src="../../assets/images/order/ico_true.jpg" alt="">
-                        </div>
-                        <div class="main">
-                            <div class="title">
-                                <p>办公室内工程&nbsp;施工图</p>
-                                <span>2800 积分</span>
+        <div class="main">
+            <mt-tab-container v-model="tabActive" style="min-height:100%;">
+                <mt-tab-container-item id="employer" style="height:100%;">
+                    <div class="tab-main">
+                        <mt-loadmore style="height:100%;" :top-method="employerLoadTop" :bottom-method="employerLoadBottom" bottomPullText="" :auto-fill="false" ref="loadmore1">
+                            <div class="item" v-for="(item, index) in employerList" :key="index">
+                                <div class="state">
+                                    <img v-if="item.status <= 80" src="../../assets/images/order/ico_true.jpg" alt="">
+                                    <img v-else src="../../assets/images/order/ico_false.jpg" alt="">
+                                </div>
+                                <div class="main">
+                                    <div class="title">
+                                        <p class="ellipsis">{{item.title}}</p>
+                                    </div>
+                                    <p class="title">{{item.pub_cost}} 积分</p>
+                                    <div class="date">
+                                        发单时间 {{item.created_on | filterDate}} 交稿时间 {{item.deadline | filterDate}}
+                                    </div>
+                                </div>
                             </div>
-                            <div class="date">
-                                发单时间 2018-10-10 交稿时间 2018-11-11
-                            </div>
-                        </div>
+                        </mt-loadmore>
                     </div>
-                    <div class="item">
-                        <div class="state">
-                            <img src="../../assets/images/order/ico_true.jpg" alt="">
-                        </div>
-                        <div class="main">
-                            <div class="title">
-                                <p>办公室内工程&nbsp;施工图</p>
-                                <span>2800 积分</span>
+                </mt-tab-container-item>
+                <mt-tab-container-item id="worker" style="height:100%">
+                    <div class="tab-main">
+                        <mt-loadmore style="height:100%;" :top-method="workerLoadTop" :bottom-method="workerLoadBottom" bottomPullText="" :auto-fill="false" ref="loadmore2">
+                            <div class="item" v-for="(item, index) in workerList" :key="index">
+                                <div class="state">
+                                    <img v-if="item.order.status <= 80" src="../../assets/images/order/ico_true.jpg" alt="">
+                                    <img v-else src="../../assets/images/order/ico_false.jpg" alt="">
+                                </div>
+                                <div class="main">
+                                    <div class="title">
+                                        <p class="ellipsis">{{item.order.title}}</p>
+                                    </div>
+                                    <p class="title">{{item.order.pub_cost}} 积分</p>
+                                    <div class="date">
+                                        发单时间 {{item.order.created_on | filterDate}} 交稿时间 {{item.order.deadline | filterDate}}
+                                    </div>
+                                </div>
                             </div>
-                            <div class="date">
-                                发单时间 2018-10-10 交稿时间 2018-11-11
-                            </div>
-                        </div>
+                        </mt-loadmore>
                     </div>
-                    <div class="item">
-                        <div class="state">
-                            <img src="../../assets/images/order/ico_true.jpg" alt="">
-                        </div>
-                        <div class="main">
-                            <div class="title">
-                                <p>办公室内工程&nbsp;施工图</p>
-                                <span>2800 积分</span>
-                            </div>
-                            <div class="date">
-                                发单时间 2018-10-10 交稿时间 2018-11-11
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="state">
-                            <img src="../../assets/images/order/ico_true.jpg" alt="">
-                        </div>
-                        <div class="main">
-                            <div class="title">
-                                <p>办公室内工程&nbsp;施工图</p>
-                                <span>2800 积分</span>
-                            </div>
-                            <div class="date">
-                                发单时间 2018-10-10 交稿时间 2018-11-11
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="state">
-                            <img src="../../assets/images/order/ico_true.jpg" alt="">
-                        </div>
-                        <div class="main">
-                            <div class="title">
-                                <p>办公室内工程&nbsp;施工图</p>
-                                <span>2800 积分</span>
-                            </div>
-                            <div class="date">
-                                发单时间 2018-10-10 交稿时间 2018-11-11
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="state">
-                            <img src="../../assets/images/order/ico_true.jpg" alt="">
-                        </div>
-                        <div class="main">
-                            <div class="title">
-                                <p>办公室内工程&nbsp;施工图</p>
-                                <span>2800 积分</span>
-                            </div>
-                            <div class="date">
-                                发单时间 2018-10-10 交稿时间 2018-11-11
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="state">
-                            <img src="../../assets/images/order/ico_true.jpg" alt="">
-                        </div>
-                        <div class="main">
-                            <div class="title">
-                                <p>办公室内工程&nbsp;施工图</p>
-                                <span>2800 积分</span>
-                            </div>
-                            <div class="date">
-                                发单时间 2018-10-10 交稿时间 2018-11-11
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="state">
-                            <img src="../../assets/images/order/ico_true.jpg" alt="">
-                        </div>
-                        <div class="main">
-                            <div class="title">
-                                <p>办公室内工程&nbsp;施工图</p>
-                                <span>2800 积分</span>
-                            </div>
-                            <div class="date">
-                                发单时间 2018-10-10 交稿时间 2018-11-11
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </mt-tab-container-item>
-            <mt-tab-container-item id="worker">
-                <div class="tab-main">
-                    <div class="item">
-                        <div class="state">
-                            <img src="../../assets/images/order/ico_true.jpg" alt="">
-                        </div>
-                        <div class="main">
-                            <div class="title">
-                                <p>办公室内工程&nbsp;施工图</p>
-                                <span>2800 积分</span>
-                            </div>
-                            <div class="date">
-                                发单时间 2018-10-10 交稿时间 2018-11-11
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </mt-tab-container-item>
-        </mt-tab-container>
+                </mt-tab-container-item>
+            </mt-tab-container>
+        </div>
         <div class="btn-box">
             <div class="btn-demand" @click="$router.push('send-creat-order')">
                 发需求
@@ -152,6 +62,8 @@
 </template>
 <style lang="scss" scoped>
 .order-container {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     background-color: #fff;
@@ -177,18 +89,18 @@
         }
     }
 }
+.main {
+    flex: 1;
+    overflow-y: auto;
+}
 .tab-main {
-    height: 565px;
+    height: 100%;
     padding-top: 50px;
     margin-bottom: 50px;
-    overflow-y: auto;
 }
 .item {
     display: flex;
-    margin: 60px 43px 0;
-    &:nth-child(1){
-        margin-top: 0;
-    }
+    margin: 0 43px;
     .state {
         width: 82px;
         height: 82px;
@@ -215,14 +127,16 @@
             color: #a1a1a1;
         }
     }
-
+}
+.item + .item {
+    margin-top: 60px;
 }
 .btn-box {
     border-top: 3px solid #ebebeb;
-    height: 257px;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-bottom: 110px;
     .btn-demand {
         border-radius: 50%;
         text-align: center;
@@ -235,10 +149,44 @@
 }
 </style>
 <script>
+import Store from '@/store'
+import { mapGetters, mapActions } from 'vuex'
 export default {
+  async beforeRouteEnter (to, from, next) {
+    await Store.dispatch('order/getEmployerList')
+    await Store.dispatch('order/getWorkerList')
+    next()
+  },
   data () {
     return {
       tabActive: 'employer' // employer 雇主  worker 工作者
+    }
+  },
+  filters: {
+    filterDate (val) {
+      return val.split(' ')[0]
+    }
+  },
+  computed: {
+    ...mapGetters('order', ['employerList', 'workerList'])
+  },
+  methods: {
+    ...mapActions('order', ['getEmployerList', 'getWorkerList']),
+    async employerLoadTop () {
+      await this.getEmployerList()
+      this.$refs.loadmore1.onTopLoaded()
+    },
+    async employerLoadBottom () {
+      await this.getEmployerList(false)
+      this.$refs.loadmore1.onBottomLoaded()
+    },
+    async workerLoadTop () {
+      await this.getWorkerList()
+      this.$refs.loadmore2.onTopLoaded()
+    },
+    async workerLoadBottom () {
+      await this.getWorkerList(false)
+      this.$refs.loadmore2.onBottomLoaded()
     }
   }
 }

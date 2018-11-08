@@ -13,7 +13,10 @@ export default {
     accept () {
       let accept = '*'
       switch (this.type) {
+        case 'avatar':
         case 'work':
+        case 'deliveries':
+        case 'order_work':
           accept = 'image/png, image/jpeg, image/jpg, image/gif'
           break
         case 'resource':
@@ -57,13 +60,13 @@ export default {
       }
       let fd = new FormData()
       fd.append('content', file)
-      fd.append('type', this.type)
+      fd.append('ftype', this.type)
       let xhr = new XMLHttpRequest()
       xhr.upload.addEventListener('progress', this.onUploadProgress)
       xhr.addEventListener('load', this.onUploadComplete)
       xhr.addEventListener('error', this.onUploadFailed)
       // xhr.addEventListener('abort', this.onUploadCanceled)
-      xhr.open('POST', '/api/upload_file/')
+      xhr.open('POST', '/api/upload_files/')
       xhr.send(fd)
       e.target.value = ''
     }
