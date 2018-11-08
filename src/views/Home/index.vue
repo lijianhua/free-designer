@@ -28,56 +28,58 @@
                 </mu-select>
             </div>
         </div>
-        <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
-            <div class="desingerInfo" v-for="(item, index) in usersList" :key="index">
-                <div class="header">
-                    <div @click="showDetail(item.id)" class="header-img">
-                        <img :src="item.avatar" alt="avatar">
-                    </div>
-                    <div class="ownInfo">
-                        <div>
-                            <span @click="showDetail(item.id)" class="name">{{ item.name }}</span>
-                            <span class="workExperience">{{ item.career }}年工作经验</span>
+        <div class="desingerContainer">
+            <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
+                <div class="desingerInfo" v-for="(item, index) in usersList" :key="index">
+                    <div class="header">
+                        <div @click="showDetail(item.id)" class="header-img">
+                            <img :src="item.avatar" alt="avatar">
                         </div>
-                        <div class="address">
-                            <img src="../../assets/images/address.png" alt="address">
-                            <span>{{ item.province }}。{{ item.city }}</span>
+                        <div class="ownInfo">
+                            <div>
+                                <span @click="showDetail(item.id)" class="name">{{ item.name }}</span>
+                                <span class="workExperience">{{ item.career }}年工作经验</span>
+                            </div>
+                            <div class="address">
+                                <img src="../../assets/images/address.png" alt="address">
+                                <span>{{ item.province }}。{{ item.city }}</span>
+                            </div>
                         </div>
-                    </div>
-                    <!-- <div class="evaluate">
-                        <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                        <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                        <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                        <img src="../../assets/images/homestartlight.png" alt="homestartlight">
-                        <img src="../../assets/images/homestart.png" alt="homestart">
-                    </div> -->
-                </div>
-                <div class="skill">
-                    <div class="skillSort">
-                        <span v-for="(childItem, idx) in item.role.split(',')" :key="idx">
-                            【{{ childItem }}】
-                        </span>
-                    </div>
-                    <div class="doSomething">
-                        <p>{{ item.desc }}</p>
-                    </div>
-                    <div class="worked">
-                        <!-- <div>
-                            <span>96%</span>
-                            <span>工作完成率</span>
+                        <!-- <div class="evaluate">
+                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                            <img src="../../assets/images/homestartlight.png" alt="homestartlight">
+                            <img src="../../assets/images/homestart.png" alt="homestart">
                         </div> -->
-                        <div>
-                            <span>{{ item.apply_count }}</span>
-                            <span>接单量</span>
+                    </div>
+                    <div class="skill">
+                        <div class="skillSort">
+                            <span v-for="(childItem, idx) in item.role.split(',')" :key="idx">
+                                【{{ childItem }}】
+                            </span>
                         </div>
-                        <div>
-                            <span>{{ item.gallery_count }}</span>
-                            <span>作品展示/套</span>
+                        <div class="doSomething">
+                            <p>{{ item.desc }}</p>
+                        </div>
+                        <div class="worked">
+                            <!-- <div>
+                                <span>96%</span>
+                                <span>工作完成率</span>
+                            </div> -->
+                            <div>
+                                <span>{{ item.apply_count }}</span>
+                                <span>接单量</span>
+                            </div>
+                            <div>
+                                <span>{{ item.gallery_count }}</span>
+                                <span>作品展示/套</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </mt-loadmore>
+            </mt-loadmore>
+        </div>
         <!-- 工作者详情页 -->
         <mu-slide-left-transition>
             <designerDetail v-if="isShowDetail" :detailData='detailData' @callBack='callBack'></designerDetail>
@@ -179,6 +181,7 @@ export default {
 
 <style scoped lang="scss">
 .home {
+  height: calc(100% - 100px);
   .swiper {
     height: 309px;
     img {
@@ -246,6 +249,10 @@ export default {
             color: #808080;
         }
     }
+  }
+  .desingerContainer{
+    overflow-y: auto;
+    height: calc(100% - 309px - 324px - 29px - 54px - 68px);
   }
   .desingerInfo{
     padding: 30px 50px;
