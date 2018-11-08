@@ -144,7 +144,7 @@ export default {
         this.isLoadedAll = true
         return
       }
-      const dataFrom = {
+      let dataFrom = {
         user: this.detailData.user,
         gallery: this.detailData.gallery
       }

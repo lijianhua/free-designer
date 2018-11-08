@@ -121,7 +121,7 @@ export default {
         this.isLoadedAll = true
         return
       }
-      const dataFrom = {
+      let dataFrom = {
         user: this.detailData,
         status: 'finished'
       }

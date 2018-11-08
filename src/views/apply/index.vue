@@ -23,7 +23,7 @@
         </div>
         <div class="applyContainer">
           <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
-            <div class="send-card" v-for="(item, index) in demandsList" :key="index" @click="isShowDetail = true">
+            <div class="send-card" v-for="(item, index) in demandsList" :key="index" @click="toOrderDetail(item.id)">
               <img src="../../assets/images/demand_background.png" alt="">
               <div class="card-body">
                 <div class="body-left">
@@ -48,7 +48,7 @@
         </div>
         <!-- 订单详情 -->
         <mu-slide-left-transition>
-            <orderDetail v-if="isShowDetail" :detailData='detailData' @callBack='callBack'></orderDetail>
+            <orderDetail v-if="isShowDetail" :orderId='orderId' @callBack='callBack'></orderDetail>
         </mu-slide-left-transition>
     </div>
 </template>
@@ -64,7 +64,7 @@ export default {
       showFilter: true,
       isLoadedAll: false,
       isShowDetail: false,
-      detailData: {}
+      orderId: ''
     }
   },
   computed: {
@@ -110,6 +110,10 @@ export default {
     },
     callBack () {
       this.isShowDetail = false
+    },
+    toOrderDetail (orderId) {
+      this.orderId = orderId
+      this.isShowDetail = true
     }
   },
   components: {

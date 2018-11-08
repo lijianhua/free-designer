@@ -147,16 +147,17 @@ export default {
       this.$refs.loadmore.onTopLoaded()
     },
     async load () {
+      if (this.selectFilter === '') {
+        return
+      }
       if (this.pageInfo.page + 1 > this.pageInfo.total_page) {
         this.isLoadedAll = true
         return
       }
       const dataForm = {
         role: this.selectFilter,
-        sort_by: this.selectSort
-      }
-      if (this.pageInfo.page) {
-        dataForm.page = this.pageInfo.page + 1
+        sort_by: this.selectSort,
+        page: this.pageInfo.page + 1
       }
       await this.getMoreUsers(dataForm)
       this.$refs.loadmore.onBottomLoaded()

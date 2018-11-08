@@ -97,9 +97,7 @@ export default {
   computed: {
     ...mapGetters('home', ['userInfo', 'pictureList', 'picturePageInfo'])
   },
-  created () {
-    this.getPicture(this.userInfo.id)
-  },
+  created () {},
   methods: {
     ...mapActions('home', ['getPicture', 'getMorePicture']),
     closeDetail () {
@@ -112,7 +110,10 @@ export default {
       if (this.isLoadedAll) {
         this.isLoadedAll = false
       }
-      await this.getPicture(this.userInfo.id)
+      let dataForm = {
+        userid: this.userInfo.id
+      }
+      await this.getPicture(dataForm)
       this.$refs.loadmore.onTopLoaded()
     },
     async load () {
@@ -120,11 +121,13 @@ export default {
         this.isLoadedAll = true
         return
       }
-      const dataFrom = {}
-      if (this.picturePageInfo.page) {
-        dataFrom.page = this.picturePageInfo.page + 1
+      let dataForm = {
+        userid: this.userInfo.id
       }
-      await this.getMorePicture(this.userInfo.id, dataFrom)
+      if (this.picturePageInfo.page) {
+        dataForm.page = this.picturePageInfo.page + 1
+      }
+      await this.getMorePicture(dataForm)
       this.$refs.loadmore.onBottomLoaded()
     },
     showDetail (item) {

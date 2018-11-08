@@ -99,7 +99,9 @@ export default {
       this.$refs.loadmore.onTopLoaded()
     },
     async load () {
-      if (!this.proPageInfo.page) return
+      if (this.selectFilter === '') {
+        return
+      }
       if (this.proPageInfo.page + 1 > this.proPageInfo.total_page) {
         this.isLoadedAll = true
         return
