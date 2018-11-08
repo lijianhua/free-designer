@@ -28,9 +28,9 @@ export function getHistory (data = {}) {
     data
   })
 }
-export function getPicture (data, pageData = {}) {
-  return fetchUtil('/users/' + data + '/gallery/', {
+export function getPicture (data = {}) {
+  return fetchUtil('/users/' + data.userid + '/gallery/', {
     method: 'GET',
-    pageData
+    data
   })
 }

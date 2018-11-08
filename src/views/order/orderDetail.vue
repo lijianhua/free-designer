@@ -16,37 +16,37 @@
                         <div class="item">
                             <div class="title">订单名称：</div>
                             <div class="box">
-                                <p>项目分包_家庭室内工程_效果图</p>
+                                <p>{{ orderInfo.title }}</p>
                             </div>
                         </div>
                         <div class="item">
                             <div class="title">完成日期：</div>
                             <div class="box">
-                                <p>2018/10/03</p>
+                                <p>{{ orderInfo.deadline }}</p>
                             </div>
                         </div>
                         <div class="item">
                             <div class="title">总任务量：</div>
                             <div class="box">
-                                <p>4张</p>
+                                <p>{{ orderInfo.task_count }}{{ orderInfo.task_unit }}</p>
                             </div>
                         </div>
                         <div class="item">
                             <div class="title">项目地址：</div>
                             <div class="box">
-                                <p>吉林四平</p>
+                                <p>{{ orderInfo.location }}</p>
                             </div>
                         </div>
                         <div class="item">
                             <div class="title">项目风格：</div>
                             <div class="box two">
-                                <p>简欧</p>
+                                <p>{{ orderInfo.order_style }}</p>
                             </div>
                         </div>
                         <div class="item">
                             <div class="title">是否参与谈判：</div>
                             <div class="box two">
-                                <p>否</p>
+                                <p v-if="orderInfo.dynamic_info">{{ orderInfo.dynamic_info.is_negotiat ? '是' : '否'}}</p>
                             </div>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                     <div class="content">
                         <div class="step-header">
                             <div class="title">任务要求</div>
-                            <div class="intro">需要构思平面规划以及出效果图</div>
+                            <div class="intro">{{ orderInfo.desc }}</div>
                         </div>
                     </div>
                 </div>
@@ -71,9 +71,9 @@
                         </div>
                         <div class="item">
                             <div class="img-box">
-                                <div class="img-item"></div>
-                                <div class="img-item"></div>
-                                <div class="img-item"></div>
+                                <div v-for="(item, index) in orderInfo.files" :key="index"  class="img-item">
+                                    <img :src="item.file_path" alt="">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -86,7 +86,19 @@
                             <div class="title">问题解答</div>
                             <div class="warn">提示：答题阶段将会计时，答题界面退出之后将直接退出答题</div>
                         </div>
-                        <div class="begin">开始答题</div>
+                        <div v-show="timing == 0" class="answer-btn" @click="beginAnswer">开始答题</div>
+                        <div v-show="timing > 0" class="answering">
+                            <div class="timing answer-btn">{{ timingText }}</div>
+                            <div class="now">
+                                <div class="calc">NO.1/5</div>
+                                <div class="problem">门厅鞋柜放在左边好，还是右边好？</div>
+                            </div>
+                            <mt-field class="textArea" placeholder="请填写答案并说明理由" type="textarea" rows="4"></mt-field>
+                            <div class="answerBtn">
+                                <div class="answer-btn" @click="giveUpAnswer">放弃答题</div>
+                                <div class="answer-btn">下一题</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="step-item">
@@ -97,7 +109,7 @@
                             <div class="title">项目价格</div>
                         </div>
                         <div class="price">
-                            1200积分<span class="priceIntro">(系统报价1200积分，消费0积分)</span>
+                            {{ orderInfo.pub_cost }}积分<span class="priceIntro">(系统报价{{ orderInfo.system_cost }}积分，小费{{ orderInfo.fee }}积分)</span>
                         </div>
                         <div class="bottomLine"></div>
                     </div>
@@ -115,20 +127,11 @@
                                 <div class="img-item">
 
                                 </div>
-                                <div class="img-item">
-
-                                </div>
-                                <div class="img-item">
-
-                                </div>
                                 <div class="img-item btn">
 
                                 </div>
                             </div>
-                            <!-- <div class="upload-txt">未选择文件</div> -->
-                            <!-- <div class="upload">选择文件</div> -->
                             <upload-img type="resource"></upload-img>
-                            <!-- <input id="upload" type="file" accept="image/png, image/jpeg, image/jpg, image/gif"> -->
                         </div>
                         <mu-text-field class="inps" placeholder="请您填写您接此单的优势" multi-line></mu-text-field>
                     </div>
@@ -154,17 +157,56 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import uploadImg from '@/components/upload'
 export default {
   data () {
     return {
+      timing: 0,
+      timingText: '00:00:00',
+      timer: null,
+      orderInfo: {}
     }
   },
-  props: ['detailData'],
-  async created () {},
+  props: ['orderId'],
+  computed: {
+    ...mapGetters('orderDetail', ['orderDetail'])
+  },
+  async created () {
+    console.info(this.orderId)
+    await this.getOrderDetail('818ae76269be4dedb4fcfd6e92b9480c')
+    console.info(this.orderDetail)
+    this.orderInfo = this.orderDetail.order
+  },
   methods: {
+    ...mapActions('orderDetail', ['getOrderDetail']),
     closeDetail () {
       this.$emit('callBack')
+    },
+    beginAnswer () {
+      this.timer = setInterval(() => {
+        this.timing += 1
+        const hour = Math.floor(this.timing / 3600)
+        const min = Math.floor(this.timing / 60) % 60
+        const sec = this.timing % 60
+        let t = ''
+        if (hour < 10) {
+          t = '0' + hour + ':'
+        } else {
+          t = hour + ':'
+        }
+        if (min < 10) { t += '0' }
+        t += min + ':'
+        if (sec < 10) { t += '0' }
+        t += sec
+        this.timingText = t
+      }, 1000)
+    },
+    giveUpAnswer () {
+      clearInterval(this.timer)
+      this.timer = null
+      this.timing = 0
+      this.timingText = '00:00:00'
     }
   },
   components: {
@@ -271,6 +313,7 @@ export default {
             .title {
                 font-size: 24px;
                 font-weight: 500;
+                white-space:nowrap;
             }
             .box {
                 &.two {
@@ -323,9 +366,13 @@ export default {
                 background: url('../../assets/images/add.png') no-repeat center #ececee;
                 background-size: 50%;
             }
+            img{
+                width: 140px;
+                height: 105px;
+            }
         }
     }
-    .begin {
+    .answer-btn {
         width: 223px;
         height: 45px;
         color: #fff;
@@ -333,7 +380,7 @@ export default {
         text-align: center;
         background-color: #4195f7;
         margin: 30px auto 26px;
-        font-size: 24px;
+        font-size: 30px;
     }
     .price{
         font-size: 30px;
@@ -381,6 +428,36 @@ export default {
         text-align: center;
         background-color: #4195f7;
         margin: 0 auto 60px;
+    }
+    .answering{
+        .timing{
+            width: 223px;
+            height: 45px;
+            line-height: 45px;
+            background-color: #4195f7;
+            text-align: center;
+            color: #ffffff;
+            font-size: 30px;
+            margin: 0 auto;
+        }
+        .now{
+            margin-top: 36px;
+            .calc{
+                font-size: 30px;
+            }
+            .problem{
+                font-size: 26px;
+                line-height: 40px;
+            }
+        }
+        .textArea{
+            margin-top: 36px;
+            border: 1px solid #000;
+        }
+        .answerBtn{
+            display: flex;
+            justify-content: space-between;
+        }
     }
 }
 </style>

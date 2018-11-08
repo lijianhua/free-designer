@@ -8,6 +8,7 @@ import productDetail from './modules/productDetail'
 import apply from './modules/apply'
 import my from './modules/my'
 import order from './modules/order'
+import orderDetail from './modules/orderDetail'
 import points from './modules/points'
 
 Vue.use(Vuex)
@@ -32,6 +33,7 @@ export default new Vuex.Store({
     apply,
     my,
     order,
+    orderDetail,
     points
   }
 })
