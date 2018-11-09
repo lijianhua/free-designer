@@ -6,6 +6,7 @@ import {
   getWorkerListApi,
   createQuestionApi,
   getOrderDetailApi
+  // getUserInfoApi
 } from '@/api/order'
 
 const defaultListPagination = {
@@ -49,7 +50,8 @@ export default {
     employerPagination: defaultListPagination, // 发单分页
     workerList: [], // 接单列表
     workerPagination: defaultListPagination, // 接单分页
-    orderDetail: {} // 订单详情
+    orderDetail: {}, // 订单详情
+    userInfo: {} // 接单人用户信息
   },
   getters: {
     formData: state => state.formData,
@@ -60,7 +62,8 @@ export default {
     projectFiles: state => state.projectFiles,
     employerList: state => state.employerList,
     workerList: state => state.workerList,
-    orderDetail: state => state.orderDetail
+    orderDetail: state => state.orderDetail,
+    userInfo: state => state.userInfo
   },
   mutations: {
     SET_CATEGORY (state, v) {
@@ -119,6 +122,9 @@ export default {
     },
     SET_ORDER_DETAIL (state, v) {
       state.orderDetail = v
+    },
+    SET_USER_INFO (state, v) {
+      state.userInfo = v
     }
   },
   actions: {
@@ -195,8 +201,12 @@ export default {
       console.log(' 创建完了')
     },
     async getOrderDetail ({ commit }, id) {
-      const { data } = await getOrderDetailApi('d727684571844e1eaf76da0d53d12844')
+      const { data } = await getOrderDetailApi(id)
       commit('SET_ORDER_DETAIL', data.data)
+    },
+    async getUserInfo ({ commit }, id) {
+      // const { data } = await getUserInfoApi(id)
+      // commit('SET_USER_INFO', data)
     }
   }
 }

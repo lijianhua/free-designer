@@ -2,7 +2,7 @@
   <div class="containers">
     <div class="header">
       <img @click="$router.push('/order')" src="../../assets/images/back.png" alt="">
-      <h3>雇主待确认订单</h3>
+      <h3>雇主{{orderDetail.status >= 90 ? '待确认' : '已确认' }}订单</h3>
     </div>
     <div class="main">
       <div class="order-info">
@@ -29,24 +29,26 @@
         <div>浏览量&nbsp;&nbsp;35</div>
       </div>
       <div class="user-list">
-        <div class="item" v-for="(item, index) in orderDetail.apply_records" :key="index">
-          <div class="avatar">
-            <img :src="item.user.avatar" alt="">
-          </div>
-          <div class="info">
-            <div class="item-header">
-              <div class="title">{{item.user.name}}</div>
-              <div class="integral">议价：{{item.user.apply_cost || 0}}积分</div>
+        <template v-for="(item, index) in orderDetail.apply_records" >
+          <router-link class="item" :to="{name:'order-user-info',params:{id:item.id}}" :key="index">
+            <div class="avatar">
+              <img :src="item.user.avatar" alt="">
             </div>
-            <div>
-              <div class="address">{{item.user.city}}</div>
-              <div class="exp">{{item.user.career}}年工作经验</div>
+            <div class="info">
+              <div class="item-header">
+                <div class="title">{{item.user.name}}</div>
+                <div class="integral">议价：{{item.user.apply_cost || 0}}积分</div>
+              </div>
+              <div>
+                <div class="address">{{item.user.city}}</div>
+                <div class="exp">{{item.user.career}}年工作经验</div>
+              </div>
+              <div class="skill">
+                {{item.user.role | filterRole}}
+              </div>
             </div>
-            <div class="skill">
-              {{item.user.role | filterRole}}
-            </div>
-          </div>
-        </div>
+          </router-link>
+        </template>
       </div>
     </div>
   </div>
@@ -65,7 +67,7 @@ export default {
   },
   filters: {
     filterRole (val) {
-      return val.split(',').filter(v => v !== '').map(v => `【${v}】`).join('&nbsp;')
+      return val.split(',').filter(v => v !== '').map(v => `【${v}】`).join('')
     }
   }
 }
