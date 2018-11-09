@@ -89,14 +89,14 @@
                         <div v-show="timing == 0" class="answer-btn" @click="beginAnswer">开始答题</div>
                         <div v-show="timing > 0" class="answering">
                             <div class="timing answer-btn">{{ timingText }}</div>
-                            <div class="now">
-                                <div class="calc">NO.1/5</div>
-                                <div class="problem">门厅鞋柜放在左边好，还是右边好？</div>
+                            <div v-for="(item, index) in questionList" :key="index" v-show="index == nowIndex" class="now">
+                                <div class="calc">NO.{{ index + 1 }}/5</div>
+                                <div class="problem">{{ item.question }}</div>
                             </div>
-                            <mt-field class="textArea" placeholder="请填写答案并说明理由" type="textarea" rows="4"></mt-field>
+                            <mt-field class="textArea" placeholder="请填写答案并说明理由" type="textarea" rows="4" v-model="answerContent"></mt-field>
                             <div class="answerBtn">
                                 <div class="answer-btn" @click="giveUpAnswer">放弃答题</div>
-                                <div class="answer-btn">下一题</div>
+                                <div class="answer-btn" @click="nextQuestion()">下一题</div>
                             </div>
                         </div>
                     </div>
@@ -124,16 +124,14 @@
                         </div>
                         <div class="item">
                             <div class="img-box">
-                                <div class="img-item">
-
+                                <div v-for="(item, index) in filesList" :key="index"  class="img-item">
+                                    <img :src="item[1]" alt="">
                                 </div>
-                                <div class="img-item btn">
-
-                                </div>
+                                <div class="img-item btn" @click="uploadImg"></div>
                             </div>
                             <upload-img type="resource"></upload-img>
                         </div>
-                        <mu-text-field class="inps" placeholder="请您填写您接此单的优势" multi-line></mu-text-field>
+                        <mu-text-field class="inps" placeholder="请您填写您接此单的优势" multi-line v-model="goodness"></mu-text-field>
                     </div>
                 </div>
                 <div class="step-item">
@@ -143,11 +141,11 @@
                         <div class="step-header">
                             <div class="title">我要加价</div>
                         </div>
-                        <mu-text-field class="inps" placeholder="请您填写想要加的价格" multi-line></mu-text-field>
+                        <mu-text-field class="inps" placeholder="请您填写想要加的价格" multi-line v-model="addPrice"></mu-text-field>
                     </div>
                 </div>
             </div>
-            <div class="submit">提交</div>
+            <div class="submit" @click="submit">提交</div>
             <div class="agree">
                 <img src="../../assets/images/redyes.png" alt="redyes">
                 <p>我已阅读并同意遵守<span>服务许可协议 隐私政策</span></p>
@@ -165,25 +163,36 @@ export default {
       timing: 0,
       timingText: '00:00:00',
       timer: null,
-      orderInfo: {}
+      orderInfo: {},
+      answerContent: '',
+      nowIndex: 0,
+      startTime: '',
+      endTime: '',
+      answerList: [],
+      goodness: '',
+      addPrice: 0,
+      filesList: []
     }
   },
   props: ['orderId'],
   computed: {
-    ...mapGetters('orderDetail', ['orderDetail'])
+    ...mapGetters('orderDetail', ['orderDetail', 'questionList'])
   },
   async created () {
     console.info(this.orderId)
-    await this.getOrderDetail('818ae76269be4dedb4fcfd6e92b9480c')
+    await this.getOrderDetail(this.orderId)
     console.info(this.orderDetail)
     this.orderInfo = this.orderDetail.order
+    await this.getOrderQusetion(this.orderId)
+    console.info(this.questionList)
   },
   methods: {
-    ...mapActions('orderDetail', ['getOrderDetail']),
+    ...mapActions('orderDetail', ['getOrderDetail', 'getOrderQusetion', 'setOrderAnswer', 'acceptOrder']),
     closeDetail () {
       this.$emit('callBack')
     },
     beginAnswer () {
+      this.startTime = new Date().getTime()
       this.timer = setInterval(() => {
         this.timing += 1
         const hour = Math.floor(this.timing / 3600)
@@ -207,7 +216,56 @@ export default {
       this.timer = null
       this.timing = 0
       this.timingText = '00:00:00'
+      this.nowIndex = 0
+      this.answerContent = ''
+    },
+    nextQuestion () {
+      this.endTime = new Date().getTime()
+      const dataForm = {
+        answer: this.answerContent,
+        start_time: this.startTime,
+        end_time: this.endTime,
+        aid: this.orderDetail.id,
+        qid: this.questionList[this.nowIndex].qid
+      }
+      this.setOrderAnswer(dataForm)
+      this.answerContent = ''
+      this.nowIndex += 1
+      this.startTime = new Date().getTime()
+    },
+    async submit () {
+      const dataForm = {
+        desc: this.goodness,
+        apply_cost: this.addPrice,
+        works: this.filesList,
+        aid: this.orderDetail.id,
+        oid: this.orderDetail.order.id
+      }
+      await this.acceptOrder(dataForm)
+      this.$router.push({
+        name: 'order'
+      })
+    },
+    uploadImg () {
+      this.$el.querySelector('#upload').click()
     }
+  },
+  mounted () {
+    this.$root.$on('uploadComplete', resp => {
+      let data = resp.data
+      switch (data[0][0].split('.')[1]) {
+        case 'png':
+        case 'jpeg':
+        case 'jpg':
+        case 'gif':
+          data[0][3] = 'img'
+          break
+        default:
+          data[0][3] = 'file'
+          break
+      }
+      this.filesList.push(data[0])
+    })
   },
   components: {
     uploadImg
