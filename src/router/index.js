@@ -13,6 +13,8 @@ const Product = () => import('@/views/product/index') // 作品展
 const Order = () => import('@/views/order/index')
 // 发布订单
 const sendCreatOrder = () => import('@/views/order/send-creat-order')
+// 订单待确认详情
+const unconfirmedDetail = () => import('@/views/order/unconfirmed-detail')
 
 // 个人中心
 const My = () => import('@/views/my/index')
@@ -111,6 +113,12 @@ export default new Router({
           name: 'my-points',
           path: '/my-points',
           component: MyPoints
+        },
+        {
+          name: 'unconfirmed-detail',
+          path: '/unconfirmed-detail/:id',
+          props: true,
+          component: unconfirmedDetail
         }
       ]
     }

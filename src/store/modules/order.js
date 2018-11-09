@@ -1,4 +1,12 @@
-import { getCategoryApi, getSuggestCostApi, getEmployerListApi, createOrderApi, getWorkerListApi, createQuestionApi } from '@/api/order'
+import {
+  getCategoryApi,
+  getSuggestCostApi,
+  getEmployerListApi,
+  createOrderApi,
+  getWorkerListApi,
+  createQuestionApi,
+  getOrderDetailApi
+} from '@/api/order'
 
 const defaultListPagination = {
   order_by: 'created_on',
@@ -40,7 +48,8 @@ export default {
     employerList: [], // 发单列表
     employerPagination: defaultListPagination, // 发单分页
     workerList: [], // 接单列表
-    workerPagination: defaultListPagination // 接单分页
+    workerPagination: defaultListPagination, // 接单分页
+    orderDetail: {} // 订单详情
   },
   getters: {
     formData: state => state.formData,
@@ -50,7 +59,8 @@ export default {
     question: state => state.question,
     projectFiles: state => state.projectFiles,
     employerList: state => state.employerList,
-    workerList: state => state.workerList
+    workerList: state => state.workerList,
+    orderDetail: state => state.orderDetail
   },
   mutations: {
     SET_CATEGORY (state, v) {
@@ -106,6 +116,9 @@ export default {
     },
     SET_PROJECT_FILE (state, v) {
       state.projectFiles.push(v)
+    },
+    SET_ORDER_DETAIL (state, v) {
+      state.orderDetail = v
     }
   },
   actions: {
@@ -180,6 +193,10 @@ export default {
         )
       ])
       console.log(' 创建完了')
+    },
+    async getOrderDetail ({ commit }, id) {
+      const { data } = await getOrderDetailApi('d727684571844e1eaf76da0d53d12844')
+      commit('SET_ORDER_DETAIL', data.data)
     }
   }
 }

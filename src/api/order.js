@@ -38,3 +38,7 @@ export function createQuestionApi (id, data = {}) {
     data
   })
 }
+
+export function getOrderDetailApi (id) {
+  return fetchUtil(`/orders/${id}/`)
+}
