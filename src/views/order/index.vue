@@ -12,8 +12,9 @@
                 <mt-tab-container-item id="employer" style="height:100%;">
                     <div class="tab-main">
                         <mt-loadmore style="height:100%;" :top-method="employerLoadTop" :bottom-method="employerLoadBottom" bottomPullText="" :auto-fill="false" ref="loadmore1">
-                            <div class="item" v-for="(item, index) in employerList" :key="index">
-                                <div class="state">
+                            <template v-for="(item, index) in employerList">
+                                <router-link class="item" :to="{name:'unconfirmed-detail',params:{id:item.id}}" :key="index">
+                                    <div class="state">
                                     <img v-if="item.status <= 80" src="../../assets/images/order/ico_true.jpg" alt="">
                                     <img v-else src="../../assets/images/order/ico_false.jpg" alt="">
                                 </div>
@@ -26,7 +27,8 @@
                                         发单时间 {{item.created_on | filterDate}} 交稿时间 {{item.deadline | filterDate}}
                                     </div>
                                 </div>
-                            </div>
+                                </router-link>
+                            </template>
                         </mt-loadmore>
                     </div>
                 </mt-tab-container-item>
