@@ -182,6 +182,7 @@ export default {
 <style scoped lang="scss">
 .home {
   height: calc(100% - 100px);
+  overflow-y: auto;
   .swiper {
     height: 309px;
     img {
