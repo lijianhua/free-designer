@@ -50,7 +50,7 @@
                 </div> -->
                 <div class="swiperBox">
                     <mt-swipe class="swiper-product" :auto="0" :showIndicators="false" @change="handleChange">
-                        <mt-swipe-item v-for="(item, index) in galleryList" :key="index">
+                        <mt-swipe-item class="swiperItem" v-for="(item, index) in galleryList" :key="index">
                             <img :src="item.mid_image" alt="jiaju">
                         </mt-swipe-item>
                     </mt-swipe>
@@ -309,8 +309,9 @@ export default {
                 width: 100%;
                 height: 440px;
                 img{
-                    width: 100%;
                     height: 100%;
+                    display: block;
+                    margin:  0 auto;
                 }
             }
             .dicators{

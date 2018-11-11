@@ -86,8 +86,8 @@
                             <div class="title">问题解答</div>
                             <div class="warn">提示：答题阶段将会计时，答题界面退出之后将直接退出答题</div>
                         </div>
-                        <div v-show="timing == 0" class="answer-btn" @click="beginAnswer">开始答题</div>
-                        <div v-show="timing > 0" class="answering">
+                        <div v-show="timing == 0 && !overAnswer" class="answer-btn" @click="beginAnswer">开始答题</div>
+                        <div v-show="timing > 0 && !overAnswer" class="answering">
                             <div class="timing answer-btn">{{ timingText }}</div>
                             <div v-for="(item, index) in questionList" :key="index" v-show="index == nowIndex" class="now">
                                 <div class="calc">NO.{{ index + 1 }}/5</div>
@@ -97,6 +97,30 @@
                             <div class="answerBtn">
                                 <div class="answer-btn" @click="giveUpAnswer">放弃答题</div>
                                 <div class="answer-btn" @click="nextQuestion()">下一题</div>
+                            </div>
+                        </div>
+                        <div v-show="overAnswer" class="overAnswer">
+                            <div class="overTittle">【答题结束】</div>
+                            <div class="clickMore" v-show="!showMore">
+                                试卷详情
+                                <img class="open" @click="showMore = true" src="../../assets/images/open.png" alt="open">
+                            </div>
+                            <div class="closeMore">
+                                <img v-show="showMore" @click="showMore = false" class="close" src="../../assets/images/close.png" alt="close">
+                            </div>
+                            <div v-show="showMore" class="answersBox" v-for="(item, index) in answerList" :key="index">
+                                <div class="anContent questionTop">
+                                    <div class="number">第{{ index + 1 }}}题</div>
+                                    <div>{{ questionList[index].question }}</div>
+                                </div>
+                                <div class="anContent">
+                                    <img class="timeIcon" src="../../assets/images/ico_time.png" alt="ico_time">
+                                    <div class="timeAnswer">
+                                        <div class="time">【{{ showAnswerTime(item.start_time, item.end_time) }}】</div>
+                                        <div v-show="item.answer" class="content">{{ item.answer }}</div>
+                                        <div v-show="!item.answer" class="noAnswer">接单人没有回答此试题</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -171,7 +195,9 @@ export default {
       answerList: [],
       goodness: '',
       addPrice: 0,
-      filesList: []
+      filesList: [],
+      overAnswer: false,
+      showMore: false
     }
   },
   props: ['orderId'],
@@ -192,6 +218,9 @@ export default {
       this.$emit('callBack')
     },
     beginAnswer () {
+      if (this.questionList.length === 0) {
+        return
+      }
       this.startTime = new Date().getTime()
       this.timer = setInterval(() => {
         this.timing += 1
@@ -218,6 +247,7 @@ export default {
       this.timingText = '00:00:00'
       this.nowIndex = 0
       this.answerContent = ''
+      this.answerList = []
     },
     nextQuestion () {
       this.endTime = new Date().getTime()
@@ -228,12 +258,18 @@ export default {
         aid: this.orderDetail.id,
         qid: this.questionList[this.nowIndex].qid
       }
-      this.setOrderAnswer(dataForm)
+      this.answerList.push(dataForm)
       this.answerContent = ''
       this.nowIndex += 1
       this.startTime = new Date().getTime()
+      if (this.nowIndex > 4) {
+        this.overAnswer = true
+      }
     },
     async submit () {
+      for (let i = 0; i < this.answerList.length; i++) {
+        await this.setOrderAnswer(this.answerList[i])
+      }
       const dataForm = {
         desc: this.goodness,
         apply_cost: this.addPrice,
@@ -248,6 +284,25 @@ export default {
     },
     uploadImg () {
       this.$el.querySelector('#upload').click()
+    },
+    showAnswerTime (start, end) {
+      const time = (end - start) / 1000
+      const hour = Math.floor(time / 3600)
+      const min = Math.floor(time / 60) % 60
+      const sec = time % 60
+      let t = ''
+      if (hour > 0) {
+        if (hour < 10) {
+          t = '0' + hour + ':'
+        } else {
+          t = hour + '时'
+        }
+      }
+      if (min < 10) { t += '0' }
+      t += min + '分'
+      if (sec < 10) { t += '0' }
+      t += sec.toFixed(0) + '秒'
+      return t
     }
   },
   mounted () {
@@ -515,6 +570,60 @@ export default {
         .answerBtn{
             display: flex;
             justify-content: space-between;
+        }
+    }
+    .overAnswer{
+        .overTittle{
+            color: #979797;
+            font-size: 26px;
+            text-align: center;
+        }
+        .clickMore,.closeMore{
+            margin-top: 20px;
+            color: #979797;
+            font-size: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            img{
+                width: 24px;
+                height: 21px;
+                margin-top: 5px;
+            }
+        }
+        .answersBox{
+            background-color: #ebebeb;
+            padding: 15px;
+            .questionTop{
+                font-size: 20px;
+                margin-top: 10px;
+                margin-bottom: 30px;
+            }
+            .anContent{
+                display: flex;
+                .timeIcon{
+                    width: 55px;
+                    height: 56px;
+                    margin-right: 18px;
+                }
+                .time{
+                    font-size: 25px;
+                    color: #ff0000;
+                }
+                .content,.noAnswer{
+                    font-size: 22px;
+                    line-height: 32px;
+                    margin-top: 12px;
+                }
+                .noAnswer{
+                    color: #ff0000;
+                }
+                .number{
+                    width: 60px;
+                    margin-right: 13px;
+                }
+            }
         }
     }
 }

@@ -166,9 +166,12 @@ export default {
         font-size: 26px;
     }
     .designImg{
-        img{
-            width: 100%;
-        }
+      height: 438px;
+      display: flex;
+      justify-content: center;
+      img{
+        height: 438px;
+      }
     }
     .designInfo{
         padding: 0 15px;
