@@ -7,7 +7,7 @@
     <div class="main">
       <mt-loadmore style="height:100%;" :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" bottomPullText="" :auto-fill="false" ref="loadmore">
         <ul class="list">
-          <li class="item" v-for="(item, index) in workList" :key="index">
+          <li class="item" v-for="(item, index) in workList" :key="index" @click="showDetail(item)">
             <div class="img">
               <img :src="item.thumb" alt="">
             </div>
@@ -23,11 +23,16 @@
         </ul>
       </mt-loadmore>
     </div>
+    <!-- 作品详情 -->
+    <mu-slide-left-transition>
+        <productDetail v-if="isShowDetail" :detailData='detailData' :isMy='true' @callBack='callBack'></productDetail>
+    </mu-slide-left-transition>
   </div>
 </template>
 <script>
 import Store from '@/store'
 import { mapGetters, mapActions } from 'vuex'
+import productDetail from '../product/productDetail'
 export default {
   async beforeRouteEnter (to, from, next) {
     await Store.dispatch('my/getWorkList')
@@ -35,7 +40,12 @@ export default {
   },
   data () {
     return {
-      allLoaded: false
+      allLoaded: false,
+      detailData: {
+        user: '',
+        gallery: ''
+      },
+      isShowDetail: false
     }
   },
   computed: {
@@ -51,7 +61,20 @@ export default {
       await this.getWorkList(false)
       // this.allLoaded = true// 若数据已全部获取完毕
       this.$refs.loadmore.onBottomLoaded()
+    },
+    callBack () {
+      this.isShowDetail = false
+    },
+    showDetail (item) {
+      this.detailData = Object.assign({}, this.detailData, {
+        user: item.uid,
+        gallery: item.id
+      })
+      this.isShowDetail = true
     }
+  },
+  components: {
+    productDetail
   }
 }
 </script>
