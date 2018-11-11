@@ -11,7 +11,7 @@
     <mt-tab-container :value="orderTabActive">
       <mt-tab-container-item id="send">
         <div class="tab-main">
-          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" bottomPullText="" :auto-fill="false" ref="loadmore1">
+          <mt-loadmore :top-method="loadTop" :auto-fill="false" ref="loadmore1">
             <ul class="list">
               <li>
                 <h4>1000平米办公楼项目</h4>
@@ -79,7 +79,7 @@
       </mt-tab-container-item>
       <mt-tab-container-item id="apply">
         <div class="tab-main">
-          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" bottomPullText="" :auto-fill="false" ref="loadmore2">
+          <mt-loadmore :top-method="loadTop" :auto-fill="false" ref="loadmore2">
             <ul class="list">
               <li>
                 <h4>1000平米办公楼项目</h4>
