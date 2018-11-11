@@ -23,7 +23,7 @@
         </div>
         <div class="applyContainer">
           <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
-            <div class="send-card" v-for="(item, index) in demandsList" :key="index" @click="toOrderDetail(item.id)">
+            <div class="send-card" v-for="(item, index) in demandsList" :key="index" @click="toOrderDetail(item.id, item.user.id)">
               <img src="../../assets/images/demand_background.png" alt="">
               <div class="card-body">
                 <div class="body-left">
@@ -56,6 +56,7 @@
 <script>
 import orderDetail from '../order/orderDetail'
 import { mapActions, mapGetters } from 'vuex'
+import Cookie from 'js-cookie'
 export default {
   data () {
     return {
@@ -64,13 +65,15 @@ export default {
       showFilter: true,
       isLoadedAll: false,
       isShowDetail: false,
-      orderId: ''
+      orderId: '',
+      userId: ''
     }
   },
   computed: {
     ...mapGetters('apply', ['filterClass', 'filterApply', 'demandsList', 'demandPage'])
   },
   async created () {
+    this.userId = JSON.parse(Cookie.get('user')).id
     await this.getFilterInfo()
     this.getList()
   },
@@ -111,9 +114,18 @@ export default {
     callBack () {
       this.isShowDetail = false
     },
-    toOrderDetail (orderId) {
-      this.orderId = orderId
-      this.isShowDetail = true
+    toOrderDetail (orderId, userId) {
+      if (userId === this.userId) {
+        this.$router.push({
+          name: 'unconfirmed-detail',
+          params: {
+            id: orderId
+          }
+        })
+      } else {
+        this.orderId = orderId
+        this.isShowDetail = true
+      }
     }
   },
   components: {

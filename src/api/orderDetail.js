@@ -24,7 +24,7 @@ export function acceptOrder (dataForm = {}) {
     works: dataForm.works
   }
   return fetchUtil('/orders/' + dataForm.oid + '/apply_records/' + dataForm.aid + '/', {
-    method: 'post',
+    method: 'patch',
     data
   })
 }
