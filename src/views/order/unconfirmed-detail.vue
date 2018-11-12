@@ -21,7 +21,7 @@
         </div>
         <div class="btns">
           <div class="edit">编辑</div>
-          <div class="del">删除</div>
+          <div class="del" @click="deleteOrder(id)">删除</div>
         </div>
       </div>
       <div class="user-title">
@@ -55,7 +55,7 @@
 </template>
 <script>
 import Store from '@/store'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   async beforeRouteEnter (to, from, next) {
     await Store.dispatch('order/getOrderDetail', to.params.id)
@@ -69,6 +69,9 @@ export default {
     filterRole (val) {
       return val.split(',').filter(v => v !== '').map(v => `【${v}】`).join('')
     }
+  },
+  methods: {
+    ...mapActions('order', ['deleteOrder'])
   }
 }
 </script>

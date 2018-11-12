@@ -56,3 +56,8 @@ export function pleaseAcceptOrder (data = {}) {
     data
   })
 }
+export function deleteOrder (id) {
+  return fetchUtil(`/orders/${id}/`, {
+    method: 'DELETE'
+  })
+}

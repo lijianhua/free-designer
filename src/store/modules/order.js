@@ -7,7 +7,8 @@ import {
   createQuestionApi,
   getOrderDetailApi,
   getUserQusetion,
-  pleaseAcceptOrder
+  pleaseAcceptOrder,
+  deleteOrder
 } from '@/api/order'
 
 const defaultListPagination = {
@@ -215,6 +216,9 @@ export default {
     },
     async pleaseAcceptOrder ({ commit }, dataForm) {
       await pleaseAcceptOrder(dataForm)
+    },
+    async deleteOrder ({ commit }, id) {
+      await deleteOrder(id)
     }
   }
 }
