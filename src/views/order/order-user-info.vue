@@ -7,34 +7,35 @@
     <div class="main">
       <div class="main-header">
         <div class="user-info">
-          <div class="avatar" style="background:red;">
+          <div class="avatar">
+            <img :src="userInfo.user.avatar" alt="">
           </div>
           <div class="info">
             <div class="item-header">
-              <div class="title">豆豆</div>
-              <div class="integral">议价：0积分</div>
+              <div class="title">{{userInfo.user.name}}</div>
+              <div class="integral">议价：{{userInfo.apply_cost}}积分</div>
             </div>
             <div>
-              <div class="address">北京</div>
-              <div class="exp">10年工作经验</div>
+              <div class="address">{{userInfo.user.city}}</div>
+              <div class="exp">{{userInfo.user.career}}年工作经验</div>
             </div>
             <div class="skill">
-              【1，2，3，4】
+              {{userInfo.user.role | filterRole}}
             </div>
           </div>
         </div>
         <div class="explain">
           <h3>竞标说明</h3>
-          <p>主要承接办公室设计，以及平面规划方案，从规划开始满足甲方的设计需求。并能提高其企业管理效率，对施工工艺比较了解，能独立完成施工图纸。</p>
+          <p>{{userInfo.desc}}</p>
         </div>
       </div>
       <div class="case">
         <h3>同类案例</h3>
         <div class="box">
-          <div class="scroll" style="width:500%;">
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
+          <div class="scroll" :style="{width:userInfo.works.length + '00%'}">
+            <div class="item" v-for="(item, index) in userInfo.works" :key="index">
+              <img :src="item[1]" alt="">
+            </div>
           </div>
         </div>
       </div>
@@ -43,7 +44,7 @@
           <h3>答题试卷<span>【您设置了3道试题】</span></h3>
         </div>
         <div class="paper-main">
-          <div class="item">
+          <div class="item" v-for="(item, index) in userQuestionList" :key="index">
             <h4>第一题：预估本项目每平米造价大约多少？</h4>
             <div class="time">
               <img src="../../assets/images/ico_time.png" alt="">【3分18秒】
@@ -83,16 +84,33 @@
   </div>
 </template>
 <script>
-// import Store from '@/store'
+import Store from '@/store'
 import { mapGetters } from 'vuex'
 export default {
   async beforeRouteEnter (to, from, next) {
-    // await Store.dispatch('order/getUserInfo', to.params.id)
+    await Store.dispatch('order/getUserQusetion', to.params.id)
     next()
   },
   props: ['id'],
   computed: {
-    ...mapGetters('order', ['userInfo'])
+    ...mapGetters('order', ['orderDetail', 'userQuestionList'])
+  },
+  data () {
+    return {
+      userInfo: {}
+    }
+  },
+  filters: {
+    filterRole (val) {
+      return val.split(',').filter(v => v !== '').map(v => `【${v}】`).join('')
+    }
+  },
+  created () {
+    if (!Object.keys(this.orderDetail).length) {
+      this.$router.back()
+      return
+    }
+    this.userInfo = this.orderDetail.apply_records.find(v => v.id === this.id)
   }
 }
 </script>
@@ -210,6 +228,10 @@ export default {
         width: 578px;
         height: 449px;
         background-color: red;
+        img {
+          width: 100%;
+          height: 100%;
+        }
 
         & + .item {
           margin-left: 44px;
