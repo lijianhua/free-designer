@@ -2,7 +2,7 @@
     <div class="orderDetail" >
         <div class="closeHeader">
             <img @click="$router.back()" src="../../assets/images/back.png" alt="back">
-            接单详情
+            <h3>接单详情</h3>
         </div>
         <div class="detailContainer">
             <div class="steps">
@@ -332,12 +332,13 @@ export default {
   background-color: #ffffff;
   z-index: 10;
   .closeHeader{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
     height: 113px;
-    line-height: 113px;
-    text-align: center;
-    padding: 0 27px;
-    position: relative;
-    font-size: 44px;
+    border-bottom: 3px solid #ededed;
+    background-color: #fff;
     img{
         width: 22px;
         height: 41px;
@@ -346,8 +347,14 @@ export default {
         left: 27px;
         margin-top: -20.5px;
     }
+    h3 {
+        font-size: 46px;
+        text-align: center;
+        line-height: 113px;
+    }
   }
   .detailContainer{
+    margin-top: 113px;
     height: calc(100% - 113px - 67px);
     overflow-y: auto;
   }

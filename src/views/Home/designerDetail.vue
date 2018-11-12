@@ -2,7 +2,7 @@
     <div class="designerDetail">
         <div class="closeHeader">
             <img @click="$router.back()" src="../../assets/images/back.png" alt="back">
-            工作者详情
+            <h3>工作者详情</h3>
         </div>
         <div class="desingerInfo">
             <div class="header">
@@ -137,12 +137,13 @@ export default {
   background-color: #ffffff;
   z-index: 10;
   .closeHeader{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
     height: 113px;
-    line-height: 113px;
-    text-align: center;
-    padding: 0 27px;
-    position: relative;
-    font-size: 44px;
+    border-bottom: 3px solid #ededed;
+    background-color: #fff;
     img{
         width: 22px;
         height: 41px;
@@ -151,8 +152,14 @@ export default {
         left: 27px;
         margin-top: -20.5px;
     }
+    h3 {
+        font-size: 46px;
+        text-align: center;
+        line-height: 113px;
+    }
   }
   .desingerInfo{
+    margin-top: 113px;
     padding: 30px 50px;
     background-color: #f0f0f0;
     border-bottom: 5px solid #ffffff;
