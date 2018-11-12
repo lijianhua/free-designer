@@ -50,3 +50,9 @@ export function getUserInfoApi (id) {
 export function getUserQusetion (id, questionId) {
   return fetchUtil(`/apply_records/${id}/answers/?order_question=${questionId}`)
 }
+export function pleaseAcceptOrder (data = {}) {
+  return fetchUtil('/pay/create_order/', {
+    method: 'POST',
+    data
+  })
+}

@@ -1,7 +1,7 @@
 <template>
   <div class="containers">
     <div class="header">
-      <img @click="$router.push('/order')" src="../../assets/images/back.png" alt="">
+      <img @click="$router.back()" src="../../assets/images/back.png" alt="">
       <h3>雇主{{orderDetail.status >= 90 ? '待确认' : '已确认' }}订单</h3>
     </div>
     <div class="main">

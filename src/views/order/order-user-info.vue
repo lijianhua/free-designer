@@ -41,29 +41,15 @@
       </div>
       <div class="test-paper">
         <div class="paper-header">
-          <h3>答题试卷<span>【您设置了3道试题】</span></h3>
+          <h3>答题试卷<span>【您设置了{{userQuestionList.length}}道试题】</span></h3>
         </div>
         <div class="paper-main">
           <div class="item" v-for="(item, index) in userQuestionList" :key="index">
-            <h4>第一题：预估本项目每平米造价大约多少？</h4>
+            <h4>第{{ index + 1 }}题：{{ item.order_question.question }}</h4>
             <div class="time">
-              <img src="../../assets/images/ico_time.png" alt="">【3分18秒】
+              <img src="../../assets/images/ico_time.png" alt="">【{{ showAnswerTime(item.start_time, item.end_time) }}】
             </div>
-            <p>这个主要根据您所采用的材料决定的，一般能控制在1500每平米吧</p>
-          </div>
-          <div class="item">
-            <h4>第一题：预估本项目每平米造价大约多少？</h4>
-            <div class="time">
-              <img src="" alt="">【3分18秒】
-            </div>
-            <p>这个主要根据您所采用的材料决定的，一般能控制在1500每平米吧</p>
-          </div>
-          <div class="item">
-            <h4>第一题：预估本项目每平米造价大约多少？</h4>
-            <div class="time">
-              <img src="" alt="">【3分18秒】
-            </div>
-            <p>这个主要根据您所采用的材料决定的，一般能控制在1500每平米吧</p>
+            <p>{{ item.answer }}</p>
           </div>
         </div>
       </div>
@@ -72,9 +58,9 @@
         <img src="../../assets/images/ico_tel.png" alt="">
       </div>
       <div class="footer">
-        <h4 class="total-price">服务总价：2700积分</h4>
-        <div class="price-info">【系统报价2000+增加奖金300+接单人加价400】</div>
-        <div class="submit">确定合作并付款</div>
+        <h4 class="total-price">服务总价：{{orderDetail.pub_cost + orderDetail.apply_cost + orderDetail.system_cost}}积分</h4>
+        <div class="price-info">【系统报价{{orderDetail.system_cost}}+增加奖金{{orderDetail.fee}}+接单人加价{{orderDetail.apply_cost}}】</div>
+        <div class="submit" @click="surePay">确定合作并付款</div>
         <div class="agree">
           <img src="../../assets/images/redyes.png" alt="redyes">
           <span>我已阅读并同意遵守本次服务协议</span>
@@ -85,7 +71,7 @@
 </template>
 <script>
 import Store from '@/store'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   async beforeRouteEnter (to, from, next) {
     await Store.dispatch('order/getUserQusetion', to.params.id)
@@ -111,6 +97,39 @@ export default {
       return
     }
     this.userInfo = this.orderDetail.apply_records.find(v => v.id === this.id)
+  },
+  methods: {
+    ...mapActions('order', ['pleaseAcceptOrder']),
+    showAnswerTime (start, end) {
+      const time = (end - start) / 1000
+      const hour = Math.floor(time / 3600)
+      const min = Math.floor(time / 60) % 60
+      const sec = time % 60
+      let t = ''
+      if (hour > 0) {
+        if (hour < 10) {
+          t = '0' + hour + ':'
+        } else {
+          t = hour + '时'
+        }
+      }
+      if (min < 10) { t += '0' }
+      t += min + '分'
+      if (sec < 10) { t += '0' }
+      t += sec.toFixed(0) + '秒'
+      return t
+    },
+    async surePay () {
+      const dataForm = {
+        goods_id: this.id,
+        goods_type: 'pre_order',
+        price_type: 'all'
+      }
+      await this.pleaseAcceptOrder(dataForm)
+      this.$router.push({
+        name: 'order'
+      })
+    }
   }
 }
 </script>

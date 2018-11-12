@@ -36,6 +36,7 @@
                     <div class="tab-main">
                         <mt-loadmore style="height:100%;" :top-method="workerLoadTop" :bottom-method="workerLoadBottom" bottomPullText="" :auto-fill="false" ref="loadmore2">
                             <div class="item" v-for="(item, index) in workerList" :key="index">
+                                <router-link class="item" :to="{name:'orderDetail',params:{orderid:item.order.id}}" :key="index">
                                 <div class="state">
                                     <img v-if="item.order.status <= 80" src="../../assets/images/order/ico_true.jpg" alt="">
                                     <img v-else src="../../assets/images/order/ico_false.jpg" alt="">
@@ -49,6 +50,7 @@
                                         发单时间 {{item.order.created_on | filterDate}} 交稿时间 {{item.order.deadline | filterDate}}
                                     </div>
                                 </div>
+                                </router-link>
                             </div>
                         </mt-loadmore>
                     </div>

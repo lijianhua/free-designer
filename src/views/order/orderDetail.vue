@@ -207,10 +207,8 @@ export default {
   async created () {
     this.orderId = this.$route.params.orderid
     await this.getOrderDetail(this.orderId)
-    console.info(this.orderDetail)
     this.orderInfo = this.orderDetail.order
     await this.getOrderQusetion(this.orderId)
-    console.info(this.questionList)
   },
   methods: {
     ...mapActions('orderDetail', ['getOrderDetail', 'getOrderQusetion', 'setOrderAnswer', 'acceptOrder']),

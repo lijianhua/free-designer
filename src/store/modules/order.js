@@ -6,7 +6,8 @@ import {
   getWorkerListApi,
   createQuestionApi,
   getOrderDetailApi,
-  getUserQusetion
+  getUserQusetion,
+  pleaseAcceptOrder
 } from '@/api/order'
 
 const defaultListPagination = {
@@ -211,6 +212,9 @@ export default {
       res = res.map(v => v.data.data[0])
       console.log(res)
       commit('SET_USER_QUESTION_LIST', res)
+    },
+    async pleaseAcceptOrder ({ commit }, dataForm) {
+      await pleaseAcceptOrder(dataForm)
     }
   }
 }
