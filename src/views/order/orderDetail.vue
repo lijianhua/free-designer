@@ -1,7 +1,7 @@
 <template>
     <div class="orderDetail" >
         <div class="closeHeader">
-            <img @click="closeDetail" src="../../assets/images/back.png" alt="back">
+            <img @click="$router.back()" src="../../assets/images/back.png" alt="back">
             接单详情
         </div>
         <div class="detailContainer">
@@ -197,15 +197,15 @@ export default {
       addPrice: 0,
       filesList: [],
       overAnswer: false,
-      showMore: false
+      showMore: false,
+      orderId: ''
     }
   },
-  props: ['orderId'],
   computed: {
     ...mapGetters('orderDetail', ['orderDetail', 'questionList'])
   },
   async created () {
-    console.info(this.orderId)
+    this.orderId = this.$route.params.orderid
     await this.getOrderDetail(this.orderId)
     console.info(this.orderDetail)
     this.orderInfo = this.orderDetail.order
@@ -214,9 +214,6 @@ export default {
   },
   methods: {
     ...mapActions('orderDetail', ['getOrderDetail', 'getOrderQusetion', 'setOrderAnswer', 'acceptOrder']),
-    closeDetail () {
-      this.$emit('callBack')
-    },
     beginAnswer () {
       if (this.questionList.length === 0) {
         return

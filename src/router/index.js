@@ -1,13 +1,21 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-// const Home = () => import('@/views/Home/index')
 const Login = () => import('@/views/login/index')
 // Mobile页面
 const mobileLayout = () => import('@/views/mobileLayout/index')
-const Home = () => import('@/views/home/index') // 首页
-const Apply = () => import('@/views/apply/index') // 需求池
-const Product = () => import('@/views/product/index') // 作品展
+// 首页
+const Home = () => import('@/views/home/index')
+// 设计者详情
+const designerDetail = () => import('@/views/home/designerDetail')
+// 设计者作品
+const browWork = () => import('@/views/home/browWork')
+// 需求池
+const Apply = () => import('@/views/apply/index')
+// 作品展
+const Product = () => import('@/views/product/index')
+// 作品详情
+const productDetail = () => import('@/views/product/productDetail')
 
 // 订单
 const Order = () => import('@/views/order/index')
@@ -17,6 +25,8 @@ const sendCreatOrder = () => import('@/views/order/send-creat-order')
 const UnconfirmedDetail = () => import('@/views/order/unconfirmed-detail')
 // 接单用户详情
 const OrderUserInfo = () => import('@/views/order/order-user-info')
+// 接单详情
+const orderDetail = () => import('@/views/order/orderDetail')
 
 // 个人中心
 const My = () => import('@/views/my/index')
@@ -57,6 +67,18 @@ export default new Router({
           component: Home
         },
         {
+          name: 'designerDetail',
+          path: '/designerDetail/:userid',
+          props: true,
+          component: designerDetail
+        },
+        {
+          name: 'browWork',
+          path: '/browWork/:userid',
+          props: true,
+          component: browWork
+        },
+        {
           name: 'apply',
           path: '/apply',
           component: Apply
@@ -65,6 +87,12 @@ export default new Router({
           name: 'product',
           path: '/product',
           component: Product
+        },
+        {
+          name: 'productDetail',
+          path: '/productDetail/:userid/:galleryid',
+          props: true,
+          component: productDetail
         },
         {
           name: 'order',
@@ -127,8 +155,13 @@ export default new Router({
           path: '/order-user-info/:id',
           props: true,
           component: OrderUserInfo
+        },
+        {
+          name: 'orderDetail',
+          path: '/orderDetail/:id',
+          props: true,
+          component: orderDetail
         }
-
       ]
     }
   ]

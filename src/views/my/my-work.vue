@@ -23,16 +23,11 @@
         </ul>
       </mt-loadmore>
     </div>
-    <!-- 作品详情 -->
-    <mu-slide-left-transition>
-        <productDetail v-if="isShowDetail" :detailData='detailData' :isMy='true' @callBack='callBack'></productDetail>
-    </mu-slide-left-transition>
   </div>
 </template>
 <script>
 import Store from '@/store'
 import { mapGetters, mapActions } from 'vuex'
-import productDetail from '../product/productDetail'
 export default {
   async beforeRouteEnter (to, from, next) {
     await Store.dispatch('my/getWorkList')
@@ -40,12 +35,7 @@ export default {
   },
   data () {
     return {
-      allLoaded: false,
-      detailData: {
-        user: '',
-        gallery: ''
-      },
-      isShowDetail: false
+      allLoaded: false
     }
   },
   computed: {
@@ -62,19 +52,16 @@ export default {
       // this.allLoaded = true// 若数据已全部获取完毕
       this.$refs.loadmore.onBottomLoaded()
     },
-    callBack () {
-      this.isShowDetail = false
-    },
     showDetail (item) {
-      this.detailData = Object.assign({}, this.detailData, {
-        user: item.uid,
-        gallery: item.id
+      this.$router.push({
+        name: 'productDetail',
+        params: {
+          userid: item.uid,
+          galleryid: item.id,
+          isMy: true
+        }
       })
-      this.isShowDetail = true
     }
-  },
-  components: {
-    productDetail
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
     <div class="designerDetail">
         <div class="closeHeader">
-            <img @click="closeDetail" src="../../assets/images/back.png" alt="back">
+            <img @click="$router.back()" src="../../assets/images/back.png" alt="back">
             工作者详情
         </div>
         <div class="desingerInfo">
@@ -54,7 +54,7 @@
         </div>
         <div class="history">
             <span>工作历史和反馈</span>
-            <span @click="isShowBrowWork = true">作品浏览<strong>》</strong></span>
+            <span @click="$router.push({name: 'browWork',params: { userid: userid } })">作品浏览<strong>》</strong></span>
         </div>
         <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
             <div class="historyDesign" v-for="(item, index) in historyList" :key="index">
@@ -73,35 +73,27 @@
                 <p class="talkAbout">{{ item.comment }}</p>
             </div>
         </mt-loadmore>
-        <!-- 工作者作品 -->
-        <mu-slide-left-transition>
-            <browWork v-if="isShowBrowWork" @callBack='callBack'></browWork>
-        </mu-slide-left-transition>
     </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import browWork from './browWork'
 export default {
   data () {
     return {
-      isShowBrowWork: false,
-      isLoadedAll: false
+      isLoadedAll: false,
+      userid: ''
     }
   },
-  props: ['detailData'],
   computed: {
     ...mapGetters('home', ['userInfo', 'historyList', 'historyPageInfo'])
   },
-  async created () {
-    this.getUserInfo(this.detailData)
+  created () {
+    this.userid = this.$route.params.userid
+    this.getUserInfo(this.userid)
   },
   methods: {
     ...mapActions('home', ['getUserInfo', 'getHistory', 'getMoreHistory']),
-    closeDetail () {
-      this.$emit('callBack')
-    },
     callBack () {
       this.isShowBrowWork = false
     },
@@ -110,7 +102,7 @@ export default {
         this.isLoadedAll = false
       }
       const dataFrom = {
-        user: this.detailData,
+        user: this.userid,
         status: 'finished'
       }
       await this.getHistory(dataFrom)
@@ -122,7 +114,7 @@ export default {
         return
       }
       let dataFrom = {
-        user: this.detailData,
+        user: this.userid,
         status: 'finished'
       }
       if (this.historyPageInfo.page) {
@@ -131,9 +123,6 @@ export default {
       await this.getMoreHistory(dataFrom)
       this.$refs.loadmore.onBottomLoaded()
     }
-  },
-  components: {
-    browWork
   }
 }
 </script>

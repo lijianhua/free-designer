@@ -1,7 +1,7 @@
 <template>
     <div class="productDetail" >
         <div class="closeHeader">
-            <img @click="closeDetail" src="../../assets/images/back.png" alt="back">
+            <img @click="$router.back()" src="../../assets/images/back.png" alt="back">
             作品详情
         </div>
         <div class="detailContainer">
@@ -112,23 +112,29 @@ export default {
       allPicture: 0,
       nowDicator: 1,
       isLoadedAll: false,
-      commentValue: ''
+      commentValue: '',
+      isMy: false
     }
   },
   computed: {
     ...mapGetters('productDetail', ['userInfo', 'galleryList', 'galleryCommentList', 'commentPageInfo'])
   },
-  props: ['detailData', 'isMy'],
   async created () {
-    await this.getUserInfo(this.detailData)
-    await this.getGalleryList(this.detailData)
+    this.userid = this.$route.params.userid
+    this.galleryid = this.$route.params.galleryid
+    if (this.$route.params.isMy) {
+      this.isMy = true
+    }
+    const dataForm = {
+      user: this.userid,
+      gallery: this.galleryid
+    }
+    await this.getUserInfo(dataForm)
+    await this.getGalleryList(dataForm)
     this.allPicture = this.galleryList.length
   },
   methods: {
     ...mapActions('productDetail', ['getUserInfo', 'getGalleryList', 'getCommentList', 'getMoreComment', 'addGalleryComment']),
-    closeDetail () {
-      this.$emit('callBack')
-    },
     handleChange (index) {
       this.nowDicator = index + 1
     },
@@ -136,7 +142,11 @@ export default {
       if (this.isLoadedAll) {
         this.isLoadedAll = false
       }
-      await this.getCommentList(this.detailData)
+      const dataForm = {
+        user: this.userid,
+        gallery: this.galleryid
+      }
+      await this.getCommentList(dataForm)
       this.$refs.loadmore.onTopLoaded()
     },
     async load () {
@@ -145,8 +155,8 @@ export default {
         return
       }
       let dataFrom = {
-        user: this.detailData.user,
-        gallery: this.detailData.gallery
+        user: this.userid,
+        gallery: this.galleryid
       }
       if (this.commentPageInfo.page) {
         dataFrom.page = this.commentPageInfo.page + 1
@@ -156,9 +166,9 @@ export default {
     },
     async addComment () {
       const dataFrom = {
-        uid: this.detailData.user,
+        uid: this.userid,
         content: this.commentValue,
-        gallery: this.detailData.gallery
+        gallery: this.galleryid
       }
       await this.addGalleryComment(dataFrom)
       this.commentValue = ''

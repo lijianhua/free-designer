@@ -1,7 +1,7 @@
 <template>
     <div class="browWork">
         <div class="closeHeader">
-            <img @click="closeDetail" src="../../assets/images/back.png" alt="back">
+            <img @click="$router.back()" src="../../assets/images/back.png" alt="back">
             作品浏览页
         </div>
         <div class="desingerInfo">
@@ -53,7 +53,7 @@
             </div>
         </div>
         <div class="history">
-            <span @click="closeDetail"><strong>《</strong>工作历史和反馈</span>
+            <span @click="$router.push({name: 'designerDetail',params: { userid: userid } })"><strong>《</strong>工作历史和反馈</span>
             <span>作品浏览</span>
         </div>
         <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
@@ -73,45 +73,33 @@
                 </div>
             </div>
         </mt-loadmore>
-        <!-- 作品详情 -->
-        <mu-slide-left-transition>
-            <productDetail v-if="isShowDetail" :detailData='detailData' @callBack='callBack'></productDetail>
-        </mu-slide-left-transition>
     </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import productDetail from '../product/productDetail'
 export default {
   data () {
     return {
       isLoadedAll: false,
-      isShowDetail: false,
-      detailData: {
-        user: '',
-        gallery: ''
-      }
+      userid: ''
     }
   },
   computed: {
     ...mapGetters('home', ['userInfo', 'pictureList', 'picturePageInfo'])
   },
-  created () {},
+  created () {
+    this.userid = this.$route.params.userid
+    this.getUserInfo(this.userid)
+  },
   methods: {
-    ...mapActions('home', ['getPicture', 'getMorePicture']),
-    closeDetail () {
-      this.$emit('callBack')
-    },
-    callBack () {
-      this.isShowDetail = false
-    },
+    ...mapActions('home', ['getUserInfo', 'getPicture', 'getMorePicture']),
     async getList () {
       if (this.isLoadedAll) {
         this.isLoadedAll = false
       }
       let dataForm = {
-        userid: this.userInfo.id
+        userid: this.userid
       }
       await this.getPicture(dataForm)
       this.$refs.loadmore.onTopLoaded()
@@ -122,7 +110,7 @@ export default {
         return
       }
       let dataForm = {
-        userid: this.userInfo.id
+        userid: this.userid
       }
       if (this.picturePageInfo.page) {
         dataForm.page = this.picturePageInfo.page + 1
@@ -131,15 +119,14 @@ export default {
       this.$refs.loadmore.onBottomLoaded()
     },
     showDetail (item) {
-      this.detailData = Object.assign({}, this.detailData, {
-        user: item.uid,
-        gallery: item.id
+      this.$router.push({
+        name: 'productDetail',
+        params: {
+          userid: item.uid,
+          galleryid: item.id
+        }
       })
-      this.isShowDetail = true
     }
-  },
-  components: {
-    productDetail
   }
 }
 </script>
@@ -271,8 +258,11 @@ export default {
         font-size: 26px;
     }
     .designImg{
+        height: 438px;
+        display: flex;
+        justify-content: center;
         img{
-            width: 100%;
+            height: 438px;
         }
     }
     .designInfo{
