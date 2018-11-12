@@ -46,15 +46,10 @@
             </div>
           </mt-loadmore>
         </div>
-        <!-- 订单详情 -->
-        <mu-slide-left-transition>
-            <orderDetail v-if="isShowDetail" :orderId='orderId' @callBack='callBack'></orderDetail>
-        </mu-slide-left-transition>
     </div>
 </template>
 
 <script>
-import orderDetail from '../order/orderDetail'
 import { mapActions, mapGetters } from 'vuex'
 import Cookie from 'js-cookie'
 export default {
@@ -64,8 +59,6 @@ export default {
       selectApply: '项目需求',
       showFilter: true,
       isLoadedAll: false,
-      isShowDetail: false,
-      orderId: '',
       userId: ''
     }
   },
@@ -111,9 +104,6 @@ export default {
       await this.getMoreDemands(dataForm)
       this.$refs.loadmore.onBottomLoaded()
     },
-    callBack () {
-      this.isShowDetail = false
-    },
     toOrderDetail (orderId, userId) {
       if (userId === this.userId) {
         this.$router.push({
@@ -123,13 +113,14 @@ export default {
           }
         })
       } else {
-        this.orderId = orderId
-        this.isShowDetail = true
+        this.$router.push({
+          name: 'orderDetail',
+          params: {
+            orderid: orderId
+          }
+        })
       }
     }
-  },
-  components: {
-    orderDetail
   }
 }
 </script>

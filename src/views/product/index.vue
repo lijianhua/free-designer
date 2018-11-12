@@ -38,16 +38,11 @@
                 </div>
             </mt-loadmore>
         </div>
-        <!-- 作品详情 -->
-        <mu-slide-left-transition>
-            <productDetail v-if="isShowDetail" :detailData='detailData' @callBack='callBack'></productDetail>
-        </mu-slide-left-transition>
     </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import productDetail from './productDetail'
 export default {
   data () {
     return {
@@ -63,11 +58,6 @@ export default {
       }],
       selectSort: 'view_count',
       selectFilter: '',
-      detailData: {
-        user: '',
-        gallery: ''
-      },
-      isShowDetail: false,
       showFilter: false,
       isLoadedAll: false
     }
@@ -84,9 +74,6 @@ export default {
   },
   methods: {
     ...mapActions('product', ['getBanners', 'getFilters', 'getProducts', 'getMoreProducts']),
-    callBack () {
-      this.isShowDetail = false
-    },
     async getList () {
       if (this.isLoadedAll) {
         this.isLoadedAll = false
@@ -115,15 +102,14 @@ export default {
       this.$refs.loadmore.onBottomLoaded()
     },
     showDetail (item) {
-      this.detailData = Object.assign({}, this.detailData, {
-        user: item.uid,
-        gallery: item.id
+      this.$router.push({
+        name: 'productDetail',
+        params: {
+          userid: item.uid,
+          galleryid: item.id
+        }
       })
-      this.isShowDetail = true
     }
-  },
-  components: {
-    productDetail
   }
 }
 </script>

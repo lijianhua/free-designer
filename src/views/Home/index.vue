@@ -80,16 +80,11 @@
                 </div>
             </mt-loadmore>
         </div>
-        <!-- 工作者详情页 -->
-        <mu-slide-left-transition>
-            <designerDetail v-if="isShowDetail" :detailData='detailData' @callBack='callBack'></designerDetail>
-        </mu-slide-left-transition>
     </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import designerDetail from './designerDetail'
 export default {
   data () {
     return {
@@ -103,8 +98,6 @@ export default {
       }],
       selectSort: 'apply_count',
       selectFilter: '',
-      detailData: '',
-      isShowDetail: false,
       showFilter: true,
       isLoadedAll: false
     }
@@ -122,9 +115,6 @@ export default {
     ...mapActions('home', ['getBanners', 'getFilters', 'getUsers', 'getMoreUsers']),
     isShowMore () {
       this.isShowMoreFilter = !this.isShowMoreFilter
-    },
-    callBack () {
-      this.isShowDetail = false
     },
     isCanShowAllFilters (index) {
       if (this.isShowMoreFilter) {
@@ -165,16 +155,17 @@ export default {
       this.$refs.loadmore.onBottomLoaded()
     },
     showDetail (userid) {
-      this.detailData = userid
-      this.isShowDetail = true
+      this.$router.push({
+        name: 'designerDetail',
+        params: {
+          userid: userid
+        }
+      })
     },
     clickFilters (id) {
       this.selectFilter = id
       this.getList()
     }
-  },
-  components: {
-    designerDetail
   }
 }
 </script>
