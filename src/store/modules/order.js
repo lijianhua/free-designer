@@ -5,8 +5,8 @@ import {
   createOrderApi,
   getWorkerListApi,
   createQuestionApi,
-  getOrderDetailApi
-  // getUserInfoApi
+  getOrderDetailApi,
+  getUserQusetion
 } from '@/api/order'
 
 const defaultListPagination = {
@@ -40,6 +40,7 @@ export default {
       d: '',
       e: ''
     }, // 问题
+    userQuestionList: {}, // 用户答题列表
     projectFiles: [], // 处理过的项目资料 =>formData.extra_resource
     dynamicInfo: {}, // 项目需求详情
     dynamicInfoOptions: [], // 项目需求详情KEYS
@@ -50,8 +51,7 @@ export default {
     employerPagination: defaultListPagination, // 发单分页
     workerList: [], // 接单列表
     workerPagination: defaultListPagination, // 接单分页
-    orderDetail: {}, // 订单详情
-    userInfo: {} // 接单人用户信息
+    orderDetail: {} // 订单详情
   },
   getters: {
     formData: state => state.formData,
@@ -63,7 +63,7 @@ export default {
     employerList: state => state.employerList,
     workerList: state => state.workerList,
     orderDetail: state => state.orderDetail,
-    userInfo: state => state.userInfo
+    userQuestionList: state => state.userQuestionList
   },
   mutations: {
     SET_CATEGORY (state, v) {
@@ -125,6 +125,9 @@ export default {
     },
     SET_USER_INFO (state, v) {
       state.userInfo = v
+    },
+    SET_USER_QUESTION_LIST (state, v) {
+      state.userQuestionList = v
     }
   },
   actions: {
@@ -198,15 +201,16 @@ export default {
           })
         )
       ])
-      console.log(' 创建完了')
     },
     async getOrderDetail ({ commit }, id) {
       const { data } = await getOrderDetailApi(id)
       commit('SET_ORDER_DETAIL', data.data)
     },
-    async getUserInfo ({ commit }, id) {
-      // const { data } = await getUserInfoApi(id)
-      // commit('SET_USER_INFO', data)
+    async getUserQusetion ({ commit }, id) {
+      let res = await Promise.all([0, 1, 2, 3, 4].map(v => getUserQusetion(id, v)))
+      res = res.map(v => v.data.data[0])
+      console.log(res)
+      commit('SET_USER_QUESTION_LIST', res)
     }
   }
 }

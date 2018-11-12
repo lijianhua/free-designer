@@ -36,7 +36,7 @@ export function payApi (data = {}) {
 }
 
 export function getPayListApi (data = {}) {
-  return fetchUtil('/prestore/', {
+  return fetchUtil('/prestores/', {
     data
   })
 }

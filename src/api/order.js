@@ -42,3 +42,11 @@ export function createQuestionApi (id, data = {}) {
 export function getOrderDetailApi (id) {
   return fetchUtil(`/orders/${id}/`)
 }
+
+export function getUserInfoApi (id) {
+  return fetchUtil(`/orders/${id}/apply_records`)
+}
+
+export function getUserQusetion (id, questionId) {
+  return fetchUtil(`/apply_records/${id}/answers/?order_question=${questionId}`)
+}
