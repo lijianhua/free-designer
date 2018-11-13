@@ -133,8 +133,8 @@ export default {
   .apply{
     width: 100%;
     height: calc(100% - 100px);
-    .header {
-      height: 310px;
+    .swiper {
+      height: 309px;
       img {
         width: 100%;
         height: 100%;
