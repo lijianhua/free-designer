@@ -16,7 +16,7 @@
               <div class="integral">议价：{{userInfo.apply_cost}}积分</div>
             </div>
             <div>
-              <div class="address">{{userInfo.user.city}}</div>
+              <div class="address">{{userInfo.user.city}} {{userInfo.user.province}}</div>
               <div class="exp">{{userInfo.user.career}}年工作经验</div>
             </div>
             <div class="skill">
