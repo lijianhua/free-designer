@@ -20,7 +20,7 @@
           <div class="content">{{orderDetail.pub_cost}}</div>
         </div>
         <div class="btns">
-          <div class="edit">编辑</div>
+          <div class="edit" @click="$router.push({name:'send-creat-order',query:{id:id}})">编辑</div>
           <div class="del">删除</div>
         </div>
       </div>
