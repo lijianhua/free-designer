@@ -17,7 +17,7 @@
                         </div>
                         <div class="address">
                             <img src="../../assets/images/address.png" alt="address">
-                            <span>{{ userInfo.province }}。{{ userInfo.city }}</span>
+                            <span>{{ userInfo.province }} {{ userInfo.city }}</span>
                         </div>
                     </div>
                     <div class="evaluate">

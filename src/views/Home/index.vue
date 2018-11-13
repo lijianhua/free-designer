@@ -42,7 +42,7 @@
                             </div>
                             <div class="address">
                                 <img src="../../assets/images/address.png" alt="address">
-                                <span>{{ item.province }}。{{ item.city }}</span>
+                                <span>{{ item.province }} {{ item.city }}</span>
                             </div>
                         </div>
                         <!-- <div class="evaluate">
