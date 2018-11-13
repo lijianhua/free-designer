@@ -39,3 +39,8 @@ export function addGalleryComment (data = {}) {
     data
   })
 }
+export function clickLike (id) {
+  return fetchUtil('/like_it/' + id + '/', {
+    method: 'POST'
+  })
+}

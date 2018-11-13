@@ -1,4 +1,4 @@
-import { getBanners, getFilters, getProduct } from '@/api/product'
+import { getBanners, getFilters, getProduct, clickLike } from '@/api/product'
 
 export default {
   namespaced: true,
@@ -52,6 +52,12 @@ export default {
       const { data } = await getProduct(dataFrom)
       commit('getMoreProducts', data.data.galleries)
       commit('getProPageInfo', data.page_info)
+    },
+    async clickLike ({ commit }, dataForm) {
+      let data = this.state.product.productList
+      await clickLike(dataForm.id)
+      data[dataForm.index].like_count += 1
+      commit('getProducts', data)
     }
   }
 }

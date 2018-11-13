@@ -29,7 +29,7 @@
                     <div class="designInfo">
                         <!-- <div class="price">本案授权 39积分/套</div> -->
                         <div class="clickGood">
-                            <img src="../../assets/images/good.png" alt="good">
+                            <img @click="clickLike({id: item.id, index: index})" src="../../assets/images/good.png" alt="good">
                             <span>{{ item.like_count }}</span>
                             <!-- <img src="../../assets/images/talk.png" alt="talk"> -->
                             <!-- <span>6</span> -->
@@ -74,7 +74,7 @@ export default {
     this.getList()
   },
   methods: {
-    ...mapActions('product', ['getBanners', 'getFilters', 'getProducts', 'getMoreProducts']),
+    ...mapActions('product', ['getBanners', 'getFilters', 'getProducts', 'getMoreProducts', 'clickLike']),
     async getList () {
       if (this.isLoadedAll) {
         this.isLoadedAll = false
@@ -156,6 +156,7 @@ export default {
       height: 438px;
       display: flex;
       justify-content: center;
+      background-color: #616161;
       img{
         height: 438px;
       }

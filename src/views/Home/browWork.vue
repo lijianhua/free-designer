@@ -65,7 +65,7 @@
                 <div class="designInfo">
                     <!-- <div class="price">本案授权 39积分/套</div> -->
                     <div class="clickGood">
-                        <img src="../../assets/images/good.png" alt="good">
+                        <img @click="clickLike({id: item.id, index: index})" src="../../assets/images/good.png" alt="good">
                         <span>{{ item.like_count }}</span>
                         <!-- <img src="../../assets/images/talk.png" alt="talk"> -->
                         <!-- <span>6</span> -->
@@ -94,7 +94,7 @@ export default {
     this.getUserInfo(this.userid)
   },
   methods: {
-    ...mapActions('home', ['getUserInfo', 'getPicture', 'getMorePicture']),
+    ...mapActions('home', ['getUserInfo', 'getPicture', 'getMorePicture', 'clickLike']),
     async getList () {
       if (this.isLoadedAll) {
         this.isLoadedAll = false
