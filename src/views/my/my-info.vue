@@ -242,7 +242,6 @@ export default {
         ...this.formData,
         career: values[0]
       })
-      this.careerVisible = false
     },
     handleSaveIntro () {
       this.introVisible = false
