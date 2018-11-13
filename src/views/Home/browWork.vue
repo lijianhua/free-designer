@@ -73,6 +73,7 @@
                 </div>
             </div>
         </mt-loadmore>
+        <div class="noData" v-show="pictureList.length == 0">暂无数据</div>
     </div>
 </template>
 

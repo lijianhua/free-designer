@@ -73,6 +73,7 @@
                 <p class="talkAbout">{{ item.comment }}</p>
             </div>
         </mt-loadmore>
+        <div class="noData" v-show="historyList.length == 0">暂无数据</div>
     </div>
 </template>
 
@@ -136,6 +137,7 @@ export default {
   left: 0;
   background-color: #ffffff;
   z-index: 10;
+  overflow-y: auto;
   .closeHeader{
     position: fixed;
     left: 0;

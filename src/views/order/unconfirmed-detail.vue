@@ -49,6 +49,7 @@
             </div>
           </router-link>
         </template>
+        <div class="noData" v-show="orderDetail.apply_records.length == 0">暂无接单人</div>
       </div>
     </div>
   </div>

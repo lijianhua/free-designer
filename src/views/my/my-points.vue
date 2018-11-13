@@ -32,6 +32,7 @@
                 <div class="num3" v-else-if="item.points_type == 5">相册积分支付</div>
               </div>
             </mt-loadmore>
+            <div class="noData" v-show="pointsList.length == 0">暂无数据</div>
           </div>
         </div>
       </mt-tab-container-item>

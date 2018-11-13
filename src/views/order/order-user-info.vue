@@ -246,7 +246,7 @@ export default {
         display: inline-block;
         width: 578px;
         height: 449px;
-        background-color: red;
+        // background-color: red;
         img {
           width: 100%;
           height: 100%;

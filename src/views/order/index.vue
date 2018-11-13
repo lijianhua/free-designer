@@ -30,6 +30,7 @@
                                 </router-link>
                             </template>
                         </mt-loadmore>
+                        <div class="noData" v-show="employerList.length == 0">暂无数据</div>
                     </div>
                 </mt-tab-container-item>
                 <mt-tab-container-item id="worker" style="height:100%">
@@ -53,6 +54,7 @@
                                 </router-link>
                             </div>
                         </mt-loadmore>
+                        <div class="noData" v-show="workerList.length == 0">暂无数据</div>
                     </div>
                 </mt-tab-container-item>
             </mt-tab-container>

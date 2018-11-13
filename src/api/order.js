@@ -69,13 +69,13 @@ export function pleaseAcceptOrder (data = {}) {
   return fetchUtil('/pay/create_order/', {
     method: 'POST',
     data
-  })
+  }, true)
 }
 
 export function deleteOrder (id) {
   return fetchUtil(`/orders/${id}/`, {
     method: 'DELETE'
-  })
+  }, true)
 }
 
 export function getQuestionListApi (id) {

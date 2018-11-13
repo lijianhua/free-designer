@@ -23,3 +23,4 @@ article,aside,footer,header,hgroup,nav,section,figure,figcaption {display: block
 .clearfix{overflow:hidden;_zoom:1;}
 a,input,textarea,button,span,li,textarea{outline:none;}
 .ellipsis{white-space: nowrap;text-overflow: ellipsis;overflow: hidden;}
+.noData{width: 100%;height: 80px;text-align: center;color: #aaa;font-size: 35px;margin-top: 40px;}

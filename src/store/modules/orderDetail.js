@@ -1,14 +1,16 @@
 import { getOrderDetail, getOrderQusetion, setOrderAnswer, acceptOrder } from '@/api/orderDetail'
-
+import { getUserQusetion } from '@/api/order'
 export default {
   namespaced: true,
   state: {
     orderDetail: {},
-    questionList: []
+    questionList: [],
+    userQuestionList: []
   },
   getters: {
     orderDetail: state => state.orderDetail,
-    questionList: state => state.questionList
+    questionList: state => state.questionList,
+    userQuestionList: state => state.userQuestionList
   },
   mutations: {
     GET_ORDERDETAIL (state, data) {
@@ -16,6 +18,9 @@ export default {
     },
     GET_QUESTION (state, data) {
       state.questionList = data.data
+    },
+    SET_USER_QUESTION_LIST (state, data) {
+      state.userQuestionList = data
     }
   },
   actions: {
@@ -32,6 +37,14 @@ export default {
     },
     async acceptOrder ({ commit }, dataForm) {
       await acceptOrder(dataForm)
+    },
+    async getUserQusetion ({ commit }, id) {
+      const res = []
+      for (let i = 0; i < 5; i++) {
+        const { data } = await getUserQusetion(id, i)
+        if (data.data.length !== 0) res.push(data.data[0])
+      }
+      commit('SET_USER_QUESTION_LIST', res)
     }
   }
 }

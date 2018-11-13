@@ -274,9 +274,11 @@ export default {
       commit('SET_ORDER_DETAIL', data.data)
     },
     async getUserQusetion ({ commit }, id) {
-      let res = await Promise.all([0, 1, 2, 3, 4].map(v => getUserQusetion(id, v)))
-      res = res.map(v => v.data.data[0])
-      console.log(res)
+      const res = []
+      for (let i = 0; i < 5; i++) {
+        const { data } = await getUserQusetion(id, i)
+        if (data.data.length !== 0) res.push(data.data[0])
+      }
       commit('SET_USER_QUESTION_LIST', res)
     },
     async pleaseAcceptOrder ({ commit }, dataForm) {
@@ -284,6 +286,9 @@ export default {
     },
     async deleteOrder ({ commit }, id) {
       await deleteOrder(id)
+      router.app.$router.push({
+        name: 'order'
+      })
     }
   }
 }

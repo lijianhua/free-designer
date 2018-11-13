@@ -94,6 +94,7 @@
                             </div>
                         </div>
                     </mt-loadmore>
+                    <div class="noData" v-show="galleryCommentList.length == 0">暂无数据</div>
                 </div>
             </div>
         </div>

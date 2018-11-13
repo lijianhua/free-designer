@@ -37,6 +37,7 @@
                     </div>
                 </div>
             </mt-loadmore>
+            <div class="noData" v-show="productList.length == 0">暂无数据</div>
         </div>
     </div>
 </template>

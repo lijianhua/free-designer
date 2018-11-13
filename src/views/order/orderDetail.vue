@@ -203,7 +203,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('orderDetail', ['orderDetail', 'questionList'])
+    ...mapGetters('orderDetail', ['orderDetail', 'questionList', 'userQuestionList'])
   },
   async created () {
     this.orderId = this.$route.params.orderid
@@ -213,9 +213,14 @@ export default {
     this.addPrice = this.orderDetail.apply_cost
     this.orderInfo = this.orderDetail.order
     await this.getOrderQusetion(this.orderId)
+    await this.getUserQusetion(this.orderDetail.id)
+    if (this.userQuestionList.length > 0) {
+      this.answerList = this.userQuestionList
+      this.overAnswer = true
+    }
   },
   methods: {
-    ...mapActions('orderDetail', ['getOrderDetail', 'getOrderQusetion', 'setOrderAnswer', 'acceptOrder']),
+    ...mapActions('orderDetail', ['getOrderDetail', 'getOrderQusetion', 'setOrderAnswer', 'acceptOrder', 'getUserQusetion']),
     beginAnswer () {
       if (this.questionList.length === 0) {
         return
@@ -266,8 +271,10 @@ export default {
       }
     },
     async submit () {
-      for (let i = 0; i < this.answerList.length; i++) {
-        await this.setOrderAnswer(this.answerList[i])
+      if (this.userQuestionList.length === 0) {
+        for (let i = 0; i < this.answerList.length; i++) {
+          await this.setOrderAnswer(this.answerList[i])
+        }
       }
       const dataForm = {
         desc: this.goodness,
