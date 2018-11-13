@@ -411,7 +411,7 @@ export default {
       }
 
       .box {
-
+        font-size: 24px;
         &.two {
           display: flex;
           align-items: center;
@@ -442,6 +442,9 @@ export default {
         opacity: 0;
       }
 
+    }
+    .mu-input {
+      font-size: 24px;
     }
   }
 }

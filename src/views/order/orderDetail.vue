@@ -148,7 +148,7 @@
                         </div>
                         <div class="item">
                             <div class="img-box">
-                                <div v-for="(item, index) in filesList" :key="index"  class="img-item">
+                                <div v-for="(item, index) in filesList" :key="index"  class="img-item" @click="fixUploadImg(index)">
                                     <img :src="item[1]" alt="">
                                 </div>
                                 <div class="img-item btn" @click="uploadImg"></div>
@@ -198,7 +198,8 @@ export default {
       filesList: [],
       overAnswer: false,
       showMore: false,
-      orderId: ''
+      orderId: '',
+      fixIndex: null
     }
   },
   computed: {
@@ -207,6 +208,9 @@ export default {
   async created () {
     this.orderId = this.$route.params.orderid
     await this.getOrderDetail(this.orderId)
+    this.filesList = this.orderDetail.works
+    this.goodness = this.orderDetail.desc
+    this.addPrice = this.orderDetail.apply_cost
     this.orderInfo = this.orderDetail.order
     await this.getOrderQusetion(this.orderId)
   },
@@ -280,6 +284,10 @@ export default {
     uploadImg () {
       this.$el.querySelector('#upload').click()
     },
+    fixUploadImg (index) {
+      this.fixIndex = index
+      this.$el.querySelector('#upload').click()
+    },
     showAnswerTime (start, end) {
       const time = (end - start) / 1000
       const hour = Math.floor(time / 3600)
@@ -314,7 +322,12 @@ export default {
           data[0][3] = 'file'
           break
       }
-      this.filesList.push(data[0])
+      if (this.fixIndex !== null) {
+        this.$set(this.filesList, this.fixIndex, data[0])
+        this.fixIndex = null
+      } else {
+        this.filesList.push(data[0])
+      }
     })
   },
   components: {
@@ -410,7 +423,7 @@ export default {
             }
             .warn{
                 padding-top: 20px;
-                font-size: 18px;
+                font-size: 20px;
                 color: #959595;
             }
         }
@@ -437,6 +450,7 @@ export default {
                 }
                 p{
                     color: #a1a1a1;
+                    font-size: 24px;
                 }
             }
             .upload-txt {
@@ -460,6 +474,9 @@ export default {
                 height: 100%;
                 opacity: 0;
             }
+        }
+        .mu-input {
+            font-size: 24px;
         }
     }
   }
