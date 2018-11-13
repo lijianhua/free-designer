@@ -11,3 +11,9 @@ export function getDemands (data = {}) {
     data
   })
 }
+export function getBanners (data = {}) {
+  return fetchUtil('/banners/', {
+    method: 'GET',
+    data
+  })
+}

@@ -1,4 +1,4 @@
-import { getFilters, getDemands } from '@/api/apply'
+import { getFilters, getDemands, getBanners } from '@/api/apply'
 
 export default {
   namespaced: true,
@@ -6,13 +6,15 @@ export default {
     filterClass: [],
     filterApply: [],
     demandsList: [],
-    demandPage: {}
+    demandPage: {},
+    bannersList: []
   },
   getters: {
     filterClass: state => state.filterClass,
     filterApply: state => state.filterApply,
     demandsList: state => state.demandsList,
-    demandPage: state => state.demandPage
+    demandPage: state => state.demandPage,
+    bannersList: state => state.bannersList
   },
   mutations: {
     getFilterInfo (state, data) {
@@ -39,6 +41,9 @@ export default {
     },
     getDemandPage (state, data) {
       state.demandPage = data
+    },
+    getBanners (state, data) {
+      state.bannersList = data
     }
   },
   actions: {
@@ -55,6 +60,13 @@ export default {
       const { data } = await getDemands(dataFrom)
       commit('getMoreDemands', data.data)
       commit('getDemandPage', data.page_info)
+    },
+    async getBanners ({ commit }) {
+      const dataFrom = {
+        from: 3
+      }
+      const { data } = await getBanners(dataFrom)
+      commit('getBanners', data)
     }
   }
 }

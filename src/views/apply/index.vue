@@ -1,8 +1,10 @@
 <template>
     <div class="apply">
-        <div class="header">
-            <img src="../../assets/images/demand_banner.png" alt="">
-        </div>
+        <mt-swipe class="swiper" :auto="4000">
+          <mt-swipe-item v-for="(item, index) in bannersList" :key="index">
+            <img :src="item.pic" alt="banner">
+          </mt-swipe-item>
+        </mt-swipe>
         <div v-if="showFilter" class="selectFilter">
             <div class="sortFilter">
                 <mu-select v-model="selectType" :label-float="true" @change="getList">
@@ -64,15 +66,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('apply', ['filterClass', 'filterApply', 'demandsList', 'demandPage'])
+    ...mapGetters('apply', ['filterClass', 'filterApply', 'demandsList', 'demandPage', 'bannersList'])
   },
   async created () {
+    this.getBanners()
     this.userId = JSON.parse(Cookie.get('user')).id
     await this.getFilterInfo()
     this.getList()
   },
   methods: {
-    ...mapActions('apply', ['getFilterInfo', 'getDemandsList', 'getMoreDemands']),
+    ...mapActions('apply', ['getFilterInfo', 'getDemandsList', 'getMoreDemands', 'getBanners']),
     async getList () {
       if (this.isLoadedAll) {
         this.isLoadedAll = false
