@@ -32,9 +32,23 @@ export function createOrderApi (data = {}) {
   })
 }
 
+export function editOrderApi (id, data = {}) {
+  return fetchUtil(`/orders/${id}/`, {
+    method: 'PATCH',
+    data
+  })
+}
+
 export function createQuestionApi (id, data = {}) {
   return fetchUtil(`/orders/${id}/questions/`, {
     method: 'POST',
+    data
+  })
+}
+
+export function editQuestionApi (id, qid, data = {}) {
+  return fetchUtil(`/orders/${id}/questions/${qid}/`, {
+    method: 'PATCH',
     data
   })
 }
@@ -50,14 +64,20 @@ export function getUserInfoApi (id) {
 export function getUserQusetion (id, questionId) {
   return fetchUtil(`/apply_records/${id}/answers/?order_question=${questionId}`)
 }
+
 export function pleaseAcceptOrder (data = {}) {
   return fetchUtil('/pay/create_order/', {
     method: 'POST',
     data
   })
 }
+
 export function deleteOrder (id) {
   return fetchUtil(`/orders/${id}/`, {
     method: 'DELETE'
   })
+}
+
+export function getQuestionListApi (id) {
+  return fetchUtil(`/orders/${id}/questions/`)
 }

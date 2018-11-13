@@ -8,8 +8,12 @@ import {
   getOrderDetailApi,
   getUserQusetion,
   pleaseAcceptOrder,
-  deleteOrder
+  deleteOrder,
+  getQuestionListApi,
+  editQuestionApi,
+  editOrderApi
 } from '@/api/order'
+import { Toast } from 'mint-ui'
 
 const defaultListPagination = {
   order_by: 'created_on',
@@ -42,6 +46,7 @@ export default {
       d: '',
       e: ''
     }, // 问题
+    questionEdit: [], // 待编辑的问题列表
     userQuestionList: {}, // 用户答题列表
     projectFiles: [], // 处理过的项目资料 =>formData.extra_resource
     dynamicInfo: {}, // 项目需求详情
@@ -130,11 +135,38 @@ export default {
     },
     SET_USER_QUESTION_LIST (state, v) {
       state.userQuestionList = v
+    },
+    SET_FORM_DATA (state, v) {
+      state.formData = v.formData
+      state.dynamicInfo = v.dynamicInfo
+    },
+    SET_QUESTION_LIST (state, v) {
+      if (!v) {
+        state.question = {
+          a: '',
+          b: '',
+          c: '',
+          d: '',
+          e: ''
+        }
+        state.questionEdit = []
+        return
+      }
+      state.question = Object.assign({}, {
+        a: v[0].question,
+        b: v[1].question,
+        c: v[2].question,
+        d: v[3].question,
+        e: v[4].question
+      })
+      state.questionEdit = v
     }
   },
   actions: {
     async getCategory ({ commit }) {
       const { data } = await getCategoryApi()
+
+      commit('SET_QUESTION_LIST')
       commit('SET_CATEGORY', data)
     },
     async getSuggestCost ({ commit }, v) {
@@ -181,8 +213,21 @@ export default {
       }
       commit('SET_WORKER_LIST', data)
     },
+    async getQuestionList ({ commit }, orderId) {
+      const { data } = await getQuestionListApi(orderId)
+      if (data.data.length) {
+        commit('SET_QUESTION_LIST', data.data.sort((a, b) => a.qid - b.qid))
+      }
+    },
     async submit ({ commit, state }) {
-      const { formData, question, dynamicInfo, projectFiles } = state
+      const { formData, question, questionEdit, dynamicInfo, projectFiles } = state
+      if ((Number(formData.pub_cost) + Number(formData.fee)) < Number(formData.system_cost)) {
+        Toast({
+          message: '最终报价必须大于或等于最终报价',
+          duration: 5000
+        })
+        return
+      }
 
       const params = Object.assign({}, formData, {
         deadline: new Date(formData.deadline).toLocaleDateString().split('/').join('-'),
@@ -194,15 +239,27 @@ export default {
         }).join()
       })
 
-      const { data } = await createOrderApi(params)
-      await Promise.all([
-        Object.keys(question).map((v, i) =>
-          createQuestionApi(data.id, {
-            qid: i,
-            question: question[v]
-          })
-        )
-      ])
+      if (formData.id) {
+        await editOrderApi(formData.id, Object.assign({}, {
+          fee: Number(formData.fee),
+          desc: formData.desc
+        }))
+        await Promise.all([
+          questionEdit.map((v, i) => editQuestionApi(formData.id, v.qid, {
+            question: question[Object.keys(question)[i]]
+          }))
+        ])
+      } else {
+        const { data } = await createOrderApi(params)
+        await Promise.all([
+          Object.keys(question).map((v, i) =>
+            createQuestionApi(data.id, {
+              qid: i,
+              question: question[v]
+            })
+          )
+        ])
+      }
     },
     async getOrderDetail ({ commit }, id) {
       const { data } = await getOrderDetailApi(id)
