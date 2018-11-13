@@ -14,6 +14,7 @@ import {
   editOrderApi
 } from '@/api/order'
 import { Toast } from 'mint-ui'
+import router from '@/router'
 
 const defaultListPagination = {
   order_by: 'created_on',
@@ -251,6 +252,7 @@ export default {
         ])
       } else {
         const { data } = await createOrderApi(params)
+        formData.id = data.id
         await Promise.all([
           Object.keys(question).map((v, i) =>
             createQuestionApi(data.id, {
@@ -260,6 +262,12 @@ export default {
           )
         ])
       }
+      router.app.$router.push({
+        name: 'unconfirmed-detail',
+        params: {
+          id: formData.id
+        }
+      })
     },
     async getOrderDetail ({ commit }, id) {
       const { data } = await getOrderDetailApi(id)

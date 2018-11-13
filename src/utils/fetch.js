@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Toast } from 'mint-ui'
+import Loading from 'muse-ui-loading'
 
 const instance = axios.create({
   baseURL: '/api',
@@ -45,7 +46,7 @@ instance.interceptors.response.use(
   }
 )
 
-export default function fetchUtil (name, options = {}) {
+export default function fetchUtil (name, options = {}, isLoading = false) {
   const {
     method = 'GET',
     data = {}
@@ -62,9 +63,20 @@ export default function fetchUtil (name, options = {}) {
   opt['url'] = name
   opt['method'] = method
 
+  let loading = null
+  if (isLoading) {
+    loading = Loading()
+  }
+
   try {
     return instance(opt)
   } catch (error) {
     throw error
+  } finally {
+    if (isLoading) {
+      setTimeout(() => {
+        loading.close()
+      }, 100)
+    }
   }
 }

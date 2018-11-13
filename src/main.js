@@ -12,6 +12,8 @@ import 'mint-ui/lib/style.css'
 import 'lib-flexible/flexible.js'
 import 'muse-ui/dist/muse-ui.css'
 import './assets/css/resetUi.scss' // 修改muse-ui mint-ui 默认样式
+import Loading from 'muse-ui-loading'
+import 'muse-ui-loading/dist/muse-ui-loading.css' // load css
 
 import delay from './utils/delay'
 import hook from './router/hook'
@@ -19,6 +21,7 @@ console.log(13911519564)
 Vue.use(delay)
 Vue.use(MintUI)
 Vue.use(MuseUI)
+Vue.use(Loading)
 
 sync(store, router)
 hook(router)

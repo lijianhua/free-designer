@@ -29,7 +29,7 @@ export function createOrderApi (data = {}) {
   return fetchUtil('/orders/', {
     method: 'POST',
     data
-  })
+  }, true)
 }
 
 export function editOrderApi (id, data = {}) {
