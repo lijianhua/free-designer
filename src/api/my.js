@@ -40,3 +40,39 @@ export function getPayListApi (data = {}) {
     data
   })
 }
+
+export function getWorkDetail (data = {}) {
+  return fetchUtil(`/users/${data.user}/gallery/${data.gallery}/`)
+}
+
+export function getWorkImage (data = {}) {
+  return fetchUtil(`/users/${data.user}/gallery/${data.gallery}/image/`)
+}
+
+export function fixWorkDetail (dataForm = {}) {
+  const data = {
+    name: dataForm.name,
+    desc: dataForm.desc
+  }
+  return fetchUtil(`/gallery/${dataForm.galleryid}/`, {
+    method: 'PATCH',
+    data
+  }, true)
+}
+
+export function addWorkImage (dataForm = {}) {
+  const data = {
+    name: dataForm.name,
+    image: dataForm.image
+  }
+  return fetchUtil(`/gallery/${dataForm.galleryid}/image/`, {
+    method: 'POST',
+    data
+  })
+}
+
+export function deleteWorkImage (data = {}) {
+  return fetchUtil(`/gallery/${data.galleryid}/image/${data.imageid}/`, {
+    method: 'DELETE'
+  })
+}

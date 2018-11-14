@@ -278,7 +278,7 @@ export default {
       }
       const dataForm = {
         desc: this.goodness,
-        apply_cost: this.addPrice,
+        apply_cost: Number(this.addPrice),
         works: this.filesList,
         aid: this.orderDetail.id,
         oid: this.orderDetail.order.id

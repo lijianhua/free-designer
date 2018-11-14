@@ -146,6 +146,7 @@ export default {
     height: 113px;
     border-bottom: 3px solid #ededed;
     background-color: #fff;
+    z-index: 2;
     img{
         width: 22px;
         height: 41px;

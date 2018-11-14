@@ -55,11 +55,10 @@ export default {
     },
     showDetail (item) {
       this.$router.push({
-        name: 'productDetail',
+        name: 'MyEditWork',
         params: {
           userid: item.uid,
-          galleryid: item.id,
-          isMy: true
+          galleryid: item.id
         }
       })
     }

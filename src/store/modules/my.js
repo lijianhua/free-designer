@@ -1,4 +1,4 @@
-import { updateUserInfoApi, changePasswordApi, getWorkListApi, getOrderListApi, getPayListApi } from '@/api/my'
+import { updateUserInfoApi, changePasswordApi, getWorkListApi, getOrderListApi, getPayListApi, getWorkDetail, getWorkImage, fixWorkDetail, addWorkImage, deleteWorkImage } from '@/api/my'
 import Cookie from 'js-cookie'
 
 const defaultWorkPagination = {
@@ -17,7 +17,9 @@ export default {
     sendOrderList: [], // 发单已完成列表
     applyOrderList: [], // 接单已完成列表
     payList: [], // 支付选项列表
-    pointsFormData: [] // 提现表单
+    pointsFormData: [], // 提现表单
+    workDetail: {}, // 编辑作品
+    workImages: []
   },
   getters: {
     formData: state => state.formData,
@@ -26,7 +28,9 @@ export default {
     sendOrderList: state => state.sendOrderList,
     applyOrderList: state => state.applyOrderList,
     payList: state => state.payList,
-    pointsFormData: state => state.pointsFormData
+    pointsFormData: state => state.pointsFormData,
+    workDetail: state => state.workDetail,
+    workImages: state => state.workImages
   },
   mutations: {
     SET_FORM_DATA (state, v) {
@@ -47,6 +51,12 @@ export default {
     },
     SET_PAY_LIST (state, v) {
       state.payList = v
+    },
+    SET_WORK_DETAIL (state, v) {
+      state.workDetail = v
+    },
+    SET_WORK_IMAGES (state, v) {
+      state.workImages = v.data
     }
   },
   actions: {
@@ -100,7 +110,23 @@ export default {
     async getPayList ({ commit }) {
       const { data } = await getPayListApi()
       commit('SET_PAY_LIST', data.data)
+    },
+    async getWorkDetail ({ commit }, dataForm) {
+      const { data } = await getWorkDetail(dataForm)
+      commit('SET_WORK_DETAIL', data)
+    },
+    async getWorkImage ({ commit }, dataForm) {
+      const { data } = await getWorkImage(dataForm)
+      commit('SET_WORK_IMAGES', data)
+    },
+    async fixWorkDetail ({ commit }, dataForm) {
+      await fixWorkDetail(dataForm)
+    },
+    async addWorkImage ({ commit }, dataForm) {
+      await addWorkImage(dataForm)
+    },
+    async deleteWorkImage ({ commit }, dataForm) {
+      await deleteWorkImage(dataForm)
     }
-
   }
 }

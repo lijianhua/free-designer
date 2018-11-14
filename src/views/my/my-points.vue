@@ -39,7 +39,7 @@
       <mt-tab-container-item id="putForward">
         <div class="tab-main" style="overflow:scroll;">
           <div class="tab-main-header">
-            <p>可提现积分<span style="color:#4195f7;">1200</span>，折换成人民币¥<span style="color:#ff0000;">1200</span></p>
+            <p>可提现积分<span style="color:#4195f7;">{{userInfo.available_cash_points}}</span>，折换成人民币¥<span style="color:#ff0000;">{{userInfo.available_cash_points}}</span></p>
             <p>(1积分=1人民币，满100积分可提现）</p>
           </div>
           <div class="form">
@@ -100,7 +100,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('points', ['pointsList', 'pointsFormData'])
+    ...mapGetters('points', ['pointsList', 'pointsFormData']),
+    ...mapGetters(['userInfo'])
   },
   methods: {
     ...mapActions('points', ['getPointsList', 'pointsSubmit']),

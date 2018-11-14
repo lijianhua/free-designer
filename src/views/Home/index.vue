@@ -24,7 +24,7 @@
             <div class="sortFilter">
                 <span>筛选</span>
                 <mu-select v-if="showFilter" v-model="selectFilter" @change="getList">
-                    <mu-option v-for="(option, index) in filtersList" :key="index" :label="option.name" :value="option.id"></mu-option>
+                    <mu-option v-for="(option, index) in rightFilter" :key="index" :label="option.name" :value="option.id"></mu-option>
                 </mu-select>
             </div>
         </div>
@@ -100,7 +100,11 @@ export default {
       selectSort: 'apply_count',
       selectFilter: '',
       showFilter: true,
-      isLoadedAll: false
+      isLoadedAll: false,
+      rightFilter: [{
+        name: '全部',
+        id: null
+      }]
     }
   },
   computed: {
@@ -109,7 +113,8 @@ export default {
   async created () {
     this.getBanners()
     await this.getFilters()
-    this.selectFilter = this.filtersList[0].id
+    this.rightFilter = this.rightFilter.concat(this.filtersList)
+    this.selectFilter = this.rightFilter[0].id
     this.getList()
   },
   methods: {

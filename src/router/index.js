@@ -32,6 +32,8 @@ const orderDetail = () => import('@/views/order/orderDetail')
 const My = () => import('@/views/my/index')
 // 我的作品
 const MyWork = () => import('@/views/my/my-work')
+// 编辑我的作品
+const MyEditWork = () => import('@/views/my/my-edit-work')
 // 实名认证
 const MyCertificationResult = () => import('@/views/my/my-certification-result')
 // 企业说明
@@ -113,6 +115,12 @@ export default new Router({
           name: 'my-work',
           path: '/my-work',
           component: MyWork
+        },
+        {
+          name: 'MyEditWork',
+          path: '/MyEditWork/:userid/:galleryid',
+          props: true,
+          component: MyEditWork
         },
         {
           name: 'my-certification-result',
