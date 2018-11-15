@@ -166,3 +166,13 @@
         text-align: center;
     }
 }
+
+
+.mint-msgbox-content {
+    max-height: 500PX;
+    overflow-y: scroll;
+
+    p,h3 {
+        text-align: left;
+    }
+}
