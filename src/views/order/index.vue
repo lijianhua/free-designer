@@ -1,7 +1,7 @@
 <template>
     <div class="order-container">
         <div class="header">
-            <img src="../../assets/images/banner/banner1.png" alt="">
+            <img src="../../assets/images/banner/orderBanner.png" alt="">
         </div>
         <div class="tab-switch">
             <div class="btn" :class="{active:tabActive === 'employer'}" @click="tabActive = 'employer'">我是雇主</div>
