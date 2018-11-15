@@ -47,6 +47,9 @@ const MyHistoryOrder = () => import('@/views/my/my-history-order')
 // 积分
 const MyPoints = () => import('@/views/my/my-points')
 
+// 活动页
+const active = () => import('@/views/active')
+
 Vue.use(Router)
 
 export default new Router({
@@ -169,6 +172,11 @@ export default new Router({
           path: '/orderDetail/:id',
           props: true,
           component: orderDetail
+        },
+        {
+          name: 'active',
+          path: '/active/',
+          component: active
         }
       ]
     }
