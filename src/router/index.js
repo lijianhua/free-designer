@@ -169,7 +169,7 @@ export default new Router({
         },
         {
           name: 'orderDetail',
-          path: '/orderDetail/:id',
+          path: '/orderDetail/:orderid',
           props: true,
           component: orderDetail
         },
