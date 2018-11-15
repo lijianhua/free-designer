@@ -52,6 +52,12 @@
                     <p>积分管理</p>
                 </router-link>
             </div>
+            <div class="row">
+                <div class="item" @click="logout">
+                    <img src="../../assets/images/my/ico_logout.png" alt="">
+                    <p>注销登录</p>
+                </div>
+            </div>
             <!-- <router-link class="item" :to="{name:'my-work'}">
                 <img src="../../assets/images/my/ico_msg.png" alt="">
                 <p>我的消息</p>
@@ -65,9 +71,16 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import Cookie from 'js-cookie'
 export default {
   computed: {
     ...mapGetters(['userInfo'])
+  },
+  methods: {
+    logout () {
+      Cookie.remove('user')
+      location.reload()
+    }
   }
 }
 </script>
@@ -140,7 +153,7 @@ export default {
         width: 100%;
         margin-bottom: 50px;
 
-        >a {
+        .item {
             text-align: center;
             display: flex;
             flex-direction: column;
