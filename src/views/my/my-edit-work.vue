@@ -17,7 +17,7 @@
         <div class="uploadimgBox">
             <div class="title">上传作品:</div>
             <div class="item">
-                <div class="img-box">
+                <div class="img-box" v-viewer="{navbar:false,title:false,toolbar:false}">
                     <div v-for="(item, index) in filesList" :key="index"  class="img-item">
                         <img :src="item.small_image" alt="">
                         <span class="delete" @click="deleteImg(index, item.gallery, item.id)">x</span>
