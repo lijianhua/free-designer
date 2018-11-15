@@ -1,7 +1,7 @@
 <template>
     <div class="browWork">
         <div class="closeHeader">
-            <img @click="$router.back()" src="../../assets/images/back.png" alt="back">
+            <img @click="$router.push({name: 'home'})" src="../../assets/images/back.png" alt="back">
             <h3>作品浏览页</h3>
         </div>
         <div class="desingerInfo">
@@ -83,7 +83,8 @@ export default {
   data () {
     return {
       isLoadedAll: false,
-      userid: ''
+      userid: '',
+      firstIn: true
     }
   },
   computed: {
@@ -92,6 +93,7 @@ export default {
   created () {
     this.userid = this.$route.params.userid
     this.getUserInfo(this.userid)
+    this.getList()
   },
   methods: {
     ...mapActions('home', ['getUserInfo', 'getPicture', 'getMorePicture', 'clickLike']),
@@ -103,15 +105,21 @@ export default {
         userid: this.userid
       }
       await this.getPicture(dataForm)
+      if (this.firstIn) {
+        this.firstIn = false
+      }
       this.$refs.loadmore.onTopLoaded()
     },
     async load () {
-      if (this.picturePageInfo.page + 1 > this.picturePageInfo.total_page) {
-        this.isLoadedAll = true
+      if (this.firstIn) {
         return
       }
       let dataForm = {
         userid: this.userid
+      }
+      if (this.picturePageInfo.page + 1 > this.picturePageInfo.total_page) {
+        this.isLoadedAll = true
+        return
       }
       if (this.picturePageInfo.page) {
         dataForm.page = this.picturePageInfo.page + 1

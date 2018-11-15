@@ -5,19 +5,20 @@
             <h3>作品详情</h3>
         </div>
         <div class="detailContainer">
-            <div v-if="!isMy" class="desingerInfo">
+            <div class="desingerInfo">
                 <div class="header">
                     <div class="header-img">
-                        <img :src="userInfo.thumb" alt="avatar">
+                        <img :src="userDetail.avatar" alt="avatar">
                     </div>
                     <div class="ownInfo">
                         <div>
-                            <span class="name">{{ userInfo.name }}</span>
-                            <span class="workExperience">{{ userInfo.career }}年工作经验</span>
+                            <span class="name">{{ userDetail.name }}</span>
+                            <span class="workExperience">{{ userDetail.career }}年工作经验</span>
                         </div>
-                        <div class="address">
-                            <img src="../../assets/images/address.png" alt="address">
-                            <span>{{ userInfo.province }} {{ userInfo.city }}</span>
+                        <div v-if="userDetail.role" class="skillSort">
+                            <span v-for="(childItem, idx) in userDetail.role.split(',')" :key="idx">
+                                【{{ childItem }}】
+                            </span>
                         </div>
                     </div>
                     <div class="evaluate">
@@ -30,14 +31,16 @@
                         <img src="../../assets/images/homestart.png" alt="homestart"> -->
                     </div>
                 </div>
-                <div v-if="userInfo.role" class="skill">
-                    <div class="skillSort">
-                        <span v-for="(childItem, idx) in userInfo.role.split(',')" :key="idx">
-                            【{{ childItem }}】
-                        </span>
+                <div class="skill">
+                    <div class="title">
+                        <span>{{ galleryUserInfo.name }}</span>
+                        <div class="talk-good">
+                            <img @click="clickLike(galleryUserInfo.id)" src="../../assets/images/good.png" alt="good">
+                            <span>{{ galleryUserInfo.like_count }}</span>
+                        </div>
                     </div>
                     <div class="doSomething">
-                        <p>{{ userInfo.desc }}</p>
+                        <p>{{ galleryUserInfo.desc }}</p>
                     </div>
                 </div>
             </div>
@@ -83,14 +86,16 @@
                                 <img :src="item.user_avatar" alt="avatar">
                             </div>
                             <div class="talk-content">
-                                <p class="talkerName">{{ item.username }}</p>
-                                <div class="talkerContent">
-                                    <p>{{ item.content }}</p>
-                                    <!-- <div class="talk-good">
-                                        <img src="../../assets/images/good.png" alt="good">
-                                        <span>88</span>
-                                    </div> -->
+                                <div>
+                                    <p class="talkerName">{{ item.username }}</p>
+                                    <div class="talkerContent">
+                                        <p>{{ item.content }}</p>
+                                    </div>
                                 </div>
+                                <!-- <div class="talk-good">
+                                    <img src="../../assets/images/good.png" alt="good">
+                                    <span>{{ item.like_count }}</span>
+                                </div> -->
                             </div>
                         </div>
                     </mt-loadmore>
@@ -98,7 +103,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="!isMy" class="DetailFooter">
+        <div class="DetailFooter">
             <input type="text" placeholder="添加评论" v-model="commentValue">
             <img @click="addComment" src="../../assets/images/sendto.png" alt="sendto">
         </div>
@@ -111,31 +116,32 @@ export default {
   data () {
     return {
       allPicture: 0,
-      nowDicator: 1,
+      nowDicator: 0,
       isLoadedAll: false,
       commentValue: '',
-      isMy: false
+      firstIn: true
     }
   },
   computed: {
-    ...mapGetters('productDetail', ['userInfo', 'galleryList', 'galleryCommentList', 'commentPageInfo'])
+    ...mapGetters('productDetail', ['galleryUserInfo', 'galleryList', 'galleryCommentList', 'commentPageInfo', 'userDetail']),
+    ...mapGetters(['userInfo'])
   },
   async created () {
     this.userid = this.$route.params.userid
     this.galleryid = this.$route.params.galleryid
-    if (this.$route.params.isMy) {
-      this.isMy = true
-    }
     const dataForm = {
       user: this.userid,
       gallery: this.galleryid
     }
     await this.getUserInfo(dataForm)
     await this.getGalleryList(dataForm)
+    this.getUserDetail(this.userid)
     this.allPicture = this.galleryList.length
+    this.nowDicator = this.galleryList.length > 0 ? 1 : 0
+    this.getList()
   },
   methods: {
-    ...mapActions('productDetail', ['getUserInfo', 'getGalleryList', 'getCommentList', 'getMoreComment', 'addGalleryComment']),
+    ...mapActions('productDetail', ['getUserInfo', 'getGalleryList', 'getCommentList', 'getMoreComment', 'addGalleryComment', 'getUserDetail', 'clickLike']),
     handleChange (index) {
       this.nowDicator = index + 1
     },
@@ -147,10 +153,16 @@ export default {
         user: this.userid,
         gallery: this.galleryid
       }
+      if (this.firstIn) {
+        this.firstIn = false
+      }
       await this.getCommentList(dataForm)
       this.$refs.loadmore.onTopLoaded()
     },
     async load () {
+      if (this.firstIn) {
+        return
+      }
       if (this.commentPageInfo.page + 1 > this.commentPageInfo.total_page) {
         this.isLoadedAll = true
         return
@@ -167,7 +179,7 @@ export default {
     },
     async addComment () {
       const dataFrom = {
-        uid: this.userid,
+        uid: this.userInfo.id,
         content: this.commentValue,
         gallery: this.galleryid
       }
@@ -214,13 +226,13 @@ export default {
     height: calc(100% - 113px - 67px);
     overflow-y: auto;
     .desingerInfo{
-        padding: 30px 50px 60px 50px;
-        background-color: #f0f0f0;
         border-bottom: 5px solid #ffffff;
         .header{
             display: flex;
             align-items: center;
             position: relative;
+            background-color: #f0f0f0;
+            padding: 15px 50px 20px 50px;
             .header-img{
                 width: 120px;
                 height: 120px;
@@ -238,21 +250,12 @@ export default {
                     margin-right: 35px;
                 }
                 .workExperience{
-                    font-size: 18px;
+                    font-size: 24px;
                     color: #808080;
                 }
-                .address{
-                    img{
-                        width: 17px;
-                        height: 20px;
-                        margin-right: 15px;
-                        vertical-align: middle;
-                    }
-                    span{
-                        font-size: 18px;
-                        color: #808080;
-                        line-height: 70px;
-                    }
+                .skillSort{
+                    margin-top: 20px;
+                    color: #4195f7;
                 }
             }
             .evaluate{
@@ -285,13 +288,33 @@ export default {
             }
         }
         .skill{
-            margin-top: 30px;
+            background-color: #f0f0f0;
+            padding: 15px 50px 20px 50px;
+            margin-top: 10px;
             .doSomething{
                 margin-top: 10px;
                 p{
                     font-size: 20px;
                     color: #808080;
                     line-height: 35px;
+                }
+            }
+            .title{
+                display: flex;
+                justify-content: space-between;
+            }
+            .talk-good{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                img{
+                    width: 27px;
+                    height: 27px;
+                }
+                span{
+                    color: #808080;
+                    font-size: 24px;
+                    margin-left: 10px;
                 }
             }
         }
@@ -326,6 +349,7 @@ export default {
             .swiper-product{
                 width: 100%;
                 height: 440px;
+                background-color: #616161;
                 img{
                     height: 100%;
                     display: block;
@@ -362,24 +386,24 @@ export default {
         }
         .talk{
             .talkBox{
-                margin-top: 20px;
+                margin-top: 40px;
+                display: flex;
                 .talk-headImg{
-                    display: block;
-                    width: 66px;
-                    height: 66px;
+                    width: 77px;
+                    height: 77px;
                     border-radius: 50%;
                     overflow: hidden;
-                    float: left;
+                    margin-right: 30px;
                     img{
                         width: 100%;
                         height: 100%;
                     }
                 }
                 .talk-content{
-                    display: inline-block;
-                    width: 570px;
-                    font-size: 20px;
-                    margin-left: 14px;
+                    display: flex;
+                    width: 543px;
+                    font-size: 24px;
+                    align-items: flex-start;
                     .talkerName{
                         color: #848484;
                         margin-bottom: 14px;
@@ -387,29 +411,23 @@ export default {
                     .talkerContent{
                         p{
                             line-height: 32px;
-                            width: 490px;
+                            width: 450px;
                             display: inline-block;
+                            word-wrap: break-word;
                         }
-                        .talk-good{
-                            display: inline-block;
+                    }
+                    .talk-good{
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        img{
+                            width: 27px;
+                            height: 27px;
+                        }
+                        span{
+                            color: #808080;
+                            font-size: 24px;
                             margin-left: 10px;
-                            width: 70px;
-                            position: relative;
-                            vertical-align: top;
-                            img{
-                                width: 27px;
-                                height: 27px;
-                            }
-                            span{
-                                color: #8a96ba;
-                                font-size: 16px;
-                                height: 27px;
-                                margin-left: 2px;
-                                line-height: 5px;
-                                position: absolute;
-                                top: 0px;
-                                left: 27px;
-                            }
                         }
                     }
                 }

@@ -1,22 +1,24 @@
-import { getPicUser, getGalleryPic, getGalleryComment, addGalleryComment } from '@/api/product'
+import { getPicUser, getGalleryPic, getGalleryComment, addGalleryComment, getUserDetail, clickLike } from '@/api/product'
 
 export default {
   namespaced: true,
   state: {
-    userInfo: {},
+    galleryUserInfo: {},
     galleryList: [],
     galleryCommentList: [],
-    commentPageInfo: {}
+    commentPageInfo: {},
+    userDetail: {}
   },
   getters: {
-    userInfo: state => state.userInfo,
+    galleryUserInfo: state => state.galleryUserInfo,
     galleryList: state => state.galleryList,
     galleryCommentList: state => state.galleryCommentList,
-    commentPageInfo: state => state.commentPageInfo
+    commentPageInfo: state => state.commentPageInfo,
+    userDetail: state => state.userDetail
   },
   mutations: {
     getUserInfo (state, data) {
-      state.userInfo = data
+      state.galleryUserInfo = data
     },
     getGalleryList (state, data) {
       state.galleryList = data
@@ -29,6 +31,9 @@ export default {
     },
     getGalleryPage (state, data) {
       state.commentPageInfo = data
+    },
+    userDetail (state, data) {
+      state.userDetail = data
     }
   },
   actions: {
@@ -52,6 +57,16 @@ export default {
     },
     async addGalleryComment ({ commit }, dataFrom) {
       await addGalleryComment(dataFrom)
+    },
+    async getUserDetail ({ commit }, user) {
+      const { data } = await getUserDetail(user)
+      commit('userDetail', data)
+    },
+    async clickLike ({ commit }, id) {
+      let data = this.state.productDetail.galleryUserInfo
+      await clickLike(id)
+      data.like_count += 1
+      commit('getUserInfo', data)
     }
   }
 }

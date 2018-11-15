@@ -194,7 +194,7 @@ export default {
             }
             .time{
               line-height: 40px;
-              font-size: 14px;
+              font-size: 20px;
               color: #758fa9;
               span{
                 margin-right: 10px;
@@ -202,7 +202,7 @@ export default {
             }
             .info{
               line-height: 60px;
-              font-size: 14px;
+              font-size: 24px;
               padding: 20px 0;
               color: #758fa9;
               span{
@@ -226,9 +226,11 @@ export default {
             }
             .name{
               width: 120px;
-              font-size: 22px;
+              line-height: 30px;
+              font-size: 30px;
               position: absolute;
               bottom: 30px;
+              text-align: center;
             }
           }
         }
