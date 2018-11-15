@@ -1,7 +1,7 @@
 <template>
     <div class="designerDetail">
         <div class="closeHeader">
-            <img @click="$router.back()" src="../../assets/images/back.png" alt="back">
+            <img @click="$router.push({name: 'home'})" src="../../assets/images/back.png" alt="back">
             <h3>工作者详情</h3>
         </div>
         <div class="desingerInfo">
@@ -83,7 +83,8 @@ export default {
   data () {
     return {
       isLoadedAll: false,
-      userid: ''
+      userid: '',
+      firstIn: true
     }
   },
   computed: {
@@ -92,6 +93,7 @@ export default {
   created () {
     this.userid = this.$route.params.userid
     this.getUserInfo(this.userid)
+    this.getList()
   },
   methods: {
     ...mapActions('home', ['getUserInfo', 'getHistory', 'getMoreHistory']),
@@ -107,16 +109,22 @@ export default {
         status: 'finished'
       }
       await this.getHistory(dataFrom)
+      if (this.firstIn) {
+        this.firstIn = false
+      }
       this.$refs.loadmore.onTopLoaded()
     },
     async load () {
-      if (this.historyPageInfo.page + 1 > this.historyPageInfo.total_page) {
-        this.isLoadedAll = true
+      if (this.firstIn) {
         return
       }
       let dataFrom = {
         user: this.userid,
         status: 'finished'
+      }
+      if (this.historyPageInfo.page + 1 > this.historyPageInfo.total_page) {
+        this.isLoadedAll = true
+        return
       }
       if (this.historyPageInfo.page) {
         dataFrom.page = this.historyPageInfo.page + 1

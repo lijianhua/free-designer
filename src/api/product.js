@@ -44,3 +44,8 @@ export function clickLike (id) {
     method: 'POST'
   })
 }
+export function getUserDetail (data) {
+  return fetchUtil('/users/' + data, {
+    method: 'GET'
+  })
+}

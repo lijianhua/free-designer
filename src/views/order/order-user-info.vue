@@ -16,7 +16,6 @@
               <div class="integral">议价：{{userInfo.apply_cost}}积分</div>
             </div>
             <div>
-              <div class="address">{{userInfo.user.city}} {{userInfo.user.province}}</div>
               <div class="exp">{{userInfo.user.career}}年工作经验</div>
             </div>
             <div class="skill">
@@ -294,9 +293,6 @@ export default {
           .integral {
             font-weight: bold;
             color: #ff0000;
-          }
-          .address {
-            color: #808080;
           }
           .exp {
             color: #808080;

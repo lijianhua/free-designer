@@ -15,26 +15,32 @@
             <div class="sortFilter">
                 <span>筛选</span>
                 <mu-select v-if="showFilter" v-model="selectFilter" @change="getList">
-                    <mu-option v-for="(option, index) in filtersList" :key="index" :label="option.name" :value="option.name"></mu-option>
+                    <mu-option v-for="(option, index) in rightFilter" :key="index" :label="option.name" :value="option.name"></mu-option>
                 </mu-select>
             </div>
         </div>
         <div class="productBox">
             <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
                 <div class="designBox" v-for="(item, index) in productList" :key="index">
-                    <div class="title">{{ item.name }}</div>
+                    <div class="designHeader">
+                      <div class="title">{{ item.name }}</div>
+                      <div class="clickGood">
+                          <img @click="clickLike({id: item.id, index: index})" src="../../assets/images/good.png" alt="good">
+                          <span>{{ item.like_count }}</span>
+                      </div>
+                    </div>
                     <div class="designImg" @click="showDetail(item)">
                         <img :src="item.thumb" alt="designImg">
                     </div>
-                    <div class="designInfo">
-                        <!-- <div class="price">本案授权 39积分/套</div> -->
+                    <!-- <div class="designInfo">
+                        <div class="price">本案授权 39积分/套</div>
                         <div class="clickGood">
                             <img @click="clickLike({id: item.id, index: index})" src="../../assets/images/good.png" alt="good">
                             <span>{{ item.like_count }}</span>
-                            <!-- <img src="../../assets/images/talk.png" alt="talk"> -->
-                            <!-- <span>6</span> -->
+                            <img src="../../assets/images/talk.png" alt="talk">
+                            <span>6</span>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </mt-loadmore>
             <div class="noData" v-show="productList.length == 0">暂无数据</div>
@@ -60,7 +66,10 @@ export default {
       selectSort: 'view_count',
       selectFilter: '',
       showFilter: false,
-      isLoadedAll: false
+      isLoadedAll: false,
+      rightFilter: [{
+        name: '全部'
+      }]
     }
   },
   computed: {
@@ -69,7 +78,8 @@ export default {
   async created () {
     this.getBanners()
     await this.getFilters()
-    this.selectFilter = this.filtersList[0].name
+    this.rightFilter = this.rightFilter.concat(this.filtersList)
+    this.selectFilter = this.rightFilter[0].name
     this.showFilter = true
     this.getList()
   },
@@ -80,7 +90,7 @@ export default {
         this.isLoadedAll = false
       }
       const dataFrom = {
-        role: this.selectFilter,
+        scate: this.selectFilter === '全部' ? 'All' : this.selectFilter,
         sort_by: this.selectSort
       }
       await this.getProducts(dataFrom)
@@ -96,7 +106,7 @@ export default {
       }
       const dataFrom = {
         page: this.proPageInfo.page + 1,
-        role: this.selectFilter,
+        scate: this.selectFilter === '全部' ? 'All' : this.selectFilter,
         sort_by: this.selectSort
       }
       await this.getMoreProducts(dataFrom)
@@ -146,6 +156,25 @@ export default {
   }
   .designBox{
     border-bottom: 3px solid #ebebeb;
+    .designHeader{
+      padding: 0 15px;
+      display: flex;
+      justify-content: space-between;
+      .clickGood{
+        display: flex;
+        align-items: center;
+        img{
+            width: 26px;
+            height: 26px;
+        }
+        span{
+            margin-left: 15px;
+            margin-right: 50px;
+            color: #797979;
+            font-size: 26px;
+        }
+      }
+    }
     .title{
         padding: 0 15px;
         line-height: 58px;

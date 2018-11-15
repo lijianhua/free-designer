@@ -37,12 +37,13 @@
                         </div>
                         <div class="ownInfo">
                             <div>
-                                <span @click="showDetail(item.id)" class="name">{{ item.name }}</span>
+                                <span @click="showDetail(item.id)" class="name">&nbsp;&nbsp;{{ item.name }}</span>
                                 <span class="workExperience">{{ item.career }}年工作经验</span>
                             </div>
-                            <div class="address">
-                                <img src="../../assets/images/address.png" alt="address">
-                                <span>{{ item.province }} {{ item.city }}</span>
+                            <div class="skillSort" v-show="item.role">
+                                <span v-for="(childItem, idx) in item.role.split(',')" :key="idx">
+                                    【{{ childItem }}】
+                                </span>
                             </div>
                         </div>
                         <!-- <div class="evaluate">
@@ -54,26 +55,17 @@
                         </div> -->
                     </div>
                     <div class="skill">
-                        <div class="skillSort">
-                            <span v-for="(childItem, idx) in item.role.split(',')" :key="idx">
-                                【{{ childItem }}】
-                            </span>
-                        </div>
                         <div class="doSomething">
                             <p>{{ item.desc }}</p>
                         </div>
                         <div class="worked">
-                            <!-- <div>
-                                <span>96%</span>
-                                <span>工作完成率</span>
-                            </div> -->
                             <div>
-                                <span>{{ item.apply_count }}</span>
                                 <span>接单量</span>
+                                {{ item.apply_count }}
                             </div>
                             <div>
-                                <span>{{ item.gallery_count }}</span>
                                 <span>作品展示/套</span>
+                                {{ item.gallery_count }}
                             </div>
                         </div>
                     </div>
@@ -277,21 +269,12 @@ export default {
                 margin-right: 35px;
             }
             .workExperience{
-                font-size: 18px;
+                font-size: 24px;
                 color: #808080;
             }
-            .address{
-                img{
-                    width: 17px;
-                    height: 20px;
-                    margin-right: 15px;
-                    vertical-align: middle;
-                }
-                span{
-                    font-size: 18px;
-                    color: #808080;
-                    line-height: 70px;
-                }
+            .skillSort{
+                margin-top: 20px;
+                color: #4195f7;
             }
         }
         .evaluate{
@@ -320,12 +303,11 @@ export default {
             display: flex;
             margin-top: 20px;
             div{
-                display: flex;
-                flex-direction: column;
-                margin-right: 80px;
+                margin-right: 130px;
                 span{
                     font-size: 20px;
                     line-height: 35px;
+                    margin-right: 30px;
                 }
             }
         }
