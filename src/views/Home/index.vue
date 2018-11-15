@@ -2,7 +2,7 @@
     <div class="home">
         <mt-swipe class="swiper" :auto="4000">
             <mt-swipe-item v-for="(item, index) in bannersList" :key="index">
-                <img :src="item.pic" alt="banner">
+                <img @click="isToActive(item.url)" :src="item.pic" alt="banner">
             </mt-swipe-item>
         </mt-swipe>
         <div class="filter-container">
@@ -163,6 +163,11 @@ export default {
     clickFilters (id) {
       this.selectFilter = id
       this.getList()
+    },
+    isToActive (url) {
+      if (url) {
+        window.location.href = url
+      }
     }
   }
 }
