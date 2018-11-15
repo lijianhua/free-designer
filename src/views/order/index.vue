@@ -160,7 +160,6 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   async beforeRouteEnter (to, from, next) {
     await Store.dispatch('order/getEmployerList')
-    await Store.dispatch('order/getWorkerList')
     next()
   },
   data () {
@@ -194,6 +193,9 @@ export default {
       await this.getWorkerList(false)
       this.$refs.loadmore2.onBottomLoaded()
     }
+  },
+  async mounted () {
+    await Store.dispatch('order/getWorkerList')
   }
 }
 </script>
