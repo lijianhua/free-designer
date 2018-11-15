@@ -7,6 +7,12 @@ const defaultWorkPagination = {
   per_page: 8
 }
 
+const defaultOrderPagination = {
+  order_by: 'created_on',
+  page: 1,
+  per_page: 10
+}
+
 export default {
   namespaced: true,
   state: {
@@ -19,7 +25,9 @@ export default {
     payList: [], // 支付选项列表
     pointsFormData: [], // 提现表单
     workDetail: {}, // 编辑作品
-    workImages: []
+    workImages: [],
+    sendPagination: defaultOrderPagination, // 历史发单分页
+    applyPagination: defaultOrderPagination // 历史接单分页
   },
   getters: {
     formData: state => state.formData,
@@ -45,9 +53,11 @@ export default {
     },
     SET_SEND_ORDER_LIST (state, v) {
       state.sendOrderList = v.data
+      state.sendPagination = v.page_info
     },
     SET_APPLY_ORDER_LIST (state, v) {
       state.applyOrderList = v.data
+      state.applyPagination = v.page_info
     },
     SET_PAY_LIST (state, v) {
       state.payList = v
@@ -98,9 +108,24 @@ export default {
       }
       commit('SET_WORK', data)
     },
-    async getOrderList ({ state, commit }, tabActive) {
-      const { orderTabActive } = state
-      const { data } = await getOrderListApi(tabActive || orderTabActive)
+    async getOrderList ({ state, commit }, isPullDown = true) {
+      const { orderTabActive, sendPagination, applyPagination, sendOrderList, applyOrderList } = state
+      const pagination = Object.assign({}, defaultOrderPagination)
+
+      if (!isPullDown) {
+        if (orderTabActive === 'send' && sendPagination.page >= sendPagination.total_page) return
+        if (orderTabActive === 'apply' && applyPagination.page >= applyPagination.total_page) return
+        pagination.page = sendPagination.page + 1
+      } else {
+        pagination.page = 1
+      }
+
+      const { data } = await getOrderListApi(orderTabActive, pagination)
+
+      if (!isPullDown) {
+        data.data = orderTabActive === 'send' ? sendOrderList.concat(data.data) : applyOrderList.concat(data.data)
+      }
+
       if (orderTabActive === 'send') {
         commit('SET_SEND_ORDER_LIST', data)
       } else if (orderTabActive === 'apply') {

@@ -20,12 +20,14 @@ export function getWorkListApi (id, data = {}) {
   })
 }
 
-export function getOrderListApi (active) {
+export function getOrderListApi (active, data) {
   let url = '/orders/?status=0'
   if (active === 'apply') {
     url = '/apply_records/?status=finished'
   }
-  return fetchUtil(url)
+  return fetchUtil(url, {
+    data
+  })
 }
 
 export function payApi (data = {}) {

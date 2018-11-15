@@ -115,7 +115,9 @@
 
 // 订单列表
 .order-container {
-    .mint-tab-container-wrap {
+    .mint-tab-container-wrap,
+    .mint-loadmore,
+    .mint-loadmore-content {
         height: 100%;
     }
 }
