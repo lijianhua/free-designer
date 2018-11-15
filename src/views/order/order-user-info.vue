@@ -296,7 +296,6 @@ export default {
           }
           .exp {
             color: #808080;
-            padding-left: 20px;
           }
         }
       }
