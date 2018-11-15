@@ -65,7 +65,8 @@
           "mu-day",
           "mu-icon-button",
           "mint-popup",
-          "mint-msgbox"
+          "mint-msgbox",
+          "viewer"
         ]
       }
     }

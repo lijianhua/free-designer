@@ -30,7 +30,7 @@
       </div>
       <div class="case">
         <h3>同类案例</h3>
-        <div class="box">
+        <div class="box" v-viewer="{navbar:false,title:false,toolbar:false}">
           <div v-if="userInfo.works.length" class="scroll" :style="{width:userInfo.works.length + '00%'}">
             <div class="item" v-for="(item, index) in userInfo.works" :key="index">
               <img :src="item[1]" alt="">

@@ -188,7 +188,7 @@
               <div class="intro">上传您项目的资料供接单人进行准确判断</div>
             </div>
             <div class="item">
-              <div class="img-box">
+              <div class="img-box" v-viewer="{navbar:false,title:false,toolbar:false}">
                 <div class="img-item" v-for="(item, index) in projectFiles" :key="index">
                   <img v-if="item[3] === 'img'" :src="item[1]" alt="">
                   <span v-else>{{item[0]}}</span>
