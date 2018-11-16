@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="productBox">
-            <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
+            <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" :auto-fill="false" ref="loadmore">
                 <div class="designBox" v-for="(item, index) in productList" :key="index">
                     <div class="designHeader">
                       <div class="title">{{ item.name }}</div>

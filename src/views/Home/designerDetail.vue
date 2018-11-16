@@ -14,9 +14,10 @@
                         <span class="name">{{ userInfo.name }}</span>
                         <span class="workExperience">{{ userInfo.career }}年工作经验</span>
                     </div>
-                    <div class="address">
-                        <img src="../../assets/images/address.png" alt="address">
-                        <span>{{ userInfo.province }} {{ userInfo.city }}</span>
+                    <div v-if="userInfo.role" class="skillSort">
+                        <span v-for="(childItem, idx) in userInfo.role.split(',')" :key="idx">
+                            【{{ childItem }}】
+                        </span>
                     </div>
                 </div>
                 <!-- <div class="evaluate">
@@ -28,26 +29,17 @@
                 </div> -->
             </div>
             <div class="skill">
-                <div v-if="userInfo.role" class="skillSort">
-                    <span v-for="(childItem, idx) in userInfo.role.split(',')" :key="idx">
-                        【{{ childItem }}】
-                    </span>
-                </div>
                 <div class="doSomething">
                     <p>{{ userInfo.desc }}</p>
                 </div>
                 <div class="worked">
-                    <!-- <div>
-                        <span>96%</span>
-                        <span>工作完成率</span>
-                    </div> -->
                     <div>
-                        <span>{{ userInfo.apply_count }}</span>
                         <span>接单量</span>
+                        {{ userInfo.apply_count }}
                     </div>
                     <div>
-                        <span>{{ userInfo.gallery_count }}</span>
                         <span>作品展示/套</span>
+                        {{ userInfo.gallery_count }}
                     </div>
                 </div>
             </div>
@@ -56,7 +48,7 @@
             <span>工作历史和反馈</span>
             <span @click="$router.push({name: 'browWork',params: { userid: userid } })">作品浏览<strong>》</strong></span>
         </div>
-        <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
+        <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" :auto-fill="false" ref="loadmore">
             <div class="historyDesign" v-for="(item, index) in historyList" :key="index">
                 <div class="title">{{ item.order }}</div>
                 <div class="designInfo">
@@ -195,21 +187,12 @@ export default {
                 margin-right: 35px;
             }
             .workExperience{
-                font-size: 18px;
+                font-size: 24px;
                 color: #808080;
             }
-            .address{
-                img{
-                    width: 17px;
-                    height: 20px;
-                    margin-right: 15px;
-                    vertical-align: middle;
-                }
-                span{
-                    font-size: 18px;
-                    color: #808080;
-                    line-height: 70px;
-                }
+            .skillSort{
+                margin-top: 20px;
+                color: #4195f7;
             }
         }
         .evaluate{
@@ -238,12 +221,11 @@ export default {
             display: flex;
             margin-top: 20px;
             div{
-                display: flex;
-                flex-direction: column;
-                margin-right: 80px;
+                margin-right: 130px;
                 span{
                     font-size: 20px;
                     line-height: 35px;
+                    margin-right: 30px;
                 }
             }
         }

@@ -80,7 +80,7 @@
                     </div>
                 </div> -->
                 <div class="talk">
-                    <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
+                    <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" :auto-fill="false" ref="loadmore">
                         <div class="talkBox" v-for="(item, index) in galleryCommentList" :key="index">
                             <div class="talk-headImg">
                                 <img :src="item.user_avatar" alt="avatar">
@@ -178,6 +178,12 @@ export default {
       this.$refs.loadmore.onBottomLoaded()
     },
     async addComment () {
+      if (!this.userInfo) {
+        this.$router.push({
+          name: 'login'
+        })
+        return
+      }
       const dataFrom = {
         uid: this.userInfo.id,
         content: this.commentValue,

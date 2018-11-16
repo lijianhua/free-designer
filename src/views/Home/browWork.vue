@@ -14,9 +14,10 @@
                         <span class="name">{{ userInfo.name }}</span>
                         <span class="workExperience">{{ userInfo.career }}年工作经验</span>
                     </div>
-                    <div class="address">
-                        <img src="../../assets/images/address.png" alt="address">
-                        <span>{{ userInfo.province }} {{ userInfo.city }}</span>
+                    <div v-if="userInfo.role" class="skillSort">
+                        <span v-for="(childItem, idx) in userInfo.role.split(',')" :key="idx">
+                            【{{ childItem }}】
+                        </span>
                     </div>
                 </div>
                 <!-- <div class="evaluate">
@@ -28,11 +29,6 @@
                 </div> -->
             </div>
             <div class="skill">
-                <div v-if="userInfo.role" class="skillSort">
-                    <span v-for="(childItem, idx) in userInfo.role.split(',')" :key="idx">
-                        【{{ childItem }}】
-                    </span>
-                </div>
                 <div class="doSomething">
                     <p>{{ userInfo.desc }}</p>
                 </div>
@@ -42,12 +38,12 @@
                         <span>工作完成率</span>
                     </div> -->
                     <div>
-                        <span>{{ userInfo.apply_count }}</span>
                         <span>接单量</span>
+                        {{ userInfo.apply_count }}
                     </div>
                     <div>
-                        <span>{{ userInfo.gallery_count }}</span>
                         <span>作品展示/套</span>
+                        {{ userInfo.gallery_count }}
                     </div>
                 </div>
             </div>
@@ -56,21 +52,27 @@
             <span @click="$router.push({name: 'designerDetail',params: { userid: userid } })"><strong>《</strong>工作历史和反馈</span>
             <span>作品浏览</span>
         </div>
-        <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
+        <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" :auto-fill="false" ref="loadmore">
             <div class="designBox" v-for="(item, index) in pictureList" :key="index">
-                <div class="title">{{ item.name }}</div>
-                <div class="designImg" @click="showDetail(item)">
-                    <img :src="item.thumb" alt="designImg">
-                </div>
-                <div class="designInfo">
-                    <!-- <div class="price">本案授权 39积分/套</div> -->
+                <div class="designHeader">
+                    <div class="title">{{ item.name }}</div>
                     <div class="clickGood">
                         <img @click="clickLike({id: item.id, index: index})" src="../../assets/images/good.png" alt="good">
                         <span>{{ item.like_count }}</span>
-                        <!-- <img src="../../assets/images/talk.png" alt="talk"> -->
-                        <!-- <span>6</span> -->
                     </div>
                 </div>
+                <div class="designImg" @click="showDetail(item)">
+                    <img :src="item.thumb" alt="designImg">
+                </div>
+                <!-- <div class="designInfo">
+                    <div class="price">本案授权 39积分/套</div>
+                    <div class="clickGood">
+                        <img @click="clickLike({id: item.id, index: index})" src="../../assets/images/good.png" alt="good">
+                        <span>{{ item.like_count }}</span>
+                        <img src="../../assets/images/talk.png" alt="talk">
+                        <span>6</span>
+                    </div>
+                </div> -->
             </div>
         </mt-loadmore>
         <div class="noData" v-show="pictureList.length == 0">暂无数据</div>
@@ -199,21 +201,12 @@ export default {
                 margin-right: 35px;
             }
             .workExperience{
-                font-size: 18px;
+                font-size: 24px;
                 color: #808080;
             }
-            .address{
-                img{
-                    width: 17px;
-                    height: 20px;
-                    margin-right: 15px;
-                    vertical-align: middle;
-                }
-                span{
-                    font-size: 18px;
-                    color: #808080;
-                    line-height: 70px;
-                }
+            .skillSort{
+                margin-top: 20px;
+                color: #4195f7;
             }
         }
         .evaluate{
@@ -242,12 +235,11 @@ export default {
             display: flex;
             margin-top: 20px;
             div{
-                display: flex;
-                flex-direction: column;
-                margin-right: 80px;
+                margin-right: 130px;
                 span{
                     font-size: 20px;
                     line-height: 35px;
+                    margin-right: 30px;
                 }
             }
         }
@@ -268,6 +260,25 @@ export default {
   }
 .designBox{
     border-bottom: 3px solid #ebebeb;
+    .designHeader{
+      padding: 0 15px;
+      display: flex;
+      justify-content: space-between;
+      .clickGood{
+        display: flex;
+        align-items: center;
+        img{
+            width: 26px;
+            height: 26px;
+        }
+        span{
+            margin-left: 15px;
+            margin-right: 50px;
+            color: #797979;
+            font-size: 26px;
+        }
+      }
+    }
     .title{
         padding: 0 15px;
         line-height: 58px;
@@ -278,6 +289,7 @@ export default {
         height: 438px;
         display: flex;
         justify-content: center;
+        background-color: #616161;
         img{
             height: 438px;
         }

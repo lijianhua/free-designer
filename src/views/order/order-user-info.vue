@@ -12,11 +12,11 @@
           </div>
           <div class="info">
             <div class="item-header">
-              <div class="title">{{userInfo.user.name}}</div>
+              <div class="title">&nbsp;{{userInfo.user.name}}</div>
               <div class="integral">议价：{{userInfo.apply_cost}}积分</div>
             </div>
             <div>
-              <div class="exp">{{userInfo.user.career}}年工作经验</div>
+              <div class="exp">&nbsp;{{userInfo.user.career}}年工作经验</div>
             </div>
             <div class="skill">
               {{userInfo.user.role | filterRole}}

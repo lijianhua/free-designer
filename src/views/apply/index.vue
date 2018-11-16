@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="applyContainer">
-          <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
+          <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" :auto-fill="false" ref="loadmore">
             <div class="send-card" v-for="(item, index) in demandsList" :key="index" @click="toOrderDetail(item.id, item.user.id)">
               <img src="../../assets/images/demand_background.png" alt="">
               <div class="card-body">
