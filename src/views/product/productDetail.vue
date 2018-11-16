@@ -178,6 +178,12 @@ export default {
       this.$refs.loadmore.onBottomLoaded()
     },
     async addComment () {
+      if (!this.userInfo) {
+        this.$router.push({
+          name: 'login'
+        })
+        return
+      }
       const dataFrom = {
         uid: this.userInfo.id,
         content: this.commentValue,
