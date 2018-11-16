@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="desingerContainer">
-            <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" ref="loadmore">
+            <mt-loadmore :top-method="getList" :bottom-method="load" :bottom-all-loaded="isLoadedAll" :auto-fill="false" ref="loadmore">
                 <div class="desingerInfo" v-for="(item, index) in usersList" :key="index">
                     <div class="header">
                         <div @click="showDetail(item.id)" class="header-img">
@@ -118,7 +118,7 @@ export default {
       if (this.isShowMoreFilter) {
         return true
       } else {
-        if (index > 7) {
+        if (index > 3) {
           return false
         } else {
           return true
@@ -247,7 +247,7 @@ export default {
   }
   .desingerContainer{
     overflow-y: auto;
-    height: calc(100% - 309px - 324px - 29px - 54px - 68px);
+    height: calc(100% - 309px - 162px - 29px - 54px - 68px);
   }
   .desingerInfo{
     padding: 30px 50px;
