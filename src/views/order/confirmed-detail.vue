@@ -2,86 +2,100 @@
   <div class="containers">
     <div class="header">
       <img @click="$router.back()" src="../../assets/images/back.png" alt="">
-      <h3>雇主订单进行中</h3>
+      <h3>{{$route.query.is_worker == 0 ? '雇主' : '工作者' }}订单进行中</h3>
     </div>
     <div class="main">
       <div class="user-info">
         <div class="avatar">
-          <img src="" alt="">
+          <img :src="orderDetail.user.avatar" alt="">
         </div>
         <div class="info">
           <div class="title_exp">
-            <div class="title">姓名</div>
-            <div class="exp">10年工作经验</div>
+            <div class="title">{{orderDetail.user.name}}</div>
+            <div class="exp">{{orderDetail.user.career}}年工作经验</div>
           </div>
-          <div class="address">北京 - 立水桥</div>
+          <div class="address">{{ orderDetail.user.province || '省份' }} - {{ orderDetail.user.city || '城市' }}</div>
           <div class="post">雇主</div>
         </div>
-        <a href="tel:123" class="tel">
+        <a v-if="$route.query.is_worker == 1" :href="`tel:${orderDetail.user.mobile}`" class="tel">
           <img src="../../assets/images/ico_tel.png" alt="">
         </a>
       </div>
       <div class="project-info">
-        <div class="title">asd asd asd asd asd </div>
+        <div class="title">{{orderDetail.title}}</div>
         <div class="info">
           <div>
             <div>交稿剩余时间：</div>
-            <div>123</div>
+            <div>{{orderDetail.count_down}}</div>
           </div>
           <div>
-            <div>交稿剩余时间：</div>
-            <div>123</div>
+            <div>任务总量：</div>
+            <div>{{orderDetail.task_count}}{{orderDetail.task_unit}}</div>
           </div>
           <div>
-            <div>交稿剩余时间：</div>
-            <div>123</div>
+            <div>任务价格</div>
+            <div>{{orderDetail.pub_cost}}</div>
           </div>
         </div>
       </div>
       <div class="user-info worker">
         <div class="avatar">
-          <img src="" alt="">
+          <img :src="applyDetail.user.avatar" alt="">
         </div>
         <div class="info">
           <div class="title_exp">
-            <div class="title">姓名</div>
-            <div class="exp">10年工作经验</div>
+            <div class="title">{{applyDetail.user.name}}</div>
+            <div class="exp">{{applyDetail.user.career}}年工作经验</div>
           </div>
-          <div class="address">北京 - 立水桥</div>
+          <div class="address">{{ applyDetail.user.province || '省份' }} - {{ applyDetail.user.city || '城市' }}</div>
           <div class="post">雇主</div>
         </div>
-        <a href="tel:123" class="tel">
+        <a v-if="$route.query.is_worker == 0" :href="`tel:${applyDetail.user.mobile}`" class="tel">
           <img src="../../assets/images/ico_tel.png" alt="">
         </a>
       </div>
       <div class="txt">
-        <p>工作者已提交项目文件，请您在PC端下载浏览文件</p>
+        <p v-if="$route.query.is_worker == 0 && orderDetail.deliver_works.length">工作者已提交项目文件，请您在PC端下载浏览文件</p>
+        <p v-else-if="$route.query.is_worker == 0 && !orderDetail.deliver_works.length">工作者还未提交项目文件</p>
       </div>
-      <div class="txt">
+      <div class="txt" v-if="$route.query.is_worker == 1">
         <h4>请在PC端上传您的作品</h4>
         <p>注：雇主有2次发起改稿的选择，如需改稿我们将会第一时间告诉您</p>
       </div>
-      <div class="txt left">
-        <p>雇主发起了改1稿，请您修改文件并在PC端提交文件</p>
+      <div class="txt left" v-if="$route.query.is_worker == 1">
+        <p>雇主发起了改稿，请您修改文件并在PC端提交文件</p>
         <p>需修改内容如下：</p>
         <p>1、门头logo字改为亚克力材质</p>
         <p>2、地面改为800*800mm灰色地砖</p>
         <div class="files">请在PC端下载附件</div>
       </div>
-      <div class="tips">
+      <div class="tips" v-if="$route.query.is_worker == 0">
         <p>注：您可以选择确认并评价或者发起改稿</p>
         <p>（为保证双方权益，仅允许发起改稿2次）</p>
       </div>
-      <div class="tips">
-        <p>恭喜您已完成此订单，佣金已转入您的积分账户请单击确认此订单即将转为历史订单</p>
-      </div>
-      <div class="btns">
-        <div class="btn-redraft">发起改稿</div>
-        <div class="btn-sumbit">确认并评价</div>
+      <div class="btns" v-if="$route.query.is_worker == 0">
+        <div class="btn-redraft" :class="{disable:!orderDetail.deliver_works.length}">发起改稿</div>
+        <div class="btn-sumbit" @click="submit" :class="{disable:!orderDetail.deliver_works.length}">确认并评价</div>
       </div>
     </div>
   </div>
 </template>
+<script>
+import Store from '@/store'
+import { mapGetters, mapActions } from 'vuex'
+export default {
+  async beforeRouteEnter (to, from, next) {
+    await Store.dispatch('confirmedOrder/getOrderDetail', to.params.id)
+    next()
+  },
+  computed: {
+    ...mapGetters('confirmedOrder', ['orderDetail', 'applyDetail'])
+  },
+  methods: {
+    ...mapActions('confirmedOrder', ['submit'])
+  }
+}
+</script>
 <style lang="scss" scoped>
 .containers {
   width: 100%;
@@ -97,6 +111,7 @@
   height: 113px;
   border-bottom: 3px solid #ededed;
   background-color: #fff;
+  z-index: 99;
   img{
     width: 22px;
     height: 41px;
@@ -145,7 +160,7 @@
       width: 120px;
       height: 120px;
       border-radius: 50%;
-      background-color: red;
+      overflow: hidden;
       img {
         width: 100%;
         height: 100%;
@@ -165,6 +180,7 @@
         }
       }
       .address {
+        opacity: 0;
         font-size: 18px;
         color: #808080;
       }
@@ -236,6 +252,10 @@
     justify-content: space-between;
     padding: 0 70px;
     margin-bottom: 50px;
+    .disable {
+      color: #333;
+      background-color: #f0f0f0;
+    }
     >div {
       color: #fff;
       font-size: 30px;

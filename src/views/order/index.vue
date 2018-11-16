@@ -13,7 +13,7 @@
                     <div class="tab-main">
                         <mt-loadmore style="height:100%;" :top-method="employerLoadTop" :bottom-method="employerLoadBottom" bottomPullText="" :auto-fill="false" ref="loadmore1">
                             <template v-for="(item, index) in employerList">
-                                <router-link class="item" :to="{name:item.status <= 80 ? 'confirmed-detail' : 'unconfirmed-detail',params:{id:item.id}}" :key="index">
+                                <router-link class="item" :to="{name:item.status <= 80 ? 'confirmed-detail' : 'unconfirmed-detail',params:{id:item.id},query:{is_worker:0}}" :key="index">
                                     <div class="state">
                                     <img v-if="item.status <= 80" src="../../assets/images/order/ico_true.jpg" alt="">
                                     <img v-else src="../../assets/images/order/ico_false.jpg" alt="">

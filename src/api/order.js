@@ -81,3 +81,10 @@ export function deleteOrder (id) {
 export function getQuestionListApi (id) {
   return fetchUtil(`/orders/${id}/questions/`)
 }
+
+export function completeOrderApi (id, data = {}) {
+  return fetchUtil(`/orders/${id}/`, {
+    method: 'PATCH',
+    data
+  })
+}

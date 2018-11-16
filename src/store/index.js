@@ -10,6 +10,7 @@ import my from './modules/my'
 import order from './modules/order'
 import orderDetail from './modules/orderDetail'
 import points from './modules/points'
+import confirmedOrder from './modules/confirmedOrder'
 
 Vue.use(Vuex)
 
@@ -34,6 +35,7 @@ export default new Vuex.Store({
     my,
     order,
     orderDetail,
-    points
+    points,
+    confirmedOrder
   }
 })
