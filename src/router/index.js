@@ -27,6 +27,8 @@ const UnconfirmedDetail = () => import('@/views/order/unconfirmed-detail')
 const OrderUserInfo = () => import('@/views/order/order-user-info')
 // 接单详情
 const orderDetail = () => import('@/views/order/orderDetail')
+// 已确定订单详情
+const ConfirmedDetail = () => import('@/views/order/confirmed-detail')
 
 // 个人中心
 const My = () => import('@/views/my/index')
@@ -177,6 +179,11 @@ export default new Router({
           name: 'active',
           path: '/active/',
           component: active
+        },
+        {
+          name: 'confirmed-detail',
+          path: '/confirmed-detail/:id',
+          component: ConfirmedDetail
         }
       ]
     }
